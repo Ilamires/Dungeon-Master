@@ -30,6 +30,9 @@ class Cell:
 
     def set_Visible(self, visible):
         self.visible = visible
+        self.draw()
+
+    def draw(self):
         if self.visible:
             if self.type == 'Stone':
                 DrawingCell = pygame.image.load("image/mount.png")
