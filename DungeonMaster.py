@@ -1,4 +1,29 @@
 import pygame
+import Rooms
+import random
+
+
+class Room:
+    def __init__(self):
+        self.set_Rooms()
+
+    def __str__(self):
+        return str(self.Cells)
+
+    def __getitem__(self, item):
+        return self.Cells[item]
+
+    def __setitem__(self, key, value):
+        self.Cells[key] = value
+
+    def set_Rooms(self):
+        self.Cells = random.choice(Rooms.Rooms)
+
+
+class Cell:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
 
 class Board:
@@ -12,8 +37,10 @@ class Board:
         self.cell_size = cell_size
 
     def render(self, surface):
+        Cells = []
         for i in range(len(self.board)):
             for j in range(len(self.board[i])):
+                Cells.append(Cell(j, i))
                 pygame.draw.rect(surface, (255, 255, 255),
                                  (ScreenWidth // 2 + self.cell_size * j - self.cell_size * self.width // 2,
                                   self.cell_size * i + 50,
