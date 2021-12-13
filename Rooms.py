@@ -1,10 +1,10 @@
-Room1 = [['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-         ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-         ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-         ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-         ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-         ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-         ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty']]
+Room1 = [['Stone', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
+         ['Stone', 'Empty', 'Empty', 'Empty', 'Stone', 'Stone', 'Empty', 'Empty', 'Empty'],
+         ['Stone', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Stone', 'Stone', 'Stone'],
+         ['Empty', 'Empty', 'Empty', 'Empty', 'Stone', 'Empty', 'Empty', 'Empty', 'Empty'],
+         ['Stone', 'Empty', 'Empty', 'Empty', 'Stone', 'Empty', 'Stone', 'Stone', 'Stone'],
+         ['Stone', 'Empty', 'Stone', 'Stone', 'Empty', 'Stone', 'Empty', 'Empty', 'Empty'],
+         ['Stone', 'Empty', 'Stone', 'Stone', 'Empty', 'Stone', 'Empty', 'Empty', 'Empty']]
 Room2 = [['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
          ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
          ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
