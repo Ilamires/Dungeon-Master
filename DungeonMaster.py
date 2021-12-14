@@ -34,18 +34,9 @@ class Cell:
 
     def draw(self):
         if self.visible:
-            if self.type == 'Stone':
-                DrawingCell = pygame.image.load("image/mount.png")
-            elif self.type == 'Enemy':
-                DrawingCell = pygame.image.load("image/enemy.png")
-            elif self.type == 'Chest':
-                DrawingCell = pygame.image.load("image/chest.png")
-            elif self.type == 'Potion':
-                DrawingCell = pygame.image.load("image/potions.png")
-            else:
-                DrawingCell = pygame.image.load("image/normal_cell.png")
+            DrawingCell = pygame.image.load(CellsDict[self.type])
         else:
-            DrawingCell = pygame.image.load("image/hidden_cell.png")
+            DrawingCell = pygame.image.load("image/cells/hidden_cell.png")
         screen.blit(DrawingCell, (self.x, self.y))
         pygame.display.update()
 
@@ -70,7 +61,7 @@ class Board:
                 room.Cells[i].append(
                     Cell(ScreenWidth // 2 + self.cell_size * j - self.cell_size * self.width // 2,
                          self.cell_size * i + 50, room[i][j]))
-                room.Cells[i][j].set_Visible(False)
+                room.Cells[i][j].draw()
                 pygame.draw.rect(surface, (255, 255, 255),
                                  (ScreenWidth // 2 + self.cell_size * j - self.cell_size * self.width // 2,
                                   self.cell_size * i + 50,
@@ -87,6 +78,17 @@ class Board:
         if 1 <= i < self.height + 1 and 1 <= j < self.width + 1:
             return j, i
 
+
+ItemsDict = {
+
+}
+CellsDict = {
+    'Empty': 'image/cells/normal_cell.png',
+    'Mount': 'image/cells/mount.png',
+    'Enemy': 'image/cells/enemy.png',
+    'Chest': 'image/cells/chest.png',
+    'Potion': 'image/cells/potions.png'
+}
 
 if __name__ == '__main__':
     pygame.init()
