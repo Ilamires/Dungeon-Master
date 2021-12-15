@@ -6,9 +6,10 @@ def render(screen, hero, enemy):
     pygame.draw.rect(screen, (0, 255, 0), (50, 50, 100, 300), width=0)
     pygame.draw.rect(screen, (255, 0, 0), (750, 50, 100, 300), width=0)
 
-    pygame.draw.rect(screen, (0, 0, 255), (400, 500, 100, 100), width=0)
     pygame.draw.rect(screen, (0, 255, 255), (100, 500, 100, 100), width=0)
-    pygame.draw.rect(screen, (255, 0, 255), (700, 500, 100, 100), width=0)
+    pygame.draw.rect(screen, (0, 0, 255), (300, 500, 100, 100), width=0)
+    pygame.draw.rect(screen, (255, 0, 255), (500, 500, 100, 100), width=0)
+    pygame.draw.rect(screen, (255, 255, 255), (700, 500, 100, 100), width=0)
 
     window_hp(hero, enemy)
 
@@ -30,10 +31,12 @@ def get_button(pos):
     if 500 <= y <= 600:
         if 100 <= x <= 200:
             return 1
-        if 400 <= x <= 500:
+        elif 300 <= x <= 400:
             return 2
-        if 700 <= x <= 800:
+        elif 500 <= x <= 600:
             return 3
+        elif 700 <= x <= 800:
+            return 4
     return None
 
 
@@ -63,12 +66,25 @@ while running:
             if flag_move:
                 if event.button == 1:
                     button = get_button(event.pos)
-                    if button == 1:
-                        attack(hero, enemy)
-                        flag_move = False
-    if not flag_move:
+                    if hero.status():
+                        if button == 1:
+                            attack(hero, enemy)
+                            flag_move = False
+                        if button == 2:
+                            hero.defense()
+                            flag_move = False
+                        if button == 3:
+                            hero.healing(50)
+                            flag_move = False
+                        if button == 4:
+                            if hero.recharge_Consumable_items == 0:
+                                enemy.taking_damage(hero.use_consumable_items())
+                                flag_move = False
+    if not flag_move and enemy.status():
         attack(enemy, hero)
         flag_move = True
+        hero.time_motion()
+        enemy.time_motion()
     render(screen, hero, enemy)
     clock.tick(fps)
     pygame.display.flip()
