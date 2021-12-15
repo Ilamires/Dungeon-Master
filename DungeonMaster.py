@@ -1,12 +1,23 @@
 import pygame
 import Rooms
 import random
+import pprint
 
 
 class Room:
     def __init__(self):
-        self.set_Room()
+        self.CellsTypes = random.choice([Rooms.Room1])
         self.Cells = []
+        for i in range(len(board.board)):
+            self.Cells.append([])
+            for j in range(len(board.board[i])):
+                self.Cells[i].append(
+                    Cell(ScreenWidth // 2 + board.cell_size * j - board.cell_size * board.width // 2,
+                         board.cell_size * i + 50, self[i][j]))
+        self.HeroPositionCell = self.CellsTypes[3][0]
+        self.CellsTypes[3][0] = 'Hero'
+        self.HeroPosition = [3, 0]
+        self.Cells[3][0].type = 'Hero'
 
     def __str__(self):
         return str(self.Cells)
@@ -17,9 +28,6 @@ class Room:
     def __setitem__(self, key, value):
         self.CellsTypes[key] = value
 
-    def set_Room(self):
-        self.CellsTypes = random.choice([Rooms.Room1])
-
 
 class Cell:
     def __init__(self, x, y, type):
@@ -28,17 +36,12 @@ class Cell:
         self.type = type
         self.visible = False
 
-    def set_Visible(self, visible):
-        self.visible = visible
-        self.draw()
-
     def draw(self):
         if self.visible:
             DrawingCell = pygame.image.load(CellsDict[self.type])
         else:
             DrawingCell = pygame.image.load("image/cells/hidden_cell.png")
         screen.blit(DrawingCell, (self.x, self.y))
-        pygame.display.update()
 
     def __str__(self):
         return self.type
@@ -51,16 +54,10 @@ class Board:
         self.board = [[0] * width for i in range(height)]
         self.cell_size = 30
 
-    def set_view(self, cell_size):
-        self.cell_size = cell_size
-
     def render(self, surface, room):
+        screen.fill((0, 0, 0))
         for i in range(len(self.board)):
-            room.Cells.append([])
-            for j in range(len(self.board[i])):
-                room.Cells[i].append(
-                    Cell(ScreenWidth // 2 + self.cell_size * j - self.cell_size * self.width // 2,
-                         self.cell_size * i + 50, room[i][j]))
+            for j in range(len(board.board[i])):
                 room.Cells[i][j].draw()
                 pygame.draw.rect(surface, (255, 255, 255),
                                  (ScreenWidth // 2 + self.cell_size * j - self.cell_size * self.width // 2,
@@ -73,10 +70,10 @@ class Board:
         y0 = 50
         x = pos[0] - x0
         y = pos[1] - y0
-        j = x // self.cell_size + 1
-        i = y // self.cell_size + 1
-        if 1 <= i < self.height + 1 and 1 <= j < self.width + 1:
-            return j, i
+        j = x // self.cell_size
+        i = y // self.cell_size
+        if 0 <= i < self.height and 0 <= j < self.width:
+            return i, j
 
 
 ItemsDict = {
@@ -84,6 +81,7 @@ ItemsDict = {
 }
 CellsDict = {
     'Empty': 'image/cells/normal_cell.png',
+    'Hero': 'image/cells/hero.png',
     'Mount': 'image/cells/mount.png',
     'Enemy': 'image/cells/enemy.png',
     'Chest': 'image/cells/chest.png',
@@ -97,10 +95,15 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(size)
 
 board = Board(9, 7)
-board.set_view(ScreenHeight // 10)
-screen.fill((0, 0, 0))
-Room1 = Room()
-board.render(screen, Room1)
+board.cell_size = ScreenHeight // 10
+Room = Room()
+Room.Cells[Room.HeroPosition[0]][Room.HeroPosition[1]].visible = True
+Room.Cells[Room.HeroPosition[0] - 1][Room.HeroPosition[1] + 1].visible = True
+Room.Cells[Room.HeroPosition[0]][Room.HeroPosition[1] + 1].visible = True
+Room.Cells[Room.HeroPosition[0] + 1][Room.HeroPosition[1] + 1].visible = True
+Room.Cells[Room.HeroPosition[0] - 1][Room.HeroPosition[1]].visible = True
+Room.Cells[Room.HeroPosition[0] + 1][Room.HeroPosition[1]].visible = True
+board.render(screen, Room)
 running = True
 
 while running:
@@ -108,5 +111,21 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            print(board.get_cell(event.pos))
+            CellMovePosition = board.get_cell(event.pos)
+            HeroX, HeroY = Room.HeroPosition[0], Room.HeroPosition[1]
+            if CellMovePosition != None:
+                MoveX, MoveY = CellMovePosition
+                if (abs(HeroY - MoveY) == 1 and
+                    MoveX == HeroX) or \
+                        (abs(HeroX - MoveX) == 1 and
+                         MoveY == HeroY):
+                    Room.CellsTypes[HeroX][HeroY] = Room.HeroPositionCell
+                    Room.Cells[HeroX][HeroY].type = Room.HeroPositionCell
+                    Room.HeroPositionCell = Room.CellsTypes[MoveX][MoveY]
+                    HeroX, HeroY = Room.HeroPosition = [MoveX, MoveY]
+                    Room.CellsTypes[HeroX][HeroY] = 'Hero'
+                    Room.Cells[HeroX][HeroY].type = 'Hero'
+                    if HeroX > 0:
+                        pass
+                    board.render(screen, Room)
     pygame.display.flip()
