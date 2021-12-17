@@ -25,6 +25,13 @@ class Room:
         self.Cells[HeroX - 1][HeroY].visible = True
         self.Cells[HeroX + 1][HeroY].visible = True
 
+    def set_Coords(self):
+        for i in range(len(board.board)):
+            for j in range(len(board.board[i])):
+                self.Cells[i][j].x = ScreenWidth // 2 + board.cell_size * j \
+                                     - board.cell_size * board.width // 2
+                self.Cells[i][j].y = board.cell_size * i + 50
+
     def __str__(self):
         return str(self.Cells)
 
@@ -47,6 +54,7 @@ class Cell:
             DrawingCell = pygame.image.load(CellsDict[self.type])
         else:
             DrawingCell = pygame.image.load("image/cells/hidden_cell.png")
+        DrawingCell = pygame.transform.scale(DrawingCell, (board.cell_size, board.cell_size))
         screen.blit(DrawingCell, (self.x, self.y))
 
     def __str__(self):
@@ -99,12 +107,12 @@ if __name__ == '__main__':
     pygame.display.set_caption('Dungeon Master')
     size = ScreenWidth, ScreenHeight = 900, 700
     screen = pygame.display.set_mode(size)
-
 board = Board(9, 7)
 board.cell_size = ScreenHeight // 10
 Room = Room()
 board.render(screen, Room)
 running = True
+clock = pygame.time.Clock()
 
 while running:
     for event in pygame.event.get():
@@ -123,14 +131,16 @@ while running:
                     Room.CellsTypes[HeroX][HeroY] = Room.HeroPositionCell
                     Room.Cells[HeroX][HeroY].type = Room.HeroPositionCell
                     Room.HeroPositionCell = Room.CellsTypes[MoveX][MoveY]
-                    for i in range(70):
-                        DrawingCell = pygame.image.load("image/cells/hero.png")
+                    DrawingAnimation = pygame.image.load("image/cells/hero.png")
+                    DrawingAnimation = pygame.transform.scale(DrawingAnimation, (board.cell_size, board.cell_size))
+                    for i in range(14):
                         board.render(screen, Room)
-                        screen.blit(DrawingCell,
+                        screen.blit(DrawingAnimation,
                                     (ScreenWidth // 2 + board.cell_size * HeroY
-                                     - board.cell_size * board.width // 2 + i * -DifferenceY,
-                                     HeroX * board.cell_size + 50 + i * -DifferenceX))
+                                     - board.cell_size * board.width // 2 + i * -DifferenceY * 5,
+                                     HeroX * board.cell_size + 50 + i * -DifferenceX * 5))
                         pygame.display.flip()
+                        clock.tick(60)
                     HeroX, HeroY = Room.HeroPosition = [MoveX, MoveY]
                     Room.CellsTypes[HeroX][HeroY] = 'Hero'
                     Room.Cells[HeroX][HeroY].type = 'Hero'
@@ -155,4 +165,23 @@ while running:
                     if HeroX > 0:
                         pass
                     board.render(screen, Room)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_f:
+                if pygame.display.get_window_size() == (900, 700):
+                    pygame.quit()
+                    pygame.init()
+                    pygame.display.set_caption('Dungeon Master')
+                    size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
+                                                       pygame.display.Info().current_h
+                    screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+                else:
+                    pygame.quit()
+                    pygame.init()
+                    pygame.display.set_caption('Dungeon Master')
+                    size = ScreenWidth, ScreenHeight = 900, 700
+                    screen = pygame.display.set_mode(size)
+                board.cell_size = ScreenHeight // 10
+                Room.set_Coords()
+                board.render(screen, Room)
     pygame.display.flip()
+    clock.tick(60)
