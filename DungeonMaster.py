@@ -167,17 +167,15 @@ while running:
                     board.render(screen, Room)
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_f:
-                if pygame.display.get_window_size() == (900, 700):
-                    pygame.quit()
-                    pygame.init()
-                    pygame.display.set_caption('Dungeon Master')
+                DisplaySize = pygame.display.get_window_size()
+                pygame.quit()
+                pygame.init()
+                pygame.display.set_caption('Dungeon Master')
+                if DisplaySize == (900, 700):
                     size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
                                                        pygame.display.Info().current_h
                     screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
                 else:
-                    pygame.quit()
-                    pygame.init()
-                    pygame.display.set_caption('Dungeon Master')
                     size = ScreenWidth, ScreenHeight = 900, 700
                     screen = pygame.display.set_mode(size)
                 board.cell_size = ScreenHeight // 10
