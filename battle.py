@@ -13,10 +13,6 @@ def hero_anim():
 
 
 def render(screen, hero, enemy):
-    hero_sprite = hero_anim()
-    screen.blit(hero_sprite, (50, 50))
-    pygame.draw.rect(screen, (255, 0, 0), (700, 50, 150, 300), width=0)
-
     pygame.draw.rect(screen, (0, 255, 255), (100, 500, 100, 100), width=0)
     pygame.draw.rect(screen, (0, 0, 255), (300, 500, 100, 100), width=0)
     pygame.draw.rect(screen, (255, 0, 255), (500, 500, 100, 100), width=0)
@@ -61,10 +57,11 @@ if __name__ == '__main__':
     pygame.display.set_caption('Dungeon Master')
     size = ScreenWidth, ScreenHeight = 900, 700
     screen = pygame.display.set_mode(size)
-    hero = Unit(0)
-    enemy = Unit(1)
+    all_sprites = pygame.sprite.Group()
+    hero = Unit(0, hero_anim_breathing, 50, 50, all_sprites)
+    enemy = Unit(0, hero_anim_breathing, 500, 50, all_sprites)
 
-fps = 30
+fps = 5
 clock = pygame.time.Clock()
 anim_fps = 0
 running = True
@@ -100,11 +97,12 @@ while running:
         flag_move = True
         hero.time_motion()
         enemy.time_motion()
-    print(anim_fps)
     render(screen, hero, enemy)
-    clock.tick(fps)
+    all_sprites.update()
+    all_sprites.draw(screen)
     if anim_fps == 20:
         anim_fps = 0
     else:
         anim_fps += 1
+    clock.tick(fps)
     pygame.display.flip()
