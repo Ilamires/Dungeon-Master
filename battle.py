@@ -1,11 +1,18 @@
 import pygame
 from unit import Unit
 
+hero_anim_breathing = ["image/hero_anim/hero_battle_anim_breathing_1.png",
+                       "image/hero_anim/hero_battle_anim_breathing_2.png",
+                       "image/hero_anim/hero_battle_anim_breathing_3.png",
+                       "image/hero_anim/hero_battle_anim_breathing_2.png"]
+
+
+def hero_anim():
+    index = anim_fps // 5
+    return pygame.image.load(hero_anim_breathing[index - 1])
+
 
 def render(screen, hero, enemy):
-    pygame.draw.rect(screen, (0, 255, 0), (50, 50, 100, 300), width=0)
-    pygame.draw.rect(screen, (255, 0, 0), (750, 50, 100, 300), width=0)
-
     pygame.draw.rect(screen, (0, 255, 255), (100, 500, 100, 100), width=0)
     pygame.draw.rect(screen, (0, 0, 255), (300, 500, 100, 100), width=0)
     pygame.draw.rect(screen, (255, 0, 255), (500, 500, 100, 100), width=0)
@@ -50,11 +57,13 @@ if __name__ == '__main__':
     pygame.display.set_caption('Dungeon Master')
     size = ScreenWidth, ScreenHeight = 900, 700
     screen = pygame.display.set_mode(size)
-    hero = Unit(0)
-    enemy = Unit(1)
+    all_sprites = pygame.sprite.Group()
+    hero = Unit(0, hero_anim_breathing, 50, 50, all_sprites)
+    enemy = Unit(0, hero_anim_breathing, 500, 50, all_sprites)
 
-fps = 10
+fps = 5
 clock = pygame.time.Clock()
+anim_fps = 0
 running = True
 flag_move = True
 while running:
@@ -70,21 +79,30 @@ while running:
                         if button == 1:
                             attack(hero, enemy)
                             flag_move = False
-                        if button == 2:
+                        elif button == 2:
                             hero.defense()
                             flag_move = False
-                        if button == 3:
-                            hero.healing(50)
-                            flag_move = False
-                        if button == 4:
+                        elif button == 3:
+                            if hero.recharge_healing == 0:
+                                hero.healing(50)
+                                flag_move = False
+                        elif button == 4:
                             if hero.recharge_Consumable_items == 0:
                                 enemy.taking_damage(hero.use_consumable_items())
                                 flag_move = False
+                        else:
+                            flag_move = True
     if not flag_move and enemy.status():
         attack(enemy, hero)
         flag_move = True
         hero.time_motion()
         enemy.time_motion()
     render(screen, hero, enemy)
+    all_sprites.update()
+    all_sprites.draw(screen)
+    if anim_fps == 20:
+        anim_fps = 0
+    else:
+        anim_fps += 1
     clock.tick(fps)
     pygame.display.flip()
