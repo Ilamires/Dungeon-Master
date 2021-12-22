@@ -12,7 +12,6 @@ def render(screen, hero, enemy):
     pygame.draw.rect(screen, (0, 0, 255), (300, 500, 100, 100), width=0)
     pygame.draw.rect(screen, (255, 0, 255), (500, 500, 100, 100), width=0)
     pygame.draw.rect(screen, (255, 255, 255), (700, 500, 100, 100), width=0)
-
     window_hp(hero, enemy)
 
 
@@ -54,7 +53,10 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(size)
     all_sprites = pygame.sprite.Group()
     hero = Unit(0, hero_anim_breathing, 50, 50, all_sprites)
-    enemy = Unit(0, hero_anim_breathing, 500, 50, all_sprites)
+    hero.putting_on_clothes(["fire sword", "", "", "", "", "", ""])
+    hero.putting_on_consumable_items("fireball")
+    hero.update_stats()
+    enemy = Unit(2, hero_anim_breathing, 500, 50, all_sprites)
 
 fps = 5
 clock = pygame.time.Clock()
