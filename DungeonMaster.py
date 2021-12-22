@@ -10,7 +10,10 @@ class Room:
         for i in range(len(board.board)):
             self.Cells.append([])
             for j in range(len(board.board[i])):
-                self.Cells[i].append(Cell(j, i, self.CellsTypes[i][j]))
+                if self.CellsTypes[i][j] == 'Chest':
+                    self.Cells[i].append(Chest(j, i))
+                else:
+                    self.Cells[i].append(Cell(j, i, self.CellsTypes[i][j]))
 
     def set_Coords(self):
         for i in range(len(board.board)):
@@ -44,6 +47,12 @@ class Cell(pygame.sprite.Sprite):
         screen.blit(DrawingCell, (ScreenWidth // 2 + board.cell_size * self.x
                                   - board.cell_size * board.width // 2,
                                   board.cell_size * self.y + 50))
+
+
+class Chest(Cell):
+    def __init__(self, x, y):
+        super().__init__(x, y, 'Chest')
+        self.item = random.choice([0])
 
 
 class Hero(pygame.sprite.Sprite):
@@ -167,6 +176,12 @@ while running:
                     Hero.CorrectPosition()
                     HeroX, HeroY = Hero.HeroPosition[0], Hero.HeroPosition[1]
 
+                    if Room.CellsTypes[MoveX][MoveY] == 'Chest':
+                        Room.CellsTypes[MoveX][MoveY] = 'Empty'
+                        Room.Cells[MoveX][MoveY].type = 'Empty'
+                    if Room.CellsTypes[MoveX][MoveY] == 'Potion':
+                        Room.CellsTypes[MoveX][MoveY] = 'Empty'
+                        Room.Cells[MoveX][MoveY].type = 'Empty'
                     if HeroY < 8:
                         Room.Cells[HeroX][HeroY + 1].visible = True
                         if HeroX > 0:
