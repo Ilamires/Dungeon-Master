@@ -7,11 +7,6 @@ hero_anim_breathing = ["image/hero_anim/hero_battle_anim_breathing_1.png",
                        "image/hero_anim/hero_battle_anim_breathing_2.png"]
 
 
-def hero_anim():
-    index = anim_fps // 5
-    return pygame.image.load(hero_anim_breathing[index - 1])
-
-
 def render(screen, hero, enemy):
     pygame.draw.rect(screen, (0, 255, 255), (100, 500, 100, 100), width=0)
     pygame.draw.rect(screen, (0, 0, 255), (300, 500, 100, 100), width=0)
@@ -63,7 +58,6 @@ if __name__ == '__main__':
 
 fps = 5
 clock = pygame.time.Clock()
-anim_fps = 0
 running = True
 flag_move = True
 while running:
@@ -100,9 +94,5 @@ while running:
     render(screen, hero, enemy)
     all_sprites.update()
     all_sprites.draw(screen)
-    if anim_fps == 20:
-        anim_fps = 0
-    else:
-        anim_fps += 1
     clock.tick(fps)
     pygame.display.flip()

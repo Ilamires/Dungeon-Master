@@ -22,6 +22,7 @@ class Unit:
 
         self.Consumable_items = "fireball"
         self.recharge_Consumable_items = 0
+        self.items = [0, 0, 0, 0, 0, 0]
 
     def update(self):
         self.anim.update()
