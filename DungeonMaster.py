@@ -179,6 +179,9 @@ while running:
                     if Room.CellsTypes[MoveX][MoveY] == 'Chest':
                         Room.CellsTypes[MoveX][MoveY] = 'Empty'
                         Room.Cells[MoveX][MoveY].type = 'Empty'
+                    if Room.CellsTypes[MoveX][MoveY] == 'Potion':
+                        Room.CellsTypes[MoveX][MoveY] = 'Empty'
+                        Room.Cells[MoveX][MoveY].type = 'Empty'
                     if HeroY < 8:
                         Room.Cells[HeroX][HeroY + 1].visible = True
                         if HeroX > 0:
