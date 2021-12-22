@@ -1,6 +1,6 @@
 import pygame
 
-from items import Consumable_items
+from items import Consumable_items, items_sword
 
 
 class Unit:
@@ -14,6 +14,8 @@ class Unit:
 
         self.atk = 10 + (lv * 0.25) * 10
         self.dop_atk = 0
+        self.fire_atk = 0
+        self.vampirism = 0
 
         self.protect = 4 + (lv * 0.25) * 4
         self.dop_protect = 0
@@ -22,10 +24,23 @@ class Unit:
 
         self.Consumable_items = "fireball"
         self.recharge_Consumable_items = 0
-        self.items = [0, 0, 0, 0, 0, 0]
+
+        self.items = ["fire sword", "", "", "", "", "", ""]
 
     def update(self):
         self.anim.update()
+
+    def update_stats(self):
+        for i in self.items:
+            if i != "":
+                pass
+            else:
+                if self.items.index(i) == 0:
+                    atk, fire_atk, vampirism = items_sword[i]
+                    self.dop_atk += atk
+                    self.dop_atk
+
+
 
     def attack(self, other):
         if other.time_def == 0:
