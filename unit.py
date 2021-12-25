@@ -13,10 +13,6 @@ class Unit:
         self.recharge_healing = 0
 
         self.atk = 10 + (lv * 0.25) * 10
-        self.atk_m = 1
-        self.dop_atk = 0
-        self.fire_atk = 0
-        self.vampirism = 0
         self.chance_of_miss = 0
 
         self.protect = 4 + (lv * 0.25) * 4
@@ -27,46 +23,23 @@ class Unit:
         self.Consumable_items = ""
         self.recharge_Consumable_items = 0
 
-        self.items = ["", "", "", "", "", "", ""]
-        self.update_stats()
+        self.items = ["default", "", "", "", "", "", ""]
 
     def update(self):
         self.anim.update()
 
-    def update_stats(self):
-        for i in self.items:
-            if i != "":
-                if self.items.index(i) == 0:
-                    atk, fire_atk, vampirism = items_sword[i]
-                    self.dop_atk += atk
-                    self.fire_atk += fire_atk
-                    self.vampirism += vampirism
-
     def attack(self, other):
+        flag_miss = False
         if self.chance_of_miss != 0:
             chance = random.randint(0, 100)
             if chance <= self.chance_of_miss:
-                dm = self.calculation_dm(other)
-                return dm
+                flag_miss = True
+        if not flag_miss:
+            if self.items[0] != "default":
+                dm = items_sword[self.items[0]].attack(self, other)
             else:
-                return 0
-        else:
-            dm = self.calculation_dm(other)
+                dm = items_sword[self.items[0]].attack(self, other)
             return dm
-
-    def calculation_dm(self, other):
-        if other.time_def == 0:
-            dm = (self.atk + self.dop_atk) - (other.protect + other.dop_protect)
-        else:
-            dm = (self.atk + self.dop_atk) - other.time_def
-        other.time_def = 0
-        if dm < 0.2 * (self.atk + self.dop_atk):
-            dm = 0.2 * (self.atk + self.dop_atk) + self.fire_atk
-        else:
-            dm += self.fire_atk
-        if self.vampirism != 0:
-            self.heal(round((self.vampirism / 100) * dm))
-        return dm
 
     def use_consumable_items(self):
         if self.recharge_Consumable_items == 0:
