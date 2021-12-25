@@ -1,6 +1,6 @@
 import pygame
 import random
-from items import Consumable_items, items_sword
+from items import Consumable_items, items_sword, items_BodyArmor
 
 
 class Unit:
@@ -23,7 +23,7 @@ class Unit:
         self.Consumable_items = ""
         self.recharge_Consumable_items = 0
 
-        self.items = ["default", "", "", "", "", "", ""]
+        self.items = ["default", "default", "default", "default", "default", "default", "default"]
 
     def update(self):
         self.anim.update()
@@ -51,7 +51,10 @@ class Unit:
                 return dm
 
     def putting_on_clothes(self, arr):
-        self.items = arr
+        for i in range(len(arr)):
+            if arr[i] == "default":
+                self.items[i] = arr[i]
+        self.dop_protect = items_BodyArmor[self.items[1]].protect
 
     def putting_on_consumable_items(self, name):
         self.Consumable_items = name
@@ -62,7 +65,7 @@ class Unit:
             self.hp = 0
 
     def defense(self):
-        self.time_def = (self.protect + self.dop_protect) * 2
+        self.time_def = items_BodyArmor[self.items[1]].defense(self)
 
     def healing(self, healing_hp):
         if self.recharge_healing == 0:
