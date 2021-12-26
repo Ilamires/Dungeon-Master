@@ -1,6 +1,6 @@
 import pygame
 import random
-from items import Consumable_items, items_sword, items_BodyArmor
+from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, items_Greaves
 
 
 class Unit:
@@ -8,11 +8,13 @@ class Unit:
         self.anim = AnimatedSprite(filename, x, y, *group)
         self.image = self.anim.image
 
-        self.max_hp = 100 + (lv * 0.25) * 100
+        self.dop_hp = 0
         self.hp = 100 + (lv * 0.25) * 100
+        self.max_hp = self.hp + self.dop_hp
         self.recharge_healing = 0
 
-        self.atk = 10 + (lv * 0.25) * 10
+        self.atk = 4 + (lv * 0.25) * 4
+        self.dop_atk = 0
         self.chance_of_miss = 0
 
         self.protect = 4 + (lv * 0.25) * 4
@@ -35,10 +37,7 @@ class Unit:
             if chance <= self.chance_of_miss:
                 flag_miss = True
         if not flag_miss:
-            if self.items[0] != "default":
-                dm = items_sword[self.items[0]].attack(self, other)
-            else:
-                dm = items_sword[self.items[0]].attack(self, other)
+            dm = items_Sword[self.items[0]].attack(self, other)
             return dm
 
     def use_consumable_items(self):
@@ -52,9 +51,14 @@ class Unit:
 
     def putting_on_clothes(self, arr):
         for i in range(len(arr)):
-            if arr[i] == "default":
+            if arr[i] != "":
                 self.items[i] = arr[i]
-        self.dop_protect = items_BodyArmor[self.items[1]].protect
+        self.dop_protect = items_BodyArmor[self.items[1]].protect + items_Gloves[self.items[2]].protect + items_Greaves[
+            self.items[3]].protect
+        self.dop_atk = items_Gloves[self.items[2]].atk
+        self.dop_hp += items_BodyArmor[self.items[1]].hp
+        self.max_hp += self.dop_hp
+        self.hp += self.dop_hp
 
     def putting_on_consumable_items(self, name):
         self.Consumable_items = name

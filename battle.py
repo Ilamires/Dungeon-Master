@@ -53,7 +53,7 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(size)
     all_sprites = pygame.sprite.Group()
     hero = Unit(0, hero_anim_breathing, 50, 50, all_sprites)
-    hero.putting_on_clothes(["fire sword", "", "", "", "", "", ""])
+    hero.putting_on_clothes(["fire sword", "rusty body armor", "fire gloves", "rusty greaves", "", "", ""])
     hero.putting_on_consumable_items("fireball")
     enemy = Unit(2, hero_anim_breathing, 500, 50, all_sprites)
 
