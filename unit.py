@@ -1,6 +1,6 @@
 import pygame
 import random
-from items import Consumable_items, items_sword
+from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, items_Greaves
 
 
 class Unit:
@@ -8,15 +8,13 @@ class Unit:
         self.anim = AnimatedSprite(filename, x, y, *group)
         self.image = self.anim.image
 
-        self.max_hp = 100 + (lv * 0.25) * 100
+        self.dop_hp = 0
         self.hp = 100 + (lv * 0.25) * 100
+        self.max_hp = self.hp + self.dop_hp
         self.recharge_healing = 0
 
-        self.atk = 10 + (lv * 0.25) * 10
-        self.atk_m = 1
+        self.atk = 4 + (lv * 0.25) * 4
         self.dop_atk = 0
-        self.fire_atk = 0
-        self.vampirism = 0
         self.chance_of_miss = 0
 
         self.protect = 4 + (lv * 0.25) * 4
@@ -27,46 +25,20 @@ class Unit:
         self.Consumable_items = ""
         self.recharge_Consumable_items = 0
 
-        self.items = ["", "", "", "", "", "", ""]
-        self.update_stats()
+        self.items = ["default", "default", "default", "default", "default", "default", "default"]
 
     def update(self):
         self.anim.update()
 
-    def update_stats(self):
-        for i in self.items:
-            if i != "":
-                if self.items.index(i) == 0:
-                    atk, fire_atk, vampirism = items_sword[i]
-                    self.dop_atk += atk
-                    self.fire_atk += fire_atk
-                    self.vampirism += vampirism
-
     def attack(self, other):
+        flag_miss = False
         if self.chance_of_miss != 0:
             chance = random.randint(0, 100)
             if chance <= self.chance_of_miss:
-                dm = self.calculation_dm(other)
-                return dm
-            else:
-                return 0
-        else:
-            dm = self.calculation_dm(other)
+                flag_miss = True
+        if not flag_miss:
+            dm = items_Sword[self.items[0]].attack(self, other)
             return dm
-
-    def calculation_dm(self, other):
-        if other.time_def == 0:
-            dm = (self.atk + self.dop_atk) - (other.protect + other.dop_protect)
-        else:
-            dm = (self.atk + self.dop_atk) - other.time_def
-        other.time_def = 0
-        if dm < 0.2 * (self.atk + self.dop_atk):
-            dm = 0.2 * (self.atk + self.dop_atk) + self.fire_atk
-        else:
-            dm += self.fire_atk
-        if self.vampirism != 0:
-            self.heal(round((self.vampirism / 100) * dm))
-        return dm
 
     def use_consumable_items(self):
         if self.recharge_Consumable_items == 0:
@@ -78,7 +50,15 @@ class Unit:
                 return dm
 
     def putting_on_clothes(self, arr):
-        self.items = arr
+        for i in range(len(arr)):
+            if arr[i] != "":
+                self.items[i] = arr[i]
+        self.dop_protect = items_BodyArmor[self.items[1]].protect + items_Gloves[self.items[2]].protect + items_Greaves[
+            self.items[3]].protect
+        self.dop_atk = items_Gloves[self.items[2]].atk
+        self.dop_hp += items_BodyArmor[self.items[1]].hp
+        self.max_hp += self.dop_hp
+        self.hp += self.dop_hp
 
     def putting_on_consumable_items(self, name):
         self.Consumable_items = name
@@ -89,7 +69,7 @@ class Unit:
             self.hp = 0
 
     def defense(self):
-        self.time_def = (self.protect + self.dop_protect) * 2
+        self.time_def = items_BodyArmor[self.items[1]].defense(self)
 
     def healing(self, healing_hp):
         if self.recharge_healing == 0:
