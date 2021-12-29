@@ -1,11 +1,16 @@
 import pygame
 import Rooms
 import random
+from battle import start_battle
+from items import items_artefacts
 
 
 class Room:
     def __init__(self):
-        self.CellsTypes = random.choice([Rooms.Room1])
+        if not Continue:
+            self.CellsTypes = random.choice([Rooms.Room1])
+        else:
+            self.CellsTypes = Rooms.Rooms[RoomNumber]
         self.Cells = []
         for i in range(len(board.board)):
             self.Cells.append([])
@@ -52,7 +57,7 @@ class Cell(pygame.sprite.Sprite):
 class Chest(Cell):
     def __init__(self, x, y):
         super().__init__(x, y, 'Chest')
-        self.item = random.choice([0])
+        self.item = random.choice(list(items_artefacts.keys()))
 
 
 class Hero(pygame.sprite.Sprite):
@@ -112,6 +117,7 @@ class Board:
             return i, j
 
 
+Received_artifacts = []
 ItemsDict = {
 }
 CellsDict = {
@@ -122,12 +128,25 @@ CellsDict = {
     'Chest': 'image/cells/chest.png',
     'Potion': 'image/cells/potions.png'
 }
+f = open('Continue.txt', mode='r')
+Continue = bool(int(f.read()))
+f.close()
+if Continue:
+    f = open('NumberMap.txt', mode='r')
+    RoomNumber = int(f.read())
+    f.close()
+    f = open('HeroPosition.txt', mode='r')
+    HeroPos = int(f.read())
+    f.close()
+    f = open('HeroPosition.txt', mode='r')
+    Received_artifacts = f.read().split()
+    f.close()
 
-if __name__ == '__main__':
-    pygame.init()
-    pygame.display.set_caption('Dungeon Master')
-    size = ScreenWidth, ScreenHeight = 900, 700
-    screen = pygame.display.set_mode(size)
+pygame.init()
+pygame.display.set_caption('Dungeon Master')
+size = ScreenWidth, ScreenHeight = 900, 700
+screen = pygame.display.set_mode(size)
+
 hero_sprite = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 board = Board(9, 7)
@@ -175,13 +194,6 @@ while running:
                                          Hero.HeroPosition[1] - DifferenceY]
                     Hero.CorrectPosition()
                     HeroX, HeroY = Hero.HeroPosition[0], Hero.HeroPosition[1]
-
-                    if Room.CellsTypes[MoveX][MoveY] == 'Chest':
-                        Room.CellsTypes[MoveX][MoveY] = 'Empty'
-                        Room.Cells[MoveX][MoveY].type = 'Empty'
-                    if Room.CellsTypes[MoveX][MoveY] == 'Potion':
-                        Room.CellsTypes[MoveX][MoveY] = 'Empty'
-                        Room.Cells[MoveX][MoveY].type = 'Empty'
                     if HeroY < 8:
                         Room.Cells[HeroX][HeroY + 1].visible = True
                         if HeroX > 0:
@@ -203,6 +215,40 @@ while running:
                     hero_sprite.update([0, 0])
                     hero_sprite.draw(screen)
                     board.render(screen)
+                    if Room.CellsTypes[MoveX][MoveY] == 'Chest':
+                        Room.CellsTypes[MoveX][MoveY] = 'Empty'
+                        Room.Cells[MoveX][MoveY].type = 'Empty'
+                        Received_artifacts.append(Room.Cells[MoveX][MoveY].item)
+                    if Room.CellsTypes[MoveX][MoveY] == 'Potion':
+                        Room.CellsTypes[MoveX][MoveY] = 'Empty'
+                        Room.Cells[MoveX][MoveY].type = 'Empty'
+                    if Room.CellsTypes[MoveX][MoveY] == 'Enemy':
+                        Room.CellsTypes[MoveX][MoveY] = 'Empty'
+                        Room.Cells[MoveX][MoveY].type = 'Empty'
+                        f = open("MapVisible.txt", mode="w")
+                        n = []
+                        for i in range(len(Room.CellsTypes)):
+                            n.append([])
+                            for j in range(len(Room.CellsTypes[i])):
+                                if Room.Cells[i][j].visible:
+                                    n[i].append('1')
+                                else:
+                                    n[i].append('0')
+                            n[i] = ' '.join(n[i])
+                        n = '\n'.join(n)
+                        f.write(n)
+                        f.close()
+                        f = open("NumberMap.txt", mode="w")
+                        f.write(str(Rooms.Rooms.index(Room.CellsTypes)))
+                        f.close()
+                        f = open("HeroPosition.txt", mode="w")
+                        f.write(' '.join(list(map(str, Hero.HeroPosition))))
+                        f.close()
+                        f = open("Artefacts.txt", mode="w")
+                        f.write(' '.join(Received_artifacts))
+                        f.close()
+                        pygame.quit()
+                        start_battle()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_f:
                 DisplaySize = pygame.display.get_window_size()
