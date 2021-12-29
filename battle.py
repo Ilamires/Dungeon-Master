@@ -12,10 +12,10 @@ def render(screen, hero, enemy):
     pygame.draw.rect(screen, (0, 0, 255), (300, 500, 100, 100), width=0)
     pygame.draw.rect(screen, (255, 0, 255), (500, 500, 100, 100), width=0)
     pygame.draw.rect(screen, (255, 255, 255), (700, 500, 100, 100), width=0)
-    window_hp(hero, enemy)
+    window_stats(hero, enemy)
 
 
-def window_hp(hero, enemy):
+def window_stats(hero, enemy):
     myfont = pygame.font.SysFont('Liberation Serif', 30)
     text = myfont.render(str(hero.hp), False, (255, 255, 255))
     text_rect = pygame.Rect(50, 20, 30, 30)
