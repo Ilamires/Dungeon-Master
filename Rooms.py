@@ -1,4 +1,4 @@
-Room1 = [['Mount', 'Empty', 'Empty', 'Chest', 'Empty', 'Empty', 'Potion', 'Empty', 'Empty'],
+Room1 = [['Mount', 'Empty', 'Empty', 'Chest', 'Empty', 'Enemy', 'Potion', 'Empty', 'Empty'],
          ['Mount', 'Empty', 'Empty', 'Empty', 'Mount', 'Mount', 'Empty', 'Empty', 'Empty'],
          ['Mount', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Mount', 'Mount', 'Mount'],
          ['Empty', 'Empty', 'Enemy', 'Empty', 'Mount', 'Empty', 'Empty', 'Empty', 'Empty'],

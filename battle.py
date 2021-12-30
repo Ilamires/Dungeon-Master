@@ -1,12 +1,13 @@
 import pygame
 from unit import Unit
 
-
 def start_battle():
     hero_anim_breathing = ["image/hero_anim/hero_battle_anim_breathing_1.png",
                            "image/hero_anim/hero_battle_anim_breathing_2.png",
                            "image/hero_anim/hero_battle_anim_breathing_3.png",
                            "image/hero_anim/hero_battle_anim_breathing_2.png"]
+
+
 
     def render(screen, hero, enemy):
         pygame.draw.rect(screen, (0, 255, 255), (100, 500, 100, 100), width=0)
@@ -88,12 +89,20 @@ def start_battle():
             flag_move = True
             hero.time_motion()
             enemy.time_motion()
-        if not hero.status() or not enemy.status():
+        if not enemy.status():
+            pygame.quit()
+            f = open('Continue.txt', mode='w')
+            f.write('1')
+            f.close()
+            from DungeonMaster import start_map
+            start_map()
+        elif not hero.status():
             pygame.quit()
             f = open('Continue.txt', mode='w')
             f.write('0')
             f.close()
-            import DungeonMaster
+            from DungeonMaster import start_map
+            start_map()
         render(screen, hero, enemy)
         all_sprites.update()
         all_sprites.draw(screen)
