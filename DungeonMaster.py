@@ -162,10 +162,12 @@ def start_map():
         'Chest': 'image/cells/chest.png',
         'Potion': 'image/cells/potions.png'
     }
+
     f = open('Continue.txt', mode='r')
     Continue = bool(int(f.read()))
     f.close()
     HeroPos = [3, 0]
+
     if Continue:
         f = open('HeroPosition.txt', mode='r')
         HeroPos = list(map(int, f.read().split()))
@@ -174,10 +176,18 @@ def start_map():
         Received_artifacts = f.read().split()
         f.close()
 
+    f = open('Fullscreen.txt', mode='r')
+    Fullscreen=bool(int(f.read()))
+    f.close()
     pygame.init()
     pygame.display.set_caption('Dungeon Master')
-    size = ScreenWidth, ScreenHeight = 900, 700
-    screen = pygame.display.set_mode(size)
+    if Fullscreen:
+        size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
+                                           pygame.display.Info().current_h
+        screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+    else:
+        size = ScreenWidth, ScreenHeight = 900, 700
+        screen = pygame.display.set_mode(size)
 
     hero_sprite = pygame.sprite.Group()
     all_sprites = pygame.sprite.Group()
@@ -208,7 +218,7 @@ def start_map():
                 f = open('Continue.txt', mode='w')
                 f.write('0')
                 f.close()
-                running = False
+                pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 CellMovePosition = board.get_cell(event.pos)
                 HeroX, HeroY = Hero.HeroPosition[0], Hero.HeroPosition[1]
@@ -275,9 +285,15 @@ def start_map():
                         size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
                                                            pygame.display.Info().current_h
                         screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+                        f = open('Fullscreen.txt', mode='w')
+                        f.write('1')
+                        f.close()
                     else:
                         size = ScreenWidth, ScreenHeight = 900, 700
                         screen = pygame.display.set_mode(size)
+                        f = open('Fullscreen.txt', mode='w')
+                        f.write('0')
+                        f.close()
                     board.cell_size = ScreenHeight // 10
                     Hero.x = ScreenWidth // 2 + board.cell_size * Hero.HeroPosition[1] \
                              - board.cell_size * board.width // 2

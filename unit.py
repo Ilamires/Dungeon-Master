@@ -4,8 +4,8 @@ from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, 
 
 
 class Unit:
-    def __init__(self, lv, filename, x, y, *group):
-        self.anim = AnimatedSprite(filename, x, y, *group)
+    def __init__(self, lv, filename, x, y, character, *group):
+        self.anim = AnimatedSprite(filename, x, y, character, *group)
         self.image = self.anim.image
 
         self.dop_hp = 0
@@ -95,17 +95,24 @@ class Unit:
 
 
 class AnimatedSprite(pygame.sprite.Sprite):
-    def __init__(self, filename, x, y, *group):
+    def __init__(self, filename, x, y, character, *group):
         super().__init__(*group)
         self.frames = []
+        self.character = character
         for i in filename:
-            self.frames.append(pygame.image.load(i))
+            i = pygame.image.load(i)
+            i = pygame.transform.scale(i, (490, 400))
+            self.frames.append(i)
         self.cur_frame = 0
         self.image = self.frames[self.cur_frame]
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
-    def update(self):
+    def update(self, NewX):
         self.cur_frame = (self.cur_frame + 1) % len(self.frames)
         self.image = self.frames[self.cur_frame]
+        if self.character == 'hero':
+            self.rect.x = NewX
+        else:
+            self.rect.x = NewX + 450
