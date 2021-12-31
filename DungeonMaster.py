@@ -82,6 +82,8 @@ def start_map():
             DrawingCell = pygame.transform.scale(DrawingCell, (board.cell_size, board.cell_size))
             screen.blit(DrawingCell, (self.x, self.y))
             self.rect = pygame.Rect(x, y, board.cell_size, board.cell_size)
+            if not Continue:
+                self.OpenMap(self.HeroPosition[0], self.HeroPosition[1])
 
         def CorrectPosition(self):
             self.x = ScreenWidth // 2 + board.cell_size * self.HeroPosition[1] \
@@ -90,6 +92,64 @@ def start_map():
             DrawingCell = pygame.image.load("image/cells/hero.png")
             DrawingCell = pygame.transform.scale(DrawingCell, (board.cell_size, board.cell_size))
             screen.blit(DrawingCell, (self.x, self.y))
+
+        def OpenMap(self, HeroX, HeroY):
+            Room.Cells[HeroX][HeroY].visible = True
+            if HeroY < 8:
+                Room.Cells[HeroX][HeroY + 1].visible = True
+                if HeroX > 0:
+                    Room.Cells[HeroX - 1][HeroY + 1].visible = True
+                if HeroX < 6:
+                    Room.Cells[HeroX + 1][HeroY + 1].visible = True
+            if HeroY > 0:
+                Room.Cells[HeroX][HeroY - 1].visible = True
+                if HeroX > 0:
+                    Room.Cells[HeroX - 1][HeroY - 1].visible = True
+                if HeroX < 6:
+                    Room.Cells[HeroX + 1][HeroY - 1].visible = True
+            if HeroX > 0:
+                Room.Cells[HeroX - 1][HeroY].visible = True
+            if HeroX < 6:
+                Room.Cells[HeroX + 1][HeroY].visible = True
+            if 'Lantern' in Received_artifacts or 'Torch' in Received_artifacts:
+                if HeroY < 7:
+                    Room.Cells[HeroX][HeroY + 2].visible = True
+                    if HeroX > 1:
+                        Room.Cells[HeroX - 2][HeroY + 2].visible = True
+                        Room.Cells[HeroX - 2][HeroY + 1].visible = True
+                    if HeroX > 0:
+                        Room.Cells[HeroX - 1][HeroY + 2].visible = True
+                    if HeroX < 6:
+                        Room.Cells[HeroX + 1][HeroY + 2].visible = True
+                    if HeroX < 5:
+                        Room.Cells[HeroX + 2][HeroY + 2].visible = True
+                        Room.Cells[HeroX + 2][HeroY + 1].visible = True
+                elif HeroY < 8:
+                    if HeroX > 1:
+                        Room.Cells[HeroX - 2][HeroY + 1].visible = True
+                    if HeroX < 5:
+                        Room.Cells[HeroX + 2][HeroY + 1].visible = True
+                if HeroY > 1:
+                    Room.Cells[HeroX][HeroY - 2].visible = True
+                    if HeroX > 1:
+                        Room.Cells[HeroX - 2][HeroY - 2].visible = True
+                        Room.Cells[HeroX - 2][HeroY - 1].visible = True
+                    if HeroX > 0:
+                        Room.Cells[HeroX - 1][HeroY - 2].visible = True
+                    if HeroX < 6:
+                        Room.Cells[HeroX + 1][HeroY - 2].visible = True
+                    if HeroX < 5:
+                        Room.Cells[HeroX + 2][HeroY - 2].visible = True
+                        Room.Cells[HeroX + 2][HeroY - 1].visible = True
+                elif HeroY > 0:
+                    if HeroX > 1:
+                        Room.Cells[HeroX - 2][HeroY - 1].visible = True
+                    if HeroX < 5:
+                        Room.Cells[HeroX + 2][HeroY - 1].visible = True
+                if HeroX > 1:
+                    Room.Cells[HeroX - 2][HeroY].visible = True
+                if HeroX < 5:
+                    Room.Cells[HeroX + 2][HeroY].visible = True
 
         def update(self, ChangePosition):
             DrawingCell = pygame.image.load("image/cells/hero.png")
@@ -177,7 +237,7 @@ def start_map():
         f.close()
 
     f = open('Fullscreen.txt', mode='r')
-    Fullscreen=bool(int(f.read()))
+    Fullscreen = bool(int(f.read()))
     f.close()
     pygame.init()
     pygame.display.set_caption('Dungeon Master')
@@ -195,14 +255,7 @@ def start_map():
     board.cell_size = ScreenHeight // 10
     Room = Room()
     Hero = Hero(*HeroPos)
-    if not Continue:
-        x, y = Hero.HeroPosition[0], Hero.HeroPosition[1]
-        Room.Cells[x][y].visible = True
-        Room.Cells[x - 1][y + 1].visible = True
-        Room.Cells[x][y + 1].visible = True
-        Room.Cells[x + 1][y + 1].visible = True
-        Room.Cells[x - 1][y].visible = True
-        Room.Cells[x + 1][y].visible = True
+
     all_sprites.update()
     all_sprites.draw(screen)
     hero_sprite.update([0, 0])
@@ -241,26 +294,12 @@ def start_map():
                                              Hero.HeroPosition[1] - DifferenceY]
                         Hero.CorrectPosition()
                         HeroX, HeroY = Hero.HeroPosition[0], Hero.HeroPosition[1]
-                        if HeroY < 8:
-                            Room.Cells[HeroX][HeroY + 1].visible = True
-                            if HeroX > 0:
-                                Room.Cells[HeroX - 1][HeroY + 1].visible = True
-                            if HeroX < 6:
-                                Room.Cells[HeroX + 1][HeroY + 1].visible = True
-                        if HeroY > 0:
-                            Room.Cells[HeroX][HeroY - 1].visible = True
-                            if HeroX > 0:
-                                Room.Cells[HeroX - 1][HeroY - 1].visible = True
-                            if HeroX < 6:
-                                Room.Cells[HeroX + 1][HeroY - 1].visible = True
-                        if HeroX > 0:
-                            Room.Cells[HeroX - 1][HeroY].visible = True
-                        if HeroX < 6:
-                            Room.Cells[HeroX + 1][HeroY].visible = True
+                        Hero.OpenMap(HeroX, HeroY)
                         if Room.CellsTypes[MoveX][MoveY] == 'Chest':
                             Room.CellsTypes[MoveX][MoveY] = 'Empty'
                             Room.Cells[MoveX][MoveY].type = 'Empty'
                             Received_artifacts.append(Room.Cells[MoveX][MoveY].item)
+                            Hero.OpenMap(HeroX, HeroY)
                         if Room.CellsTypes[MoveX][MoveY] == 'Potion':
                             Room.CellsTypes[MoveX][MoveY] = 'Empty'
                             Room.Cells[MoveX][MoveY].type = 'Empty'
