@@ -50,7 +50,7 @@ class Unit:
             type = Consumable_items[name][0]
             if type == "damage":
                 dm = Consumable_items[name][1]
-                self.recharge_Consumable_items = Consumable_items[name][2]
+                self.recharge_Consumable_items = Consumable_items[name][2] + 1
                 return dm
 
     def putting_on_clothes(self, arr):
@@ -79,7 +79,7 @@ class Unit:
     def healing(self, healing_hp):
         if self.recharge_healing == 0:
             self.heal(healing_hp)
-            self.recharge_healing = 5
+            self.recharge_healing = 6
 
     def heal(self, heal_hp):
         self.hp += heal_hp
@@ -106,7 +106,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.character = character
         for i in filename:
             i = pygame.image.load(i)
-            i = pygame.transform.scale(i, (490, 400))
+            # i = pygame.transform.scale(i, (360, 400))
             self.frames.append(i)
         self.cur_frame = 0
         self.image = self.frames[self.cur_frame]

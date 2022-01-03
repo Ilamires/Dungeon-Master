@@ -8,11 +8,21 @@ def start_battle():
                            "image/hero_anim/hero_battle_anim_breathing_3.png",
                            "image/hero_anim/hero_battle_anim_breathing_2.png"]
 
+    enemy_anim_breathing = ["image/enemy_anim/enemy.png",
+                            "image/enemy_anim/enemy_2.png",
+                            "image/enemy_anim/enemy_3.png",
+                            "image/enemy_anim/enemy_2.png"]
+
+    icons = [pygame.image.load("image/icons/attack.png"),
+             pygame.image.load("image/icons/shild.png"),
+             pygame.image.load("image/icons/potion.png"),
+             pygame.image.load("image/icons/fireball.png")]
+
     def render(screen, hero, enemy):
-        pygame.draw.rect(screen, (0, 255, 255), (100, 500, 100, 100), width=0)
-        pygame.draw.rect(screen, (0, 0, 255), (300, 500, 100, 100), width=0)
-        pygame.draw.rect(screen, (255, 0, 255), (500, 500, 100, 100), width=0)
-        pygame.draw.rect(screen, (255, 255, 255), (700, 500, 100, 100), width=0)
+        screen.blit(icons[0], (100, 500))
+        screen.blit(icons[1], (300, 500))
+        screen.blit(icons[2], (500, 500))
+        screen.blit(icons[3], (700, 500))
         window_hp(hero, enemy)
 
     def window_hp(hero, enemy):
@@ -81,7 +91,7 @@ def start_battle():
     hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', all_sprites)
     hero.putting_on_clothes(["fire sword", "rusty body armor", "fire gloves", "rusty greaves", "", "", ""])
     hero.putting_on_consumable_items("fireball")
-    enemy = Unit(2, hero_anim_breathing, ArtPosX, 50, 'enemy', all_sprites)
+    enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', all_sprites)
 
     fps = 5
     clock = pygame.time.Clock()
