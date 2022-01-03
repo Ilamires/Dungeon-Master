@@ -1,6 +1,6 @@
 import pygame
 import random
-from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, items_Greaves
+from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, items_Greaves, items_Ring, items_Helmet
 
 
 class Unit:
@@ -15,16 +15,20 @@ class Unit:
 
         self.atk = 4 + (lv * 0.25) * 4
         self.dop_atk = 0
+        self.atk_fire = 0
+        self.status_atk = 0
         self.chance_of_miss = 0
 
         self.protect = 4 + (lv * 0.25) * 4
         self.dop_protect = 0
+        self.status_protect = 0
 
         self.time_def = 0
 
         self.Consumable_items = ""
         self.recharge_Consumable_items = 0
 
+        # ["Sword", "BodyArmor", "Gloves", "Greaves", "Helmet", "Ring"]
         self.items = ["default", "default", "default", "default", "default", "default", "default"]
 
     def update(self):
@@ -54,7 +58,8 @@ class Unit:
             if arr[i] != "":
                 self.items[i] = arr[i]
         self.dop_protect = items_BodyArmor[self.items[1]].protect + items_Gloves[self.items[2]].protect + items_Greaves[
-            self.items[3]].protect
+            self.items[3]].protect + items_Helmet[self.items[4]].protect
+        self.status_protect = items_Helmet[self.items[4]].status_protect
         self.dop_atk = items_Gloves[self.items[2]].atk
         self.dop_hp += items_BodyArmor[self.items[1]].hp
         self.max_hp += self.dop_hp
