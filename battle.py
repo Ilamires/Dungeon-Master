@@ -77,7 +77,7 @@ def start_battle():
     ConsumableItemPosX = ScreenWidth // 2 + 250
     PosY = 500
 
-    ArtPosX = ScreenWidth // 2-400
+    ArtPosX = ScreenWidth // 2 - 400
     hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', all_sprites)
     hero.putting_on_clothes(["fire sword", "rusty body armor", "fire gloves", "rusty greaves", "", "", ""])
     hero.putting_on_consumable_items("fireball")
@@ -144,14 +144,13 @@ def start_battle():
                     HealingPosX = ScreenWidth // 2 + 50
                     ConsumableItemPosX = ScreenWidth // 2 + 250
                     ArtPosX = ScreenWidth // 2 - 400
-        if not flag_move and enemy.status():
+        if not flag_move and enemy.status() and not flag_anim:
             attack(enemy, hero)
             flag_move = True
             hero.time_motion()
             enemy.time_motion()
             flag_anim = True
         if not hero.status() or not enemy.status():
-        if not enemy.status():
             pygame.quit()
             f = open('Continue.txt', mode='w')
             f.write('1')
