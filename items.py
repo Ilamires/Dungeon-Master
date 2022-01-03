@@ -11,9 +11,10 @@ class Sword:
             dm = (self.atk + unit.atk + unit.dop_atk) - other.time_def
         other.time_def = 0
         if dm < 0.2 * (self.atk + unit.atk + unit.dop_atk):
-            dm = 0.2 * (self.atk + unit.atk + unit.dop_atk) + self.atk_fire
-        else:
-            dm += self.atk_fire
+            dm = 0.2 * (self.atk + unit.atk + unit.dop_atk)
+        dop_dm = (self.atk_fire + unit.atk_fire) - other.status_protect
+        if dop_dm > 0:
+            dm += dop_dm
         if self.vampirism != 0:
             unit.heal(round((self.vampirism / 100) * dm))
         return round(dm)
@@ -39,6 +40,18 @@ class Greaves:
         self.protect = protect
 
 
+class Ring:
+    def __init__(self, atk_fire, status_atk):
+        self.status_atk = status_atk
+        self.atk_fire = atk_fire
+
+
+class Helmet:
+    def __init__(self, protect, status_protect):
+        self.protect = protect
+        self.status_protect = status_protect
+
+
 items_Sword = {"default": Sword(1, 0, 0),
                "rusty sword": Sword(5, 0, 0),
                "fire sword": Sword(5, 3, 5)}
@@ -47,6 +60,10 @@ items_BodyArmor = {"default": BodyArmor(1, 0),
                    "rusty body armor": BodyArmor(2, 20),
                    "fire body armor": BodyArmor(5, 50)}
 
+items_Helmet = {"default": Helmet(0, 0),
+                "rusty gloves": Helmet(1, 1),
+                "fire gloves": Helmet(1, 3)}
+
 items_Gloves = {"default": Gloves(0, 0),
                 "rusty gloves": Gloves(2, 1),
                 "fire gloves": Gloves(3, 1)}
@@ -54,6 +71,10 @@ items_Gloves = {"default": Gloves(0, 0),
 items_Greaves = {"default": Greaves(0),
                  "rusty greaves": Greaves(1),
                  "fire greaves": Greaves(3)}
+
+items_Ring = {"default": Ring(0, 0),
+              "rusty ring": Ring(5, 0),
+              "fire ring": Ring(0, 3)}
 
 Consumable_items = {"fireball": ["damage", 20, 3]}
 #  название : [1)Максимум хп, 2)восстановление здововья, 3)атака, 4)атака(множитель), 5)атака огнем,
