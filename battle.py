@@ -149,7 +149,6 @@ def start_battle():
             flag_move = True
             hero.time_motion()
             enemy.time_motion()
-            flag_anim = True
         if not hero.status() or not enemy.status():
             pygame.quit()
             f = open('Continue.txt', mode='w')

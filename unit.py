@@ -32,7 +32,7 @@ class Unit:
         self.items = ["default", "default", "default", "default", "default", "default", "default"]
 
     def update(self):
-        self.anim.update()
+        self.anim.update(0)
 
     def attack(self, other):
         flag_miss = False
