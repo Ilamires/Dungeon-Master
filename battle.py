@@ -13,9 +13,9 @@ def start_battle():
         pygame.draw.rect(screen, (0, 0, 255), (300, 500, 100, 100), width=0)
         pygame.draw.rect(screen, (255, 0, 255), (500, 500, 100, 100), width=0)
         pygame.draw.rect(screen, (255, 255, 255), (700, 500, 100, 100), width=0)
-        window_status(hero, enemy)
+        window_hp(hero, enemy)
 
-    def window_status(hero, enemy):
+    def window_hp(hero, enemy):
         myfont = pygame.font.SysFont('Liberation Serif', 30)
         # hp hero
         text = myfont.render(str(hero.hp), False, (255, 255, 255))
@@ -57,15 +57,31 @@ def start_battle():
         dm = self.attack(other)
         other.taking_damage(dm)
 
+    f = open('Fullscreen.txt', mode='r')
+    Fullscreen = bool(int(f.read()))
+    f.close()
     pygame.init()
     pygame.display.set_caption('Dungeon Master')
-    size = ScreenWidth, ScreenHeight = 900, 700
-    screen = pygame.display.set_mode(size)
+    if Fullscreen:
+        size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
+                                           pygame.display.Info().current_h
+        screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+    else:
+        size = ScreenWidth, ScreenHeight = 900, 700
+        screen = pygame.display.set_mode(size)
     all_sprites = pygame.sprite.Group()
-    hero = Unit(0, hero_anim_breathing, 50, 50, all_sprites)
+
+    AttackPosX = ScreenWidth // 2 - 350
+    DefendPosX = ScreenWidth // 2 - 150
+    HealingPosX = ScreenWidth // 2 + 50
+    ConsumableItemPosX = ScreenWidth // 2 + 250
+    PosY = 500
+
+    ArtPosX = ScreenWidth // 2-400
+    hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', all_sprites)
     hero.putting_on_clothes(["fire sword", "rusty body armor", "fire gloves", "rusty greaves", "", "", ""])
     hero.putting_on_consumable_items("fireball")
-    enemy = Unit(2, hero_anim_breathing, 500, 50, all_sprites)
+    enemy = Unit(2, hero_anim_breathing, ArtPosX, 50, 'enemy', all_sprites)
 
     fps = 5
     clock = pygame.time.Clock()
@@ -105,19 +121,52 @@ def start_battle():
                                 flag_move = True
                                 flag_anim = False
         if not flag_move and enemy.status() and not flag_anim:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_f:
+                    DisplaySize = pygame.display.get_window_size()
+                    pygame.quit()
+                    pygame.init()
+                    pygame.display.set_caption('Dungeon Master')
+                    f = open('Fullscreen.txt', mode='w')
+                    if DisplaySize == (900, 700):
+                        size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
+                                                           pygame.display.Info().current_h
+                        screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+                        f.write('1')
+                    else:
+                        size = ScreenWidth, ScreenHeight = 900, 700
+                        screen = pygame.display.set_mode(size)
+                        f = open('Fullscreen.txt', mode='w')
+                        f.write('0')
+                    f.close()
+                    AttackPosX = ScreenWidth // 2 - 350
+                    DefendPosX = ScreenWidth // 2 - 150
+                    HealingPosX = ScreenWidth // 2 + 50
+                    ConsumableItemPosX = ScreenWidth // 2 + 250
+                    ArtPosX = ScreenWidth // 2 - 400
+        if not flag_move and enemy.status():
             attack(enemy, hero)
             flag_move = True
             hero.time_motion()
             enemy.time_motion()
             flag_anim = True
         if not hero.status() or not enemy.status():
+        if not enemy.status():
+            pygame.quit()
+            f = open('Continue.txt', mode='w')
+            f.write('1')
+            f.close()
+            from DungeonMaster import start_map
+            start_map()
+        elif not hero.status():
             pygame.quit()
             f = open('Continue.txt', mode='w')
             f.write('0')
             f.close()
-            import DungeonMaster
+            from DungeonMaster import start_map
+            start_map()
         render(screen, hero, enemy)
-        all_sprites.update()
+        all_sprites.update(ArtPosX)
         all_sprites.draw(screen)
         clock.tick(fps)
         if flag_anim:
