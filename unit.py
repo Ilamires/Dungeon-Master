@@ -1,14 +1,14 @@
 import pygame
 import random
-
-import items
-from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, items_Greaves, items_Ring, items_Helmet
+from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, items_Greaves, items_Ring, items_Helmet, \
+    items_Artefacts
 
 
 class Unit:
     def __init__(self, lv, filename, x, y, character, *group):
         self.anim = AnimatedSprite(filename, x, y, character, *group)
         self.image = self.anim.image
+        self.flag_first_move = True
 
         self.dop_hp = 0
         self.hp = 100 + (lv * 0.25) * 100
@@ -17,7 +17,10 @@ class Unit:
 
         self.atk = 4 + (lv * 0.25) * 4
         self.dop_atk = 0
+
         self.atk_fire = 0
+        self.atk_fire_multiplier = 1
+
         self.status_atk = 0
         self.chance_of_miss = 0
 
@@ -32,14 +35,25 @@ class Unit:
 
         self.Consumable_items = ""
         self.recharge_Consumable_items = 0
+        self.revival = 0
 
         # ["Sword", "BodyArmor", "Gloves", "Greaves", "Helmet", "Ring"]
-        self.items = ["default", "default", "default", "default", "default", "default", "default"]
+        self.items = ["default", "default", "default", "default", "default", "default"]
+        self.artefacts = []
+        self.active_artefacts = []
+        for i in self.artefacts:
+            items_Artefacts[i][0].use(self)
+            if items_Artefacts[i][1] == 1:
+                self.active_artefacts.append(i)
 
     def update(self):
         self.anim.update(0)
 
     def attack(self, other):
+        if self.flag_first_move:
+            for i in self.active_artefacts:
+                items_Artefacts[i][0].active_use(self, other)
+            self.flag_first_move = False
         flag_miss = False
         if self.poison_flag:
             other.poison_move = items_Ring[self.items[5]].poison_move
@@ -75,6 +89,13 @@ class Unit:
         if items_Ring[self.items[5]].poison_move > 0:
             self.poison_flag = True
 
+    def putting_artefacts(self, arr):
+        for i in arr:
+            items_Artefacts[i][0].use(self)
+            if items_Artefacts[i][1] == 1:
+                self.active_artefacts.append(i)
+            self.artefacts.append(i)
+
     def putting_on_consumable_items(self, name):
         self.Consumable_items = name
 
@@ -82,6 +103,9 @@ class Unit:
         self.hp -= dm
         if self.hp < 0:
             self.hp = 0
+            if self.revival > 0:
+                self.hp = self.max_hp * 0.5
+                self.revival -= 1
 
     def defense(self):
         self.time_def = items_BodyArmor[self.items[1]].defense(self)

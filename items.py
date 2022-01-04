@@ -55,7 +55,8 @@ class Helmet:
 
 items_Sword = {"default": Sword(1, 0, 0),
                "rusty sword": Sword(5, 0, 0),
-               "fire sword": Sword(5, 3, 5)}
+               "fire sword": Sword(5, 3, 5),
+               "god sword": Sword(1000, 0, 0)}
 
 items_BodyArmor = {"default": BodyArmor(1, 0),
                    "rusty body armor": BodyArmor(2, 20),
@@ -78,6 +79,32 @@ items_Ring = {"default": Ring(0, 0, 0),
               "poison ring": Ring(0, 3, 2)}
 
 Consumable_items = {"fireball": ["damage", 20, 3]}
+
+
+class Artefacts:
+    def __init__(self):
+        pass
+
+    def use(self, hero):
+        pass
+
+
+class Dio(Artefacts):
+    def use(self, hero):
+        hero.revival += 1
+
+
+class OilBottle(Artefacts):
+    def use(self, hero):
+        hero.atk_fire_multiplier += 0.25
+
+    def active_use(self, enemy):
+        enemy.chance_of_miss += 10
+
+
+items_Artefacts = {"Dio": [Dio(), 0],
+                   "Oil Bottle": [OilBottle(), 1]}
+
 #  название : [1)Максимум хп, 2)восстановление здововья, 3)атака, 4)атака(множитель), 5)атака огнем,
 #  6)атака ядом, 7)вампиризм, 8)дополнительная защита, 9)шанс промаха%, 10)шанс промаха%(дебафф на врага),
 #  11)эффект масла(значение влияет только на шанс промаха, увееличение урона от огня фиксированное)]
