@@ -41,9 +41,10 @@ class Greaves:
 
 
 class Ring:
-    def __init__(self, atk_fire, status_atk):
-        self.status_atk = status_atk
+    def __init__(self, atk_fire, poison_atk, poison_move):
         self.atk_fire = atk_fire
+        self.poison_atk = poison_atk
+        self.poison_move = poison_move
 
 
 class Helmet:
@@ -72,9 +73,9 @@ items_Greaves = {"default": Greaves(0),
                  "rusty greaves": Greaves(1),
                  "fire greaves": Greaves(3)}
 
-items_Ring = {"default": Ring(0, 0),
-              "rusty ring": Ring(5, 0),
-              "fire ring": Ring(0, 3)}
+items_Ring = {"default": Ring(0, 0, 0),
+              "rusty ring": Ring(5, 0, 0),
+              "poison ring": Ring(0, 3, 2)}
 
 Consumable_items = {"fireball": ["damage", 20, 3]}
 #  название : [1)Максимум хп, 2)восстановление здововья, 3)атака, 4)атака(множитель), 5)атака огнем,
