@@ -8,6 +8,7 @@ from battle import start_battle
 def start_map():
     class Room:
         def __init__(self):
+            print(1)
             if not Continue:
                 self.CellsTypes = random.choice([Rooms.Room1])
             else:
