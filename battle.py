@@ -16,16 +16,17 @@ def start_battle():
     icons = [pygame.image.load("image/icons/attack.png"),
              pygame.image.load("image/icons/shild.png"),
              pygame.image.load("image/icons/potion.png"),
-             pygame.image.load("image/icons/fireball.png")]
+             pygame.image.load("image/icons/fireball.png"),
+             pygame.image.load("image/icons/poison.png")]
 
     def render(screen, hero, enemy):
         screen.blit(icons[0], (100, 500))
         screen.blit(icons[1], (300, 500))
         screen.blit(icons[2], (500, 500))
         screen.blit(icons[3], (700, 500))
-        window_hp(hero, enemy)
+        window_status(hero, enemy)
 
-    def window_hp(hero, enemy):
+    def window_status(hero, enemy):
         myfont = pygame.font.SysFont('Liberation Serif', 30)
         # hp hero
         text = myfont.render(str(hero.hp), False, (255, 255, 255))
@@ -48,6 +49,20 @@ def start_battle():
             text = myfont.render(str(hero.recharge_Consumable_items), False, (255, 255, 255))
             text_rect = pygame.Rect(700, 470, 30, 30)
             screen.blit(text, text_rect)
+
+        myfont = pygame.font.SysFont('Liberation Serif', 20)
+        # poison
+        if hero.poison_move > 0:
+            screen.blit(icons[4], (390, 50))
+            text = myfont.render(str(hero.poison_move), False, (255, 255, 255))
+            rect = text.get_rect(center=(415, 40))
+            screen.blit(text, rect)
+
+        if enemy.poison_move > 0:
+            screen.blit(icons[4], (460, 50))
+            text = myfont.render(str(enemy.poison_move), False, (255, 255, 255))
+            rect = text.get_rect(center=(485, 40))
+            screen.blit(text, rect)
 
     def get_button(pos):
         x = int(pos[0])
@@ -87,16 +102,18 @@ def start_battle():
     ConsumableItemPosX = ScreenWidth // 2 + 250
     PosY = 500
 
-    ArtPosX = ScreenWidth // 2 - 400
+    ArtPosX = ScreenWidth // 2 - 425
     hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', all_sprites)
-    hero.putting_on_clothes(["fire sword", "rusty body armor", "fire gloves", "rusty greaves", "", "", ""])
+    hero.putting_on_clothes(["", "", "", "", "", "poison ring"])
     hero.putting_on_consumable_items("fireball")
     enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', all_sprites)
+    enemy.putting_on_clothes(["", "", "", "", "", "poison ring"])
 
     fps = 5
     clock = pygame.time.Clock()
     running = True
     flag_move = True
+    flag_enemy_move = False
     flag_anim = False
     time_anim = 5
     while running:
@@ -153,12 +170,11 @@ def start_battle():
                     DefendPosX = ScreenWidth // 2 - 150
                     HealingPosX = ScreenWidth // 2 + 50
                     ConsumableItemPosX = ScreenWidth // 2 + 250
-                    ArtPosX = ScreenWidth // 2 - 400
+                    ArtPosX = ScreenWidth // 2 - 375
         if not flag_move and enemy.status() and not flag_anim:
             attack(enemy, hero)
-            flag_move = True
-            hero.time_motion()
-            enemy.time_motion()
+            flag_anim = True
+            flag_enemy_move = True
         if not hero.status() or not enemy.status():
             pygame.quit()
             f = open('Continue.txt', mode='w')
@@ -182,4 +198,9 @@ def start_battle():
             if time_anim == 0:
                 time_anim = 5
                 flag_anim = False
+                if flag_enemy_move:
+                    hero.time_motion()
+                    enemy.time_motion()
+                    flag_move = True
+                    flag_enemy_move = False
         pygame.display.flip()

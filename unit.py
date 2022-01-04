@@ -1,5 +1,7 @@
 import pygame
 import random
+
+import items
 from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, items_Greaves, items_Ring, items_Helmet
 
 
@@ -22,6 +24,9 @@ class Unit:
         self.protect = 4 + (lv * 0.25) * 4
         self.dop_protect = 0
         self.status_protect = 0
+        self.poison_dm = 0
+        self.poison_move = 0
+        self.poison_flag = False
 
         self.time_def = 0
 
@@ -36,6 +41,9 @@ class Unit:
 
     def attack(self, other):
         flag_miss = False
+        if self.poison_flag:
+            other.poison_move = items_Ring[self.items[5]].poison_move
+            other.poison_dm = items_Ring[self.items[5]].poison_atk
         if self.chance_of_miss != 0:
             chance = random.randint(0, 100)
             if chance <= self.chance_of_miss:
@@ -64,6 +72,8 @@ class Unit:
         self.dop_hp += items_BodyArmor[self.items[1]].hp
         self.max_hp += self.dop_hp
         self.hp += self.dop_hp
+        if items_Ring[self.items[5]].poison_move > 0:
+            self.poison_flag = True
 
     def putting_on_consumable_items(self, name):
         self.Consumable_items = name
@@ -97,6 +107,11 @@ class Unit:
             self.recharge_healing -= 1
         if self.recharge_Consumable_items != 0:
             self.recharge_Consumable_items -= 1
+        if self.poison_move > 0:
+            self.taking_damage(self.poison_dm)
+            self.poison_move -= 1
+            if self.poison_move == 0:
+                self.poison_dm = 0
 
 
 class AnimatedSprite(pygame.sprite.Sprite):
@@ -120,4 +135,4 @@ class AnimatedSprite(pygame.sprite.Sprite):
         if self.character == 'hero':
             self.rect.x = NewX
         else:
-            self.rect.x = NewX + 450
+            self.rect.x = NewX + 490
