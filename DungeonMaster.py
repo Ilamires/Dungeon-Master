@@ -1,7 +1,7 @@
 import pygame
 import Rooms
 import random
-from items import items_artefacts
+from items import items_Artefacts
 from battle import start_battle
 
 
@@ -67,7 +67,7 @@ def start_map():
     class Chest(Cell):
         def __init__(self, x, y):
             super().__init__(x, y, 'Chest')
-            self.item = random.choice(list(items_artefacts.keys()))
+            self.item = random.choice(list(items_Artefacts.keys()))
 
     class Hero(pygame.sprite.Sprite):
         def __init__(self, x, y):
@@ -208,7 +208,7 @@ def start_map():
         f.write(' '.join(list(map(str, Hero.HeroPosition))))
         f.close()
         f = open("Artefacts.txt", mode="w")
-        f.write(' '.join(Received_artifacts))
+        f.write('/'.join(Received_artifacts))
         f.close()
 
     Received_artifacts = []
@@ -233,7 +233,7 @@ def start_map():
         HeroPos = list(map(int, f.read().split()))
         f.close()
         f = open('Artefacts.txt', mode='r')
-        Received_artifacts = f.read().split()
+        Received_artifacts = f.read().split("/")
         f.close()
 
     f = open('Fullscreen.txt', mode='r')
