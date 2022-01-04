@@ -104,10 +104,11 @@ def start_battle():
 
     ArtPosX = ScreenWidth // 2 - 425
     hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', all_sprites)
-    hero.putting_on_clothes(["", "", "", "", "", "poison ring"])
+    hero.putting_on_clothes(["god sword", "", "", "", "", ""])
     hero.putting_on_consumable_items("fireball")
     enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', all_sprites)
-    enemy.putting_on_clothes(["", "", "", "", "", "poison ring"])
+    enemy.putting_on_clothes(["", "", "", "", "", ""])
+    enemy.putting_artefacts(["Dio"])
 
     fps = 5
     clock = pygame.time.Clock()
@@ -175,14 +176,14 @@ def start_battle():
             attack(enemy, hero)
             flag_anim = True
             flag_enemy_move = True
-        if not hero.status() or not enemy.status():
+        if not hero.status() or not enemy.status() and not flag_anim:
             pygame.quit()
             f = open('Continue.txt', mode='w')
             f.write('1')
             f.close()
             from DungeonMaster import start_map
             start_map()
-        elif not hero.status():
+        elif not hero.status() and not flag_anim:
             pygame.quit()
             f = open('Continue.txt', mode='w')
             f.write('0')
