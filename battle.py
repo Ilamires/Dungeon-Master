@@ -108,11 +108,11 @@ def start_battle():
     print(arr_Artefacts)
     f.close()
     hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', all_sprites)
-    hero.putting_on_clothes(["", "", "", "", "", ""])
+    hero.putting_on_clothes(["fire sword", "", "", "", "", ""])
     hero.putting_artefacts(arr_Artefacts)
     hero.putting_on_consumable_items("fireball")
     enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', all_sprites)
-    enemy.putting_on_clothes(["god sword", "", "", "", "", ""])
+    enemy.putting_on_clothes(["", "", "", "", "", ""])
 
     fps = 5
     clock = pygame.time.Clock()

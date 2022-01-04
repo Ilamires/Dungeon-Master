@@ -52,7 +52,7 @@ class Unit:
     def attack(self, other):
         if self.flag_first_move:
             for i in self.active_artefacts:
-                items_Artefacts[i][0].active_use(self, other)
+                items_Artefacts[i][0].active_use(other)
             self.flag_first_move = False
         flag_miss = False
         if self.poison_flag:
@@ -91,10 +91,11 @@ class Unit:
 
     def putting_artefacts(self, arr):
         for i in arr:
-            items_Artefacts[i][0].use(self)
-            if items_Artefacts[i][1] == 1:
-                self.active_artefacts.append(i)
-            self.artefacts.append(i)
+            if i != "":
+                items_Artefacts[i][0].use(self)
+                if items_Artefacts[i][1] == 1:
+                    self.active_artefacts.append(i)
+                self.artefacts.append(i)
 
     def putting_on_consumable_items(self, name):
         self.Consumable_items = name

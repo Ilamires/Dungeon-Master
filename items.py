@@ -12,7 +12,7 @@ class Sword:
         other.time_def = 0
         if dm < 0.2 * (self.atk + unit.atk + unit.dop_atk):
             dm = 0.2 * (self.atk + unit.atk + unit.dop_atk)
-        dop_dm = (self.atk_fire + unit.atk_fire) - other.status_protect
+        dop_dm = (self.atk_fire + unit.atk_fire) * unit.atk_fire_multiplier - other.status_protect
         if dop_dm > 0:
             dm += dop_dm
         if self.vampirism != 0:
