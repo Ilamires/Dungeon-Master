@@ -78,7 +78,7 @@ items_Ring = {"default": Ring(0, 0, 0),
               "rusty ring": Ring(5, 0, 0),
               "poison ring": Ring(0, 3, 2)}
 
-Consumable_items = {"fireball": ["damage", 20, 3]}
+Consumable_items = {"fireball": ["damage", "fire", 20, 3]}
 
 
 class Artefacts:

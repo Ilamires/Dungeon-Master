@@ -70,10 +70,12 @@ class Unit:
         if self.recharge_Consumable_items == 0:
             name = self.Consumable_items
             type = Consumable_items[name][0]
+            type_atk = Consumable_items[name][1]
             if type == "damage":
-                dm = Consumable_items[name][1]
-                self.recharge_Consumable_items = Consumable_items[name][2] + 1
-                return dm
+                if type_atk == "fire":
+                    dm = Consumable_items[name][2] * self.atk_fire_multiplier
+                    self.recharge_Consumable_items = Consumable_items[name][3] + 1
+                    return dm
 
     def putting_on_clothes(self, arr):
         for i in range(len(arr)):
