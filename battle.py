@@ -126,6 +126,9 @@ def start_battle():
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                f = open('Continue.txt', mode='w')
+                f.write('0')
+                f.close()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if flag_move and not flag_anim:
@@ -191,6 +194,9 @@ def start_battle():
             NumberOfRooms, RoomNumber = list(map(int, f.read().split()))
             f.close()
             if RoomNumber == NumberOfRooms:
+                f = open('Continue.txt', mode='w')
+                f.write('0')
+                f.close()
                 sys.exit()
             else:
                 start_map()
