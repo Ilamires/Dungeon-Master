@@ -22,22 +22,22 @@ def start_battle():
              pygame.image.load("image/icons/poison.png")]
 
     def render(screen, hero, enemy):
-        screen.blit(icons[0], (100, 500))
-        screen.blit(icons[1], (300, 500))
-        screen.blit(icons[2], (500, 500))
-        screen.blit(icons[3], (700, 500))
+        screen.blit(icons[0], (AttackPosX, 500))
+        screen.blit(icons[1], (DefendPosX, 500))
+        screen.blit(icons[2], (HealingPosX, 500))
+        screen.blit(icons[3], (ConsumableItemPosX, 500))
         window_status(hero, enemy)
 
     def window_status(hero, enemy):
         myfont = pygame.font.SysFont('Liberation Serif', 30)
         # hp hero
         text = myfont.render(str(hero.hp), False, (255, 255, 255))
-        text_rect = pygame.Rect(50, 20, 30, 30)
+        text_rect = pygame.Rect(ArtPosX+150, 20, 30, 30)
         screen.blit(text, text_rect)
 
         # hp enemy
         text = myfont.render(str(enemy.hp), False, (255, 255, 255))
-        text_rect = pygame.Rect(750, 20, 30, 30)
+        text_rect = pygame.Rect(ArtPosX+640, 20, 30, 30)
         screen.blit(text, text_rect)
 
         # recharge_healing
@@ -70,13 +70,13 @@ def start_battle():
         x = int(pos[0])
         y = int(pos[1])
         if 500 <= y <= 600:
-            if 100 <= x <= 200:
+            if AttackPosX <= x <= AttackPosX + 100:
                 return 1
-            elif 300 <= x <= 400:
+            elif DefendPosX <= x <= DefendPosX + 100:
                 return 2
-            elif 500 <= x <= 600:
+            elif HealingPosX <= x <= HealingPosX + 100:
                 return 3
-            elif 700 <= x <= 800:
+            elif ConsumableItemPosX <= x <= ConsumableItemPosX + 100:
                 return 4
         return None
 
@@ -102,7 +102,6 @@ def start_battle():
     DefendPosX = ScreenWidth // 2 - 150
     HealingPosX = ScreenWidth // 2 + 50
     ConsumableItemPosX = ScreenWidth // 2 + 250
-    PosY = 500
 
     ArtPosX = ScreenWidth // 2 - 425
     f = open('ReceivedArtefacts.txt', mode='r')
