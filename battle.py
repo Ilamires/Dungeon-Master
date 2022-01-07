@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 from unit import Unit
 
@@ -124,7 +126,7 @@ def start_battle():
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if flag_move and not flag_anim:
                     if event.button == 1:
@@ -185,14 +187,26 @@ def start_battle():
             f.write('1')
             f.close()
             from DungeonMaster import start_map
-            start_map()
+            f = open('MapNumber.txt', mode='r')
+            NumberOfRooms, RoomNumber = list(map(int, f.read().split()))
+            f.close()
+            if RoomNumber == NumberOfRooms:
+                sys.exit()
+            else:
+                start_map()
         elif not hero.status() and not flag_anim:
             pygame.quit()
             f = open('Continue.txt', mode='w')
             f.write('0')
             f.close()
             from DungeonMaster import start_map
-            start_map()
+            f = open('MapNumber.txt', mode='r')
+            NumberOfRooms, RoomNumber = list(map(int, f.read().split()))
+            f.close()
+            if RoomNumber == NumberOfRooms:
+                pygame.quit()
+            else:
+                start_map()
         render(screen, hero, enemy)
         all_sprites.update(ArtPosX)
         all_sprites.draw(screen)

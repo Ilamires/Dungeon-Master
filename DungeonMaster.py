@@ -1,6 +1,7 @@
 import pygame
 import Rooms
 import random
+import sys
 from items import items_Artefacts
 from battle import start_battle
 
@@ -272,7 +273,7 @@ def start_map():
             ItemsInChest[i] = ItemsInChest[i].split('/')
         f.close()
         f = open('MapNumber.txt', mode='r')
-        NumberOfRooms, RoomNumber = list(map(int,f.read().split()))
+        NumberOfRooms, RoomNumber = list(map(int, f.read().split()))
         f.close()
         f = open('Continue.txt', mode='w')
         f.write('0')
@@ -314,7 +315,7 @@ def start_map():
                 f = open('Continue.txt', mode='w')
                 f.write('0')
                 f.close()
-                pygame.quit()
+                sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 CellMovePosition = board.get_cell(event.pos)
                 HeroX, HeroY = Hero.HeroPosition[0], Hero.HeroPosition[1]
@@ -354,8 +355,10 @@ def start_map():
                             start_battle()
                         if Room.CellsTypes[MoveX][MoveY] == 'Exit':
                             RoomNumber += 1
-                            if RoomNumber==NumberOfRooms:
-                                pass
+                            if RoomNumber == NumberOfRooms:
+                                Save()
+                                pygame.quit()
+                                start_battle()
                             else:
                                 for i in range(len(board.board)):
                                     for j in range(len(board.board[i])):
