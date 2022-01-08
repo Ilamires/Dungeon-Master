@@ -2,7 +2,7 @@ class Sword:
     def __init__(self, atk, atk_fire, vampirism):
         self.atk = atk
         self.atk_fire = atk_fire
-        self.vampirism = vampirism
+        self.life_steal = vampirism
 
     def attack(self, unit, other):
         if other.time_def == 0:
@@ -15,9 +15,13 @@ class Sword:
         dop_dm = (self.atk_fire + unit.atk_fire) * unit.atk_fire_multiplier - other.status_protect
         if dop_dm > 0:
             dm += dop_dm
-        if self.vampirism != 0:
-            unit.heal(round((self.vampirism / 100) * dm))
+        if self.life_steal != 0:
+            unit.heal(round((self.life_steal / 100) * dm))
         return round(dm)
+
+    def get_stats(self):
+        arr_str = [f"attack = {self.atk}", f"attack fire = {self.atk_fire}", f"life_steal = {self.life_steal}"]
+        return arr_str
 
 
 class BodyArmor:
@@ -78,7 +82,7 @@ items_Ring = {"default": Ring(0, 0, 0),
               "rusty ring": Ring(5, 0, 0),
               "poison ring": Ring(0, 3, 2)}
 
-Consumable_items = {"fireball": ["damage", "fire", 20, 3]}
+Consumable_items = {"fireball": ["damage", "fire", 20, 4]}
 
 
 class Artefacts:
