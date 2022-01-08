@@ -1,6 +1,7 @@
 import sys
 
 import pygame
+from infobattle import Info
 from unit import Unit
 
 
@@ -22,6 +23,7 @@ def start_battle():
              pygame.image.load("image/icons/poison.png")]
 
     def render(screen, hero, enemy):
+        info.render()
         screen.blit(icons[0], (AttackPosX, 500))
         screen.blit(icons[1], (DefendPosX, 500))
         screen.blit(icons[2], (HealingPosX, 500))
@@ -32,24 +34,24 @@ def start_battle():
         myfont = pygame.font.SysFont('Liberation Serif', 30)
         # hp hero
         text = myfont.render(str(hero.hp), False, (255, 255, 255))
-        text_rect = pygame.Rect(ArtPosX+150, 20, 30, 30)
+        text_rect = pygame.Rect(ArtPosX + 150, 20, 30, 30)
         screen.blit(text, text_rect)
 
         # hp enemy
         text = myfont.render(str(enemy.hp), False, (255, 255, 255))
-        text_rect = pygame.Rect(ArtPosX+640, 20, 30, 30)
+        text_rect = pygame.Rect(ArtPosX + 640, 20, 30, 30)
         screen.blit(text, text_rect)
 
         # recharge_healing
         if hero.recharge_healing != 0:
             text = myfont.render(str(hero.recharge_healing), False, (255, 255, 255))
-            text_rect = pygame.Rect(500, 470, 30, 30)
+            text_rect = pygame.Rect(HealingPosX, 470, 30, 30)
             screen.blit(text, text_rect)
 
         # recharge_Consumable_items
         if hero.recharge_Consumable_items != 0:
             text = myfont.render(str(hero.recharge_Consumable_items), False, (255, 255, 255))
-            text_rect = pygame.Rect(700, 470, 30, 30)
+            text_rect = pygame.Rect(ConsumableItemPosX, 470, 30, 30)
             screen.blit(text, text_rect)
 
         myfont = pygame.font.SysFont('Liberation Serif', 20)
@@ -78,6 +80,11 @@ def start_battle():
                 return 3
             elif ConsumableItemPosX <= x <= ConsumableItemPosX + 100:
                 return 4
+        if 50 < y < 450:
+            if ArtPosX <= x <= AttackPosX + 360:
+                return 5
+            elif ArtPosX + 490 <= x <= AttackPosX + 360 + 490:
+                return 6
         return None
 
     def attack(self, other):
@@ -94,19 +101,21 @@ def start_battle():
                                            pygame.display.Info().current_h
         screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
     else:
-        size = ScreenWidth, ScreenHeight = 900, 700
+        size = ScreenWidth, ScreenHeight = 1225, 700
         screen = pygame.display.set_mode(size)
     all_sprites = pygame.sprite.Group()
 
-    AttackPosX = ScreenWidth // 2 - 350
-    DefendPosX = ScreenWidth // 2 - 150
-    HealingPosX = ScreenWidth // 2 + 50
-    ConsumableItemPosX = ScreenWidth // 2 + 250
+    dop_x = 150
+    AttackPosX = ScreenWidth // 2 - 350 + dop_x
+    DefendPosX = ScreenWidth // 2 - 150 + dop_x
+    HealingPosX = ScreenWidth // 2 + 50 + dop_x
+    ConsumableItemPosX = ScreenWidth // 2 + 250 + dop_x
 
-    ArtPosX = ScreenWidth // 2 - 425
+    ArtPosX = ScreenWidth // 2 - 425 + dop_x
     f = open('ReceivedArtefacts.txt', mode='r')
     arr_Artefacts = f.readline().split("/")
     f.close()
+    info = Info(screen, 10, 10)
     hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', all_sprites)
     hero.putting_on_clothes(["god sword", "", "", "", "", ""])
     hero.putting_artefacts(arr_Artefacts)
@@ -114,13 +123,13 @@ def start_battle():
     enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', all_sprites)
     enemy.putting_on_clothes(["", "", "", "", "", ""])
 
-    fps = 5
+    fps = 30
     clock = pygame.time.Clock()
     running = True
     flag_move = True
     flag_enemy_move = False
     flag_anim = False
-    time_anim = 5
+    time_anim = 30
     while running:
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
@@ -129,6 +138,10 @@ def start_battle():
                 f.write('0')
                 f.close()
                 sys.exit()
+            if event.type == pygame.MOUSEMOTION:
+                button = get_button(event.pos)
+                if button != None:
+                    info.render_info(hero, enemy, button)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if flag_move and not flag_anim:
                     if event.button == 1:
@@ -144,7 +157,7 @@ def start_battle():
                                 flag_anim = True
                             elif button == 3:
                                 if hero.recharge_healing == 0:
-                                    hero.healing(50)
+                                    hero.healing()
                                     flag_move = False
                                     flag_anim = True
                             elif button == 4:
@@ -219,7 +232,7 @@ def start_battle():
         if flag_anim:
             time_anim -= 1
             if time_anim == 0:
-                time_anim = 5
+                time_anim = 30
                 flag_anim = False
                 if flag_enemy_move:
                     hero.time_motion()

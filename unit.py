@@ -13,7 +13,9 @@ class Unit:
         self.dop_hp = 0
         self.hp = 100 + (lv * 0.25) * 100
         self.max_hp = self.hp + self.dop_hp
+        self.healing_hp = 50
         self.recharge_healing = 0
+        self.max_recharge_healing = 6
 
         self.atk = 4 + (lv * 0.25) * 4
         self.dop_atk = 0
@@ -74,8 +76,16 @@ class Unit:
             if type == "damage":
                 if type_atk == "fire":
                     dm = Consumable_items[name][2] * self.atk_fire_multiplier
-                    self.recharge_Consumable_items = Consumable_items[name][3] + 1
+                    self.recharge_Consumable_items = Consumable_items[name][3]
                     return dm
+
+    def get_info_consumable_item(self):
+        name = self.Consumable_items
+        type = Consumable_items[name][0]
+        type_atk = Consumable_items[name][1]
+        if type == "damage":
+            arr = [name, type, type_atk]
+            return arr
 
     def putting_on_clothes(self, arr):
         for i in range(len(arr)):
@@ -113,10 +123,10 @@ class Unit:
     def defense(self):
         self.time_def = items_BodyArmor[self.items[1]].defense(self)
 
-    def healing(self, healing_hp):
+    def healing(self):
         if self.recharge_healing == 0:
-            self.heal(healing_hp)
-            self.recharge_healing = 6
+            self.heal(self.healing_hp)
+            self.recharge_healing = self.max_recharge_healing
 
     def heal(self, heal_hp):
         self.hp += heal_hp
@@ -144,6 +154,7 @@ class Unit:
 class AnimatedSprite(pygame.sprite.Sprite):
     def __init__(self, filename, x, y, character, *group):
         super().__init__(*group)
+        self.fps = 0
         self.frames = []
         self.character = character
         for i in filename:
@@ -157,9 +168,11 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.rect.y = y
 
     def update(self, NewX):
-        self.cur_frame = (self.cur_frame + 1) % len(self.frames)
-        self.image = self.frames[self.cur_frame]
-        if self.character == 'hero':
-            self.rect.x = NewX
-        else:
-            self.rect.x = NewX + 490
+        if self.fps % 6 == 0:
+            self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+            self.image = self.frames[self.cur_frame]
+            if self.character == 'hero':
+                self.rect.x = NewX
+            else:
+                self.rect.x = NewX + 490
+        self.fps += 1
