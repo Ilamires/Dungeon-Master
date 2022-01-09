@@ -115,7 +115,7 @@ def start_battle():
     f.close()
     # ["Sword", "BodyArmor", "Gloves", "Greaves", "Helmet", "Ring"]
     hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', all_sprites)
-    hero.putting_on_clothes(["rusty sword", "rusty body armor", "rusty gloves", "", "", "poison ring"])
+    hero.putting_on_clothes(["rusty sword", "", "", "", "", ""])
     hero.putting_artefacts(arr_Artefacts)
     hero.putting_on_consumable_items("fireball")
     enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', all_sprites)
