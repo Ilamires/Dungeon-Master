@@ -4,6 +4,7 @@ import random
 import sys
 from items import items_Artefacts
 from battle import start_battle
+from MainMenu import start_mainmenu
 
 
 def start_map():
@@ -405,6 +406,5 @@ def start_map():
                     board.render(screen)
         pygame.display.flip()
         clock.tick(60)
+start_mainmenu()
 
-
-start_map()

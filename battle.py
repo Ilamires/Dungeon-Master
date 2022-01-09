@@ -6,6 +6,7 @@ from unit import Unit
 
 
 def start_battle():
+    from DungeonMaster import start_map
     hero_anim_breathing = ["image/hero_anim/hero_battle_anim_breathing_1.png",
                            "image/hero_anim/hero_battle_anim_breathing_2.png",
                            "image/hero_anim/hero_battle_anim_breathing_3.png",
@@ -117,7 +118,7 @@ def start_battle():
     f.close()
     info = Info(screen, 10, 10)
     hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', all_sprites)
-    hero.putting_on_clothes(["god sword", "", "", "", "", ""])
+    hero.putting_on_clothes(["rusty sword", "", "", "", "", ""])
     hero.putting_artefacts(arr_Artefacts)
     hero.putting_on_consumable_items("fireball")
     enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', all_sprites)
@@ -201,7 +202,6 @@ def start_battle():
             f = open('Continue.txt', mode='w')
             f.write('1')
             f.close()
-            from DungeonMaster import start_map
             f = open('MapNumber.txt', mode='r')
             NumberOfRooms, RoomNumber = list(map(int, f.read().split()))
             f.close()
@@ -217,7 +217,6 @@ def start_battle():
             f = open('Continue.txt', mode='w')
             f.write('0')
             f.close()
-            from DungeonMaster import start_map
             f = open('MapNumber.txt', mode='r')
             NumberOfRooms, RoomNumber = list(map(int, f.read().split()))
             f.close()
