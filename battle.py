@@ -24,12 +24,12 @@ def start_battle():
              pygame.image.load("image/icons/poison.png")]
 
     def render(screen, hero, enemy):
-        info.render()
         screen.blit(icons[0], (AttackPosX, 500))
         screen.blit(icons[1], (DefendPosX, 500))
         screen.blit(icons[2], (HealingPosX, 500))
         screen.blit(icons[3], (ConsumableItemPosX, 500))
         window_status(hero, enemy)
+        info.render()
 
     def window_status(hero, enemy):
         myfont = pygame.font.SysFont('Liberation Serif', 30)
@@ -58,21 +58,21 @@ def start_battle():
         myfont = pygame.font.SysFont('Liberation Serif', 20)
         # poison
         if hero.poison_move > 0:
-            screen.blit(icons[4], (390, 50))
+            screen.blit(icons[4], (ArtPosX + 365, 50))
             text = myfont.render(str(hero.poison_move), False, (255, 255, 255))
-            rect = text.get_rect(center=(415, 40))
+            rect = text.get_rect(center=(ArtPosX + 390, 40))
             screen.blit(text, rect)
 
         if enemy.poison_move > 0:
-            screen.blit(icons[4], (460, 50))
+            screen.blit(icons[4], (ArtPosX + 440, 50))
             text = myfont.render(str(enemy.poison_move), False, (255, 255, 255))
-            rect = text.get_rect(center=(485, 40))
+            rect = text.get_rect(center=(ArtPosX + 465, 40))
             screen.blit(text, rect)
 
     def get_button(pos):
         x = int(pos[0])
         y = int(pos[1])
-        if 500 <= y <= 600:
+        if 500 <= y <= 600 and not flag_inventory:
             if AttackPosX <= x <= AttackPosX + 100:
                 return 1
             elif DefendPosX <= x <= DefendPosX + 100:
@@ -81,15 +81,13 @@ def start_battle():
                 return 3
             elif ConsumableItemPosX <= x <= ConsumableItemPosX + 100:
                 return 4
-        if 50 < y < 450:
-            if ArtPosX <= x <= AttackPosX + 360:
+        if ScreenHeight - 150 <= y <= ScreenHeight - 50:
+            if 25 <= x <= 325:
                 return 5
-            elif ArtPosX + 490 <= x <= AttackPosX + 360 + 490:
-                return 6
         return None
 
     def attack(self, other):
-        dm = self.attack(other)
+        dm = self.attack(other, True)
         other.taking_damage(dm)
 
     f = open('Fullscreen.txt', mode='r')
@@ -116,7 +114,7 @@ def start_battle():
     f = open('ReceivedArtefacts.txt', mode='r')
     arr_Artefacts = f.readline().split("/")
     f.close()
-    info = Info(screen, 10, 10)
+    # ["Sword", "BodyArmor", "Gloves", "Greaves", "Helmet", "Ring"]
     hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', all_sprites)
     hero.putting_on_clothes(["rusty sword", "", "", "", "", ""])
     hero.putting_artefacts(arr_Artefacts)
@@ -124,11 +122,14 @@ def start_battle():
     enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', all_sprites)
     enemy.putting_on_clothes(["", "", "", "", "", ""])
 
+    info = Info(screen, ScreenWidth, ScreenHeight, 10, 10, hero, enemy)
+
     fps = 30
     clock = pygame.time.Clock()
     running = True
     flag_move = True
     flag_enemy_move = False
+    flag_inventory = False
     flag_anim = False
     time_anim = 30
     while running:
@@ -141,8 +142,8 @@ def start_battle():
                 sys.exit()
             if event.type == pygame.MOUSEMOTION:
                 button = get_button(event.pos)
-                if button != None:
-                    info.render_info(hero, enemy, button)
+                if button != None and button != 5:
+                    info.render_info(button)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if flag_move and not flag_anim:
                     if event.button == 1:
@@ -166,6 +167,9 @@ def start_battle():
                                     enemy.taking_damage(hero.use_consumable_items())
                                     flag_move = False
                                     flag_anim = True
+                            elif button == 5:
+                                info.render_info(button)
+                                flag_inventory = not flag_inventory
                             else:
                                 flag_move = True
                                 flag_anim = False

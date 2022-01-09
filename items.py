@@ -57,6 +57,7 @@ class Helmet:
         self.status_protect = status_protect
 
 
+# ["Sword", "BodyArmor", "Gloves", "Greaves", "Helmet", "Ring"]
 items_Sword = {"default": Sword(1, 0, 0),
                "rusty sword": Sword(5, 0, 0),
                "fire sword": Sword(5, 3, 5),
@@ -66,10 +67,6 @@ items_BodyArmor = {"default": BodyArmor(1, 0),
                    "rusty body armor": BodyArmor(2, 20),
                    "fire body armor": BodyArmor(5, 50)}
 
-items_Helmet = {"default": Helmet(0, 0),
-                "rusty gloves": Helmet(1, 1),
-                "fire gloves": Helmet(1, 3)}
-
 items_Gloves = {"default": Gloves(0, 0),
                 "rusty gloves": Gloves(2, 1),
                 "fire gloves": Gloves(3, 1)}
@@ -77,6 +74,10 @@ items_Gloves = {"default": Gloves(0, 0),
 items_Greaves = {"default": Greaves(0),
                  "rusty greaves": Greaves(1),
                  "fire greaves": Greaves(3)}
+
+items_Helmet = {"default": Helmet(0, 0),
+                "rusty gloves": Helmet(1, 1),
+                "fire gloves": Helmet(1, 3)}
 
 items_Ring = {"default": Ring(0, 0, 0),
               "rusty ring": Ring(5, 0, 0),
