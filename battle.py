@@ -28,8 +28,14 @@ def start_battle():
         screen.blit(icons[1], (DefendPosX, 500))
         screen.blit(icons[2], (HealingPosX, 500))
         screen.blit(icons[3], (ConsumableItemPosX, 500))
+        all_sprites.update(ArtPosX)
+        all_sprites.draw(screen)
         window_status(hero, enemy)
         info.render()
+        if hero.anim.flag_window_hp:
+            hero.window_hp()
+        if enemy.anim.flag_window_hp:
+            enemy.window_hp()
 
     def window_status(hero, enemy):
         myfont = pygame.font.SysFont('Liberation Serif', 30)
@@ -115,11 +121,11 @@ def start_battle():
     arr_Artefacts = f.readline().split("/")
     f.close()
     # ["Sword", "BodyArmor", "Gloves", "Greaves", "Helmet", "Ring"]
-    hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', all_sprites)
-    hero.putting_on_clothes(["rusty sword", "", "", "", "", ""])
+    hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', screen, all_sprites)
+    hero.putting_on_clothes(["fire sword", "", "", "", "", "poison ring"])
     hero.putting_artefacts(arr_Artefacts)
     hero.putting_on_consumable_items("fireball")
-    enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', all_sprites)
+    enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', screen, all_sprites)
     enemy.putting_on_clothes(["", "", "", "", "", ""])
 
     info = Info(screen, ScreenWidth, ScreenHeight, 10, 10, hero, enemy)
@@ -229,8 +235,6 @@ def start_battle():
             else:
                 start_map()
         render(screen, hero, enemy)
-        all_sprites.update(ArtPosX)
-        all_sprites.draw(screen)
         clock.tick(fps)
         if flag_anim:
             time_anim -= 1
