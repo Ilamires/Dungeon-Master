@@ -66,7 +66,9 @@ class Unit:
                 flag_miss = True
         if not flag_miss:
             dm = items_Sword[self.items[0]].attack(self, other)
-            return dm
+        else:
+            dm = 0
+        return dm
 
     def use_consumable_items(self):
         if self.recharge_Consumable_items == 0:
@@ -77,7 +79,7 @@ class Unit:
                 if type_atk == "fire":
                     dm = Consumable_items[name][2] * self.atk_fire_multiplier
                     self.recharge_Consumable_items = Consumable_items[name][3]
-                    return dm
+                    return round(dm)
 
     def get_info_consumable_item(self):
         name = self.Consumable_items

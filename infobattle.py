@@ -17,6 +17,7 @@ class Info:
             text = self.text_arr[i]
             rect = (self.x + 5, self.y + 5 + (i * 25))
             self.screen.blit(text, rect)
+        pygame.draw.rect(self.screen, [255, 255, 255], self.rect, width=1)
 
     def render_info(self, hero, other, flag, ):
         myfont = pygame.font.SysFont('Liberation Serif', 20)
@@ -61,3 +62,6 @@ class Info:
             elif flag == 5:
                 pass
         self.flag = flag
+
+    def render_clothes(self):
+        pass
