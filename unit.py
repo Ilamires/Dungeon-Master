@@ -51,13 +51,13 @@ class Unit:
     def update(self):
         self.anim.update(0)
 
-    def attack(self, other):
+    def attack(self, other, flag):
         if self.flag_first_move:
             for i in self.active_artefacts:
                 items_Artefacts[i][0].active_use(other)
             self.flag_first_move = False
         flag_miss = False
-        if self.poison_flag:
+        if self.poison_flag and flag:
             other.poison_move = items_Ring[self.items[5]].poison_move
             other.poison_dm = items_Ring[self.items[5]].poison_atk
         if self.chance_of_miss != 0:
