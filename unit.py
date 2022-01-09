@@ -5,7 +5,7 @@ from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, 
 
 
 class Unit:
-    def __init__(self, lv, filename, x, y, character, *group):
+    def __init__(self, lv, filename, x, y, character, screen, *group):
         self.anim = AnimatedSprite(filename, x, y, character, *group)
         self.image = self.anim.image
         self.flag_first_move = True
@@ -16,6 +16,9 @@ class Unit:
         self.healing_hp = 50
         self.recharge_healing = 0
         self.max_recharge_healing = 6
+
+        self.transparency = 128
+        self.screen = screen
 
         self.atk = 4 + (lv * 0.25) * 4
         self.dop_atk = 0
@@ -115,12 +118,16 @@ class Unit:
         self.Consumable_items = name
 
     def taking_damage(self, dm):
+        self.transparency = round(((dm / self.max_hp) * 255 * 0.7) + 255 * 0.3)
+        if self.transparency > 255:
+            self.transparency = 255
         self.hp -= dm
         if self.hp < 0:
             self.hp = 0
             if self.revival > 0:
                 self.hp = self.max_hp * 0.5
                 self.revival -= 1
+        self.anim.flag_window_hp = True
 
     def defense(self):
         self.time_def = items_BodyArmor[self.items[1]].defense(self)
@@ -152,6 +159,12 @@ class Unit:
             if self.poison_move == 0:
                 self.poison_dm = 0
 
+    def window_hp(self):
+        rect_surf = pygame.Surface((1225, 700), pygame.SRCALPHA)
+        pygame.draw.rect(rect_surf, [255, 0, 0, self.transparency], (self.anim.rect.x, self.anim.rect.y, 360, 400),
+                         width=0)
+        self.screen.blit(rect_surf, (0, 0))
+
 
 class AnimatedSprite(pygame.sprite.Sprite):
     def __init__(self, filename, x, y, character, *group):
@@ -159,6 +172,9 @@ class AnimatedSprite(pygame.sprite.Sprite):
         self.fps = 0
         self.frames = []
         self.character = character
+
+        self.flag_window_hp = False
+        self.time_window_hp = 15
         for i in filename:
             i = pygame.image.load(i)
             # i = pygame.transform.scale(i, (360, 400))
@@ -178,3 +194,8 @@ class AnimatedSprite(pygame.sprite.Sprite):
             else:
                 self.rect.x = NewX + 490
         self.fps += 1
+        if self.flag_window_hp:
+            self.time_window_hp -= 1
+            if self.time_window_hp == -1:
+                self.flag_window_hp = False
+                self.time_window_hp = 15
