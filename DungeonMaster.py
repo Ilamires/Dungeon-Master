@@ -353,12 +353,14 @@ def start_map():
                             Room.Cells[MoveX][MoveY].type = 'Empty'
                             Save()
                             pygame.quit()
+                            running = False
                             start_battle()
                         if Room.CellsTypes[MoveX][MoveY] == 'Exit':
                             RoomNumber += 1
                             if RoomNumber == NumberOfRooms:
                                 Save()
                                 pygame.quit()
+                                running=False
                                 start_battle()
                             else:
                                 for i in range(len(board.board)):
@@ -390,7 +392,7 @@ def start_map():
                         f.write('1')
                         f.close()
                     else:
-                        size = ScreenWidth, ScreenHeight = 900, 700
+                        size = ScreenWidth, ScreenHeight = 1225, 700
                         screen = pygame.display.set_mode(size)
                         f = open('Fullscreen.txt', mode='w')
                         f.write('0')

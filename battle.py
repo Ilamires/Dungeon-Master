@@ -7,6 +7,7 @@ from unit import Unit
 
 def start_battle():
     from DungeonMaster import start_map
+    from MainMenu import start_mainmenu
     hero_anim_breathing = ["image/hero_anim/hero_battle_anim_breathing_1.png",
                            "image/hero_anim/hero_battle_anim_breathing_2.png",
                            "image/hero_anim/hero_battle_anim_breathing_3.png",
@@ -143,7 +144,7 @@ def start_battle():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 f = open('Continue.txt', mode='w')
-                f.write('0')
+                f.write('1')
                 f.close()
                 sys.exit()
             if event.type == pygame.MOUSEMOTION:
@@ -198,11 +199,14 @@ def start_battle():
                             f = open('Fullscreen.txt', mode='w')
                             f.write('0')
                         f.close()
-                        AttackPosX = ScreenWidth // 2 - 350
-                        DefendPosX = ScreenWidth // 2 - 150
-                        HealingPosX = ScreenWidth // 2 + 50
-                        ConsumableItemPosX = ScreenWidth // 2 + 250
-                        ArtPosX = ScreenWidth // 2 - 375
+                        AttackPosX = ScreenWidth // 2 - 350 + dop_x
+                        DefendPosX = ScreenWidth // 2 - 150 + dop_x
+                        HealingPosX = ScreenWidth // 2 + 50 + dop_x
+                        ConsumableItemPosX = ScreenWidth // 2 + 250 + dop_x
+                        ArtPosX = ScreenWidth // 2 - 425 + dop_x
+                        info.screen_width = ScreenWidth
+                        info.screen_height = ScreenHeight
+                        info.screen = screen
         if not flag_move and enemy.status() and not flag_anim:
             attack(enemy, hero)
             flag_anim = True
@@ -221,6 +225,7 @@ def start_battle():
                 f.close()
                 sys.exit()
             else:
+                running = False
                 start_map()
         elif not hero.status() and not flag_anim:
             pygame.quit()
@@ -231,8 +236,10 @@ def start_battle():
             NumberOfRooms, RoomNumber = list(map(int, f.read().split()))
             f.close()
             if RoomNumber == NumberOfRooms:
-                pygame.quit()
+                running = False
+                start_mainmenu()
             else:
+                running = False
                 start_map()
         render(screen, hero, enemy)
         clock.tick(fps)

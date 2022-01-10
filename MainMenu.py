@@ -15,7 +15,7 @@ def start_mainmenu():
                                             pygame.display.Info().current_h
         screen = pygame.display.set_mode(size1, pygame.FULLSCREEN)
     else:
-        size1 = ScreenWidth, ScreenHeight = 900, 700
+        size1 = ScreenWidth, ScreenHeight = 1225, 700
         screen = pygame.display.set_mode(size1)
     Font = pygame.font.SysFont('Liberation Serif', 100)
     text = Font.render('Dungeon Master', False, (255, 255, 255))
@@ -51,12 +51,14 @@ def start_mainmenu():
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == ContinueGame:
                     pygame.quit()
+                    running = False
                     start_map()
                 elif event.ui_element == StartGame:
                     f = open('Continue.txt', mode='w')
                     f.write('0')
                     f.close()
                     pygame.quit()
+                    running = False
                     start_map()
                 elif event.ui_element == StatisticsButton:
                     pass
@@ -68,7 +70,7 @@ def start_mainmenu():
                     pygame.quit()
                     pygame.init()
                     pygame.display.set_caption('Dungeon Master')
-                    if DisplaySize == (900, 700):
+                    if DisplaySize == (1225, 700):
                         size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
                                                            pygame.display.Info().current_h
                         screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
@@ -76,7 +78,7 @@ def start_mainmenu():
                         f.write('1')
                         f.close()
                     else:
-                        size = ScreenWidth, ScreenHeight = 900, 700
+                        size = ScreenWidth, ScreenHeight = 1225, 700
                         screen = pygame.display.set_mode(size)
                         f = open('Fullscreen.txt', mode='w')
                         f.write('0')

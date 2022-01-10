@@ -160,7 +160,9 @@ class Unit:
                 self.poison_dm = 0
 
     def window_hp(self):
-        rect_surf = pygame.Surface((1225, 700), pygame.SRCALPHA)
+        ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
+                                    pygame.display.Info().current_h
+        rect_surf = pygame.Surface((ScreenWidth, ScreenHeight), pygame.SRCALPHA)
         pygame.draw.rect(rect_surf, [255, 0, 0, self.transparency], (self.anim.rect.x, self.anim.rect.y, 360, 400),
                          width=0)
         self.screen.blit(rect_surf, (0, 0))
