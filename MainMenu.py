@@ -83,6 +83,8 @@ def start_mainmenu():
                         f = open('Fullscreen.txt', mode='w')
                         f.write('0')
                         f.close()
+                    text_rect = pygame.Rect(ScreenWidth // 2 - 340, 60, 800, 200)
+                    screen.blit(text, text_rect)
                     StartGame.kill()
                     StatisticsButton.kill()
                     ExitButton.kill()
