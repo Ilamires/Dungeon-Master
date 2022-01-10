@@ -290,7 +290,7 @@ def start_map():
                                            pygame.display.Info().current_h
         screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
     else:
-        size = ScreenWidth, ScreenHeight = 900, 700
+        size = ScreenWidth, ScreenHeight = 1225, 700
         screen = pygame.display.set_mode(size)
 
     hero_sprite = pygame.sprite.Group()
@@ -314,7 +314,7 @@ def start_map():
             if event.type == pygame.QUIT:
                 Save()
                 f = open('Continue.txt', mode='w')
-                f.write('0')
+                f.write('1')
                 f.close()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -382,7 +382,7 @@ def start_map():
                     pygame.quit()
                     pygame.init()
                     pygame.display.set_caption('Dungeon Master')
-                    if DisplaySize == (900, 700):
+                    if DisplaySize == (1225, 700):
                         size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
                                                            pygame.display.Info().current_h
                         screen = pygame.display.set_mode(size, pygame.FULLSCREEN)

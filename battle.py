@@ -122,7 +122,7 @@ def start_battle():
     f.close()
     # ["Sword", "BodyArmor", "Gloves", "Greaves", "Helmet", "Ring"]
     hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', screen, all_sprites)
-    hero.putting_on_clothes(["fire sword", "", "", "", "", "poison ring"])
+    hero.putting_on_clothes(["god sword", "", "", "", "", "poison ring"])
     hero.putting_artefacts(arr_Artefacts)
     hero.putting_on_consumable_items("fireball")
     enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', screen, all_sprites)
@@ -179,30 +179,30 @@ def start_battle():
                             else:
                                 flag_move = True
                                 flag_anim = False
-        if not flag_move and enemy.status() and not flag_anim:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_f:
-                    DisplaySize = pygame.display.get_window_size()
-                    pygame.quit()
-                    pygame.init()
-                    pygame.display.set_caption('Dungeon Master')
-                    f = open('Fullscreen.txt', mode='w')
-                    if DisplaySize == (900, 700):
-                        size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
-                                                           pygame.display.Info().current_h
-                        screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
-                        f.write('1')
-                    else:
-                        size = ScreenWidth, ScreenHeight = 900, 700
-                        screen = pygame.display.set_mode(size)
+            if enemy.status():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_f:
+                        DisplaySize = pygame.display.get_window_size()
+                        pygame.quit()
+                        pygame.init()
+                        pygame.display.set_caption('Dungeon Master')
                         f = open('Fullscreen.txt', mode='w')
-                        f.write('0')
-                    f.close()
-                    AttackPosX = ScreenWidth // 2 - 350
-                    DefendPosX = ScreenWidth // 2 - 150
-                    HealingPosX = ScreenWidth // 2 + 50
-                    ConsumableItemPosX = ScreenWidth // 2 + 250
-                    ArtPosX = ScreenWidth // 2 - 375
+                        if DisplaySize == (1225, 700):
+                            size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
+                                                               pygame.display.Info().current_h
+                            screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+                            f.write('1')
+                        else:
+                            size = ScreenWidth, ScreenHeight = 1225, 700
+                            screen = pygame.display.set_mode(size)
+                            f = open('Fullscreen.txt', mode='w')
+                            f.write('0')
+                        f.close()
+                        AttackPosX = ScreenWidth // 2 - 350
+                        DefendPosX = ScreenWidth // 2 - 150
+                        HealingPosX = ScreenWidth // 2 + 50
+                        ConsumableItemPosX = ScreenWidth // 2 + 250
+                        ArtPosX = ScreenWidth // 2 - 375
         if not flag_move and enemy.status() and not flag_anim:
             attack(enemy, hero)
             flag_anim = True

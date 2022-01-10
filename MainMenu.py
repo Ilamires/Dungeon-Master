@@ -19,13 +19,21 @@ def start_mainmenu():
         screen = pygame.display.set_mode(size1)
     Font = pygame.font.SysFont('Liberation Serif', 100)
     text = Font.render('Dungeon Master', False, (255, 255, 255))
-    text_rect = pygame.Rect(ScreenWidth//2-340, 60, 800, 200)
+    text_rect = pygame.Rect(ScreenWidth // 2 - 340, 60, 800, 200)
     screen.blit(text, text_rect)
 
     manager = pygame_gui.UIManager((ScreenWidth, ScreenHeight))
-
+    f = open('Continue.txt', mode='r')
+    Continue = bool(int(f.read()))
+    f.close()
+    if Continue:
+        ContinueGame = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+            (ScreenWidth // 2 - 100, ScreenHeight // 2), (200, 50)),
+            text='Continue', manager=manager)
+    else:
+        ContinueGame = ''
     StartGame = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
-        (ScreenWidth // 2 - 100, ScreenHeight // 2+80), (200, 50)),
+        (ScreenWidth // 2 - 100, ScreenHeight // 2 + 80), (200, 50)),
         text='Start game', manager=manager)
     StatisticsButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
         (ScreenWidth // 2 - 100, ScreenHeight // 2 + 160), (200, 50)),
@@ -41,10 +49,17 @@ def start_mainmenu():
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
-                if event.ui_element == StatisticsButton:
-                    pass
-                elif event.ui_element == StartGame:
+                if event.ui_element == ContinueGame:
+                    pygame.quit()
                     start_map()
+                elif event.ui_element == StartGame:
+                    f = open('Continue.txt', mode='w')
+                    f.write('0')
+                    f.close()
+                    pygame.quit()
+                    start_map()
+                elif event.ui_element == StatisticsButton:
+                    pass
                 elif event.ui_element == ExitButton:
                     sys.exit()
             if event.type == pygame.KEYDOWN:
@@ -69,7 +84,13 @@ def start_mainmenu():
                     StartGame.kill()
                     StatisticsButton.kill()
                     ExitButton.kill()
+                    if Continue:
+                        ContinueGame.kill()
                     manager = pygame_gui.UIManager((ScreenWidth, ScreenHeight))
+                    if Continue:
+                        ContinueGame = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+                            (ScreenWidth // 2 - 100, ScreenHeight // 2), (200, 50)),
+                            text='Continue', manager=manager)
                     StartGame = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
                         (ScreenWidth // 2 - 100, ScreenHeight // 2 + 80), (200, 50)),
                         text='Start game', manager=manager)
