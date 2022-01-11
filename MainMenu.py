@@ -67,6 +67,9 @@ def start_mainmenu():
                     f = open('ContinueBattle.txt', mode='w')
                     f.write('0')
                     f.close()
+                    f = open('Hero.txt', mode='w')
+                    f.write('100')
+                    f.close()
                     pygame.quit()
                     running = False
                     start_map()
