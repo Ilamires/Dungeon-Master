@@ -5,6 +5,7 @@ import pygame_gui
 
 def start_mainmenu():
     from DungeonMaster import start_map
+    from battle import start_battle
     f = open('Fullscreen.txt', mode='r')
     Fullscreen = bool(int(f.read()))
     f.close()
@@ -52,7 +53,13 @@ def start_mainmenu():
                 if event.ui_element == ContinueGame:
                     pygame.quit()
                     running = False
-                    start_map()
+                    f = open('ContinueBattle.txt', mode='r')
+                    ContinueBattle = bool(int(f.read()))
+                    f.close()
+                    if ContinueBattle:
+                        start_battle()
+                    else:
+                        start_map()
                 elif event.ui_element == StartGame:
                     f = open('Continue.txt', mode='w')
                     f.write('0')
