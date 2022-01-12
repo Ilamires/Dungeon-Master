@@ -1,13 +1,15 @@
 import pygame.draw
-from items import items_Sword, Consumable_items
+from items import items_Sword, items_BodyArmor, items_Gloves, items_Greaves, items_Ring, items_Helmet, Consumable_items
 
 
 class Info:
     def __init__(self, screen, screen_width, screen_height, x, y, hero, enemy):
+        self.arr_arr = [items_Sword, items_BodyArmor, items_Gloves, items_Greaves, items_Helmet, items_Ring]
         self.flag = -1
         self.screen = screen
         self.screen_width = screen_width
         self.screen_height = screen_height
+        self.size_cell = []
         self.hero = hero
         self.enemy = enemy
         self.x = x
@@ -35,8 +37,15 @@ class Info:
 
     def render_info(self, flag):
         myfont = pygame.font.SysFont('Liberation Serif', 20)
-        if flag == 5:
+        if flag == 8:
             self.flag_inventory = not self.flag_inventory
+        elif self.flag_inventory and 1 <= flag <= 6:
+            self.text_arr = []
+            hero = self.hero
+            arr_str = self.arr_arr[flag - 1][hero.items[flag - 1]].get_stats()
+            for i in arr_str:
+                text = myfont.render(i, False, (255, 255, 255))
+                self.text_arr.append(text)
         elif flag != self.flag:
             self.text_arr = []
             hero = self.hero
@@ -81,12 +90,19 @@ class Info:
 
     def render_inventory(self):
         pygame.draw.rect(self.screen, [255, 255, 255], self.rect_inventory, width=0)
-        size_cell = ((self.rect_inventory[2] - 35) // 6, self.rect_inventory[3] - 10)
+        self.size_cell = ((self.rect_inventory[2] - 35) // 6, self.rect_inventory[3] - 10)
         for i in range(6):
             if self.hero.items[i] != "default":
                 color = [0, 150, 0]
             else:
                 color = [100, 100, 100]
-            rect = self.rect_inventory[0] + (i + 1) * 5 + i * size_cell[0], self.rect_inventory[1] + 5, size_cell[0], \
-                   size_cell[1]
+            rect = self.rect_inventory[0] + (i + 1) * 5 + i * self.size_cell[0], self.rect_inventory[1] + 5, \
+                   self.size_cell[0], \
+                   self.size_cell[1]
             pygame.draw.rect(self.screen, color, rect, width=0)
+
+    def button_inventory(self, pos):
+        x, y = pos
+        if self.screen_width >= y >= self.rect_inventory[1]:
+            if x - self.rect_inventory[0] >= 0:
+                return (x - self.rect_inventory[0]) // (self.size_cell[0] + 5) + 1

@@ -8,7 +8,7 @@ from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, 
     items_Ring, items_Helmet, items_Artefacts
 
 
-def start_battle():
+def start_battle(flag):
     from DungeonMaster import start_map
     from MainMenu import start_mainmenu
     hero_anim_breathing = ["image/hero_anim/hero_battle_anim_breathing_1.png",
@@ -20,6 +20,11 @@ def start_battle():
                             "image/enemy_anim/enemy_2.png",
                             "image/enemy_anim/enemy_3.png",
                             "image/enemy_anim/enemy_2.png"]
+
+    boss_anim_breathing = ["image/boss_anim/boss_anim_1.png",
+                           "image/boss_anim/boss_anim_2.png",
+                           "image/boss_anim/boss_anim_3.png",
+                           "image/boss_anim/boss_anim_4.png"]
 
     icons = [pygame.image.load("image/icons/attack.png"),
              pygame.image.load("image/icons/shild.png"),
@@ -93,7 +98,7 @@ def start_battle():
                 return 4
         if ScreenHeight - 150 <= y <= ScreenHeight - 50:
             if 25 <= x <= 325:
-                return 5
+                return 8
         return None
 
     def attack(self, other):
@@ -124,7 +129,6 @@ def start_battle():
     f = open('ReceivedArtefacts.txt', mode='r')
     arr_Artefacts = f.readline().split("/")
     f.close()
-    # ["Sword", "BodyArmor", "Gloves", "Greaves", "Helmet", "Ring"]
     hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', screen, all_sprites)
     f = open('HeroClothes.txt', mode='r')
     hero.putting_on_clothes(f.read().split('\n'))
@@ -139,8 +143,13 @@ def start_battle():
     f = open('Hero.txt', mode='r')
     hero.hp = float(f.read())
     f.close()
-    enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', screen, all_sprites)
-    enemy.putting_on_clothes(["", "", "", "", "", "poison ring"])
+    # enemy = 0, boss = 1
+    if flag == 0:
+        enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', screen, all_sprites)
+        enemy.putting_on_clothes(["", "", "", "", "", ""])
+    elif flag == 1:
+        enemy = Boss(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', screen, all_sprites)
+        enemy.putting_on_clothes(["", "", "", "", "", ""])
     f = open('ContinueBattle.txt', mode='r')
     ContinueBattle = bool(int(f.read()))
     f.close()
@@ -163,6 +172,8 @@ def start_battle():
         f.close()
 
     info = Info(screen, ScreenWidth, ScreenHeight, 10, 10, hero, enemy)
+    pattern_atk_enemy = [1, 1, 2, 1, 2, 1, 1, 2, 2, 1]
+    flag_atk_enemy = 0
 
     fps = 30
     clock = pygame.time.Clock()
@@ -199,9 +210,14 @@ def start_battle():
                 f.close()
                 sys.exit()
             if event.type == pygame.MOUSEMOTION:
-                button = get_button(event.pos)
-                if button != None and button != 5:
-                    info.render_info(button)
+                if flag_inventory:
+                    button = info.button_inventory(event.pos)
+                    if button != None and button != 8:
+                        info.render_info(button)
+                else:
+                    button = get_button(event.pos)
+                    if button != None and button != 8:
+                        info.render_info(button)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if flag_move and not flag_anim:
                     if event.button == 1:
@@ -216,7 +232,7 @@ def start_battle():
                                 flag_move = False
                                 flag_anim = True
                             elif button == 3:
-                                if hero.recharge_healing == 0:
+                                if hero.recharge_healing == 0 and hero.count_potion > 0:
                                     hero.healing()
                                     flag_move = False
                                     flag_anim = True
@@ -225,7 +241,7 @@ def start_battle():
                                     enemy.taking_damage(hero.use_consumable_items())
                                     flag_move = False
                                     flag_anim = True
-                            elif button == 5:
+                            elif button == 8:
                                 info.render_info(button)
                                 flag_inventory = not flag_inventory
                             else:
@@ -259,9 +275,15 @@ def start_battle():
                         info.screen_height = ScreenHeight
                         info.screen = screen
         if not flag_move and enemy.status() and not flag_anim:
-            attack(enemy, hero)
+            if flag_atk_enemy > len(pattern_atk_enemy) - 1:
+                flag_atk_enemy = 0
+            if pattern_atk_enemy[flag_atk_enemy] == 1:
+                attack(enemy, hero)
+            else:
+                enemy.defense()
             flag_anim = True
             flag_enemy_move = True
+            flag_atk_enemy += 1
         if not hero.status() or not enemy.status() and not flag_anim:
             pygame.quit()
             f = open('Continue.txt', mode='w')

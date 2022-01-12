@@ -16,6 +16,7 @@ class Unit:
         self.healing_hp = 50
         self.recharge_healing = 0
         self.max_recharge_healing = 6
+        self.count_potion = 3
 
         self.transparency = 128
         self.screen = screen
@@ -32,6 +33,8 @@ class Unit:
         self.protect = 4 + (lv * 0.25) * 4
         self.dop_protect = 0
         self.status_protect = 0
+        self.protect_multiplier = 1
+
         self.poison_dm = 0
         self.poison_move = 0
         self.poison_flag = False
@@ -136,6 +139,7 @@ class Unit:
         if self.recharge_healing == 0:
             self.heal(self.healing_hp)
             self.recharge_healing = self.max_recharge_healing
+            self.count_potion -= 1
 
     def heal(self, heal_hp):
         self.hp += heal_hp
@@ -166,6 +170,20 @@ class Unit:
         pygame.draw.rect(rect_surf, [255, 0, 0, self.transparency],
                          (self.anim.rect.x, self.anim.rect.y, 360, 400), width=0)
         self.screen.blit(rect_surf, (0, 0))
+
+    def get_count_potion(self):
+        return self.count_potion
+
+    def set_count_potion(self, count):
+        self.count_potion = count
+
+
+class Boss(Unit):
+    def __init__(self, lv, filename, x, y, character, screen, *group):
+        super().__init__(lv, filename, x, y, character, screen, *group)
+        self.atk_fire = 10
+        self.atk_fire_multiplier = 2
+        self.status_protect = 10
 
 
 class AnimatedSprite(pygame.sprite.Sprite):
