@@ -151,6 +151,9 @@ def start_battle():
         f = open('EnemyClothes.txt', mode='r')
         enemy.putting_on_clothes(f.read().split('\n'))
         f.close()
+        f = open('HeroClothes.txt', mode='r')
+        hero.putting_on_clothes(f.read().split('\n'))
+        f.close()
 
     info = Info(screen, ScreenWidth, ScreenHeight, 10, 10, hero, enemy)
 
