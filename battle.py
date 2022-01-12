@@ -3,6 +3,8 @@ import sys
 import pygame
 from infobattle import Info
 from unit import Unit, Boss
+from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, items_Greaves, \
+    items_Ring, items_Helmet, items_Artefacts
 
 
 def start_battle(flag):
@@ -126,7 +128,6 @@ def start_battle(flag):
     f = open('ReceivedArtefacts.txt', mode='r')
     arr_Artefacts = f.readline().split("/")
     f.close()
-    # ["Sword", "BodyArmor", "Gloves", "Greaves", "Helmet", "Ring"]
     hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', screen, all_sprites)
     hero.putting_on_clothes(["", "", "", "", "", "poison ring"])
     hero.putting_artefacts(arr_Artefacts)
