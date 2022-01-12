@@ -6,7 +6,7 @@ class Sword:
 
     def attack(self, unit, other):
         if other.time_def == 0:
-            dm = (self.atk + unit.atk + unit.dop_atk) - (other.protect + other.dop_protect)
+            dm = (self.atk + unit.atk + unit.dop_atk) - (other.protect + other.dop_protect) * other.protect_multiplier
         else:
             dm = (self.atk + unit.atk + unit.dop_atk) - other.time_def
         other.time_def = 0
@@ -30,7 +30,11 @@ class BodyArmor:
         self.protect = protect
 
     def defense(self, unit):
-        return (self.protect + unit.protect) * 2
+        return (self.protect + unit.protect) * 2 * unit.protect_multiplier
+
+    def get_stats(self):
+        arr_str = [f"hp = {self.hp}", f"protect = {self.protect}"]
+        return arr_str
 
 
 class Gloves:
@@ -38,10 +42,18 @@ class Gloves:
         self.atk = atk
         self.protect = protect
 
+    def get_stats(self):
+        arr_str = [f"atk = {self.atk}", f"protect = {self.protect}"]
+        return arr_str
+
 
 class Greaves:
     def __init__(self, protect):
         self.protect = protect
+
+    def get_stats(self):
+        arr_str = [f"protect = {self.protect}"]
+        return arr_str
 
 
 class Ring:
@@ -50,18 +62,27 @@ class Ring:
         self.poison_atk = poison_atk
         self.poison_move = poison_move
 
+    def get_stats(self):
+        arr_str = [f"atk fire = {self.atk_fire}", f"poison atk = {self.poison_atk}",
+                   f"poison move = {self.poison_move}"]
+        return arr_str
+
 
 class Helmet:
     def __init__(self, protect, status_protect):
         self.protect = protect
         self.status_protect = status_protect
 
+    def get_stats(self):
+        arr_str = [f"protect = {self.protect}", f"status_protect = {self.status_protect}"]
+        return arr_str
+
 
 # ["Sword", "BodyArmor", "Gloves", "Greaves", "Helmet", "Ring"]
 items_Sword = {"default": Sword(1, 0, 0),
                "rusty sword": Sword(5, 0, 0),
                "fire sword": Sword(5, 3, 5),
-               "god sword": Sword(1000, 0, 0)}
+               "Dima sword": Sword(1000, 0, 0)}
 
 items_BodyArmor = {"default": BodyArmor(1, 0),
                    "rusty body armor": BodyArmor(2, 20),
@@ -105,6 +126,31 @@ class OilBottle(Artefacts):
 
     def active_use(self, enemy):
         enemy.chance_of_miss += 10
+
+
+class Lantern(Artefacts):
+    def use(self, hero):
+        if hero.chance_of_miss > 0:
+            hero.chance_of_miss -= 5
+            if hero.chance_of_miss < 0:
+                hero.chance_of_miss = 0
+
+    def active_use(self, enemy):
+        enemy.chance_of_miss += 5
+
+
+class Torch(Artefacts):
+    def use(self, hero):
+        if hero.chance_of_miss > 0:
+            hero.chance_of_miss -= 3
+            if hero.chance_of_miss < 0:
+                hero.chance_of_miss = 0
+        hero.atk_fire += 7
+
+
+class MegaShield(Artefacts):
+    def use(self, hero):
+        hero.protect_multiplier += 0.5
 
 
 items_Artefacts = {"Dio": [Dio(), 0],

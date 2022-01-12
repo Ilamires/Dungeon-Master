@@ -289,7 +289,7 @@ def start_map():
         f = open('HeroClothes.txt', mode='r')
         HeroClothes = f.read().split('\n')
         f.close()
-        f = open('ReceivedClothes.txt.txt', mode='r')
+        f = open('ReceivedClothes.txt', mode='r')
         Received_clothes = f.read().split('\n')
         f.close()
         f = open('Continue.txt', mode='w')
