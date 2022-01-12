@@ -239,6 +239,14 @@ def start_map():
         f.write(str(NumberOfRooms) + ' ' + str(RoomNumber))
         f.close()
 
+    def SaveClothes():
+        f = open('HeroClothes.txt', mode='w')
+        f.write('\n'.join(HeroClothes))
+        f.close()
+        f = open('ReceivedClothes.txt', mode='w')
+        f.write('\n'.join(Received_clothes))
+        f.close()
+
     Received_artefacts = []
     NumberOfRooms = 5
     RoomNumber = 1
@@ -257,6 +265,8 @@ def start_map():
     f.close()
     HeroPos = [3, 0]
     Artefacts = list(items_Artefacts.keys())
+    HeroClothes = ["default", "default", "default", "default", "default", "default"]
+    Received_clothes = ["default", "default", "default", "default", "default", "default"]
 
     if Continue:
         f = open('HeroPosition.txt', mode='r')
@@ -275,6 +285,12 @@ def start_map():
         f.close()
         f = open('MapNumber.txt', mode='r')
         NumberOfRooms, RoomNumber = list(map(int, f.read().split()))
+        f.close()
+        f = open('HeroClothes.txt', mode='r')
+        HeroClothes = f.read().split('\n')
+        f.close()
+        f = open('ReceivedClothes.txt.txt', mode='r')
+        Received_clothes = f.read().split('\n')
         f.close()
         f = open('Continue.txt', mode='w')
         f.write('0')
@@ -313,6 +329,7 @@ def start_map():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 Save()
+                SaveClothes()
                 f = open('Continue.txt', mode='w')
                 f.write('1')
                 f.close()
@@ -360,7 +377,7 @@ def start_map():
                             if RoomNumber == NumberOfRooms:
                                 Save()
                                 pygame.quit()
-                                running=False
+                                running = False
                                 start_battle()
                             else:
                                 for i in range(len(board.board)):
@@ -380,5 +397,6 @@ def start_map():
                         board.render(screen)
         pygame.display.flip()
         clock.tick(60)
-start_mainmenu()
 
+
+start_mainmenu()

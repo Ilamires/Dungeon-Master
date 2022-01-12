@@ -123,7 +123,7 @@ def start_battle():
     f.close()
     # ["Sword", "BodyArmor", "Gloves", "Greaves", "Helmet", "Ring"]
     hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', screen, all_sprites)
-    hero.putting_on_clothes(["rusty sword", "", "", "", "", "poison ring"])
+    hero.putting_on_clothes(["", "", "", "", "", "poison ring"])
     hero.putting_artefacts(arr_Artefacts)
     hero.putting_on_consumable_items("fireball")
     f = open('Hero.txt', mode='r')
