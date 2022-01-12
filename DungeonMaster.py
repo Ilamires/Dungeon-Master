@@ -378,34 +378,6 @@ def start_map():
                         hero_sprite.update([0, 0])
                         hero_sprite.draw(screen)
                         board.render(screen)
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_f:
-                    DisplaySize = pygame.display.get_window_size()
-                    pygame.quit()
-                    pygame.init()
-                    pygame.display.set_caption('Dungeon Master')
-                    if DisplaySize == (1225, 700):
-                        size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
-                                                           pygame.display.Info().current_h
-                        screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
-                        f = open('Fullscreen.txt', mode='w')
-                        f.write('1')
-                        f.close()
-                    else:
-                        size = ScreenWidth, ScreenHeight = 1225, 700
-                        screen = pygame.display.set_mode(size)
-                        f = open('Fullscreen.txt', mode='w')
-                        f.write('0')
-                        f.close()
-                    board.cell_size = ScreenHeight // 10
-                    Hero.x = ScreenWidth // 2 + board.cell_size * Hero.HeroPosition[1] \
-                             - board.cell_size * board.width // 2
-                    Hero.y = board.cell_size * Hero.HeroPosition[0] + 50
-                    all_sprites.update()
-                    all_sprites.draw(screen)
-                    hero_sprite.update([0, 0])
-                    hero_sprite.draw(screen)
-                    board.render(screen)
         pygame.display.flip()
         clock.tick(60)
 start_mainmenu()

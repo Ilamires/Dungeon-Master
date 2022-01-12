@@ -3,8 +3,6 @@ import sys
 import pygame
 from infobattle import Info
 from unit import Unit
-from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, items_Greaves, items_Ring, items_Helmet, \
-    items_Artefacts
 
 
 def start_battle():
@@ -150,6 +148,9 @@ def start_battle():
         hero.poison_move = int(Poison[0])
         hero.poison_dm = int(Poison[1])
         f.close()
+        f = open('EnemyClothes.txt', mode='r')
+        enemy.putting_on_clothes(f.read().split('\n'))
+        f.close()
 
     info = Info(screen, ScreenWidth, ScreenHeight, 10, 10, hero, enemy)
 
@@ -182,6 +183,9 @@ def start_battle():
                 f.close()
                 f = open('HeroStatusEffects.txt', mode='w')
                 f.write(str(hero.poison_move) + ' ' + str(hero.poison_dm))
+                f.close()
+                f = open('EnemyClothes.txt', mode='w')
+                f.write('\n'.join(enemy.items))
                 f.close()
                 sys.exit()
             if event.type == pygame.MOUSEMOTION:
