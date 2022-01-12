@@ -1,6 +1,6 @@
-rusty sword
+god sword
 default
 default
 default
 default
-poison ring
+default

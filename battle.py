@@ -1,8 +1,11 @@
+import random
 import sys
 
 import pygame
 from infobattle import Info
 from unit import Unit
+from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, items_Greaves, \
+    items_Ring, items_Helmet, items_Artefacts
 
 
 def start_battle():
@@ -123,7 +126,14 @@ def start_battle():
     f.close()
     # ["Sword", "BodyArmor", "Gloves", "Greaves", "Helmet", "Ring"]
     hero = Unit(0, hero_anim_breathing, ArtPosX, 50, 'hero', screen, all_sprites)
-    hero.putting_on_clothes(["", "", "", "", "", "poison ring"])
+    f = open('HeroClothes.txt', mode='r')
+    hero.putting_on_clothes(f.read().split('\n'))
+    f.close()
+    f = open('ReceivedClothes.txt', mode='r')
+    Received_clothes = f.read().split('\n')
+    f.close()
+    if Received_clothes == [""]:
+        Received_clothes = []
     hero.putting_artefacts(arr_Artefacts)
     hero.putting_on_consumable_items("fireball")
     f = open('Hero.txt', mode='r')
@@ -150,9 +160,6 @@ def start_battle():
         f.close()
         f = open('EnemyClothes.txt', mode='r')
         enemy.putting_on_clothes(f.read().split('\n'))
-        f.close()
-        f = open('HeroClothes.txt', mode='r')
-        hero.putting_on_clothes(f.read().split('\n'))
         f.close()
 
     info = Info(screen, ScreenWidth, ScreenHeight, 10, 10, hero, enemy)
@@ -268,6 +275,19 @@ def start_battle():
             f.close()
             f = open('Hero.txt', mode='w')
             f.write(str(hero.hp))
+            f.close()
+            if len(Received_clothes) < 12:
+                i = 'default'
+                while i == 'default':
+                    i = random.choice([random.choice(list(items_Sword.keys())),
+                                       random.choice(list(items_BodyArmor.keys())),
+                                       random.choice(list(items_Gloves.keys())),
+                                       random.choice(list(items_Greaves.keys())),
+                                       random.choice(list(items_Helmet.keys())),
+                                       random.choice(list(items_Ring.keys()))])
+                Received_clothes.append(i)
+            f = open('ReceivedClothes.txt', mode='w')
+            f.write('\n'.join(Received_clothes))
             f.close()
             if RoomNumber == NumberOfRooms:
                 f = open('Continue.txt', mode='w')

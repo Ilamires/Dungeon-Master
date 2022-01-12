@@ -238,6 +238,7 @@ def start_map():
         f = open("MapNumber.txt", mode="w")
         f.write(str(NumberOfRooms) + ' ' + str(RoomNumber))
         f.close()
+        SaveClothes()
 
     def SaveClothes():
         f = open('HeroClothes.txt', mode='w')
@@ -265,8 +266,8 @@ def start_map():
     f.close()
     HeroPos = [3, 0]
     Artefacts = list(items_Artefacts.keys())
-    HeroClothes = ["default", "default", "default", "default", "default", "default"]
-    Received_clothes = ["default", "default", "default", "default", "default", "default"]
+    HeroClothes = ["god sword", "default", "default", "default", "default", "default"]
+    Received_clothes = []
 
     if Continue:
         f = open('HeroPosition.txt', mode='r')
@@ -289,7 +290,7 @@ def start_map():
         f = open('HeroClothes.txt', mode='r')
         HeroClothes = f.read().split('\n')
         f.close()
-        f = open('ReceivedClothes.txt.txt', mode='r')
+        f = open('ReceivedClothes.txt', mode='r')
         Received_clothes = f.read().split('\n')
         f.close()
         f = open('Continue.txt', mode='w')
@@ -329,7 +330,6 @@ def start_map():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 Save()
-                SaveClothes()
                 f = open('Continue.txt', mode='w')
                 f.write('1')
                 f.close()
