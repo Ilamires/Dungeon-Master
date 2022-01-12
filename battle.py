@@ -3,6 +3,8 @@ import sys
 import pygame
 from infobattle import Info
 from unit import Unit
+from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, items_Greaves, items_Ring, items_Helmet, \
+    items_Artefacts
 
 
 def start_battle():
@@ -130,13 +132,23 @@ def start_battle():
     hero.hp = float(f.read())
     f.close()
     enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', screen, all_sprites)
-    enemy.putting_on_clothes(["", "", "", "", "", ""])
+    enemy.putting_on_clothes(["", "", "", "", "", "poison ring"])
     f = open('ContinueBattle.txt', mode='r')
     ContinueBattle = bool(int(f.read()))
     f.close()
     if ContinueBattle:
         f = open('Enemy.txt', mode='r')
         enemy.hp = float(f.read())
+        f.close()
+        f = open('EnemyStatusEffects.txt', mode='r')
+        Poison = f.read().split()
+        enemy.poison_move = int(Poison[0])
+        enemy.poison_dm = int(Poison[1])
+        f.close()
+        f = open('HeroStatusEffects.txt', mode='r')
+        Poison = f.read().split()
+        hero.poison_move = int(Poison[0])
+        hero.poison_dm = int(Poison[1])
         f.close()
 
     info = Info(screen, ScreenWidth, ScreenHeight, 10, 10, hero, enemy)
@@ -162,8 +174,14 @@ def start_battle():
                 f = open('Enemy.txt', mode='w')
                 f.write(str(enemy.hp))
                 f.close()
+                f = open('EnemyStatusEffects.txt', mode='w')
+                f.write(str(enemy.poison_move) + ' ' + str(enemy.poison_dm))
+                f.close()
                 f = open('Hero.txt', mode='w')
                 f.write(str(hero.hp))
+                f.close()
+                f = open('HeroStatusEffects.txt', mode='w')
+                f.write(str(hero.poison_move) + ' ' + str(hero.poison_dm))
                 f.close()
                 sys.exit()
             if event.type == pygame.MOUSEMOTION:
