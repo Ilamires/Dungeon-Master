@@ -1,2 +1,4 @@
+rusty gloves
+rusty ring
 rusty sword
-fire sword
+fire gloves
