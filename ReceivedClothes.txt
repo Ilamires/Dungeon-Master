@@ -1,1 +1,7 @@
 rusty gloves
+fire gloves
+fire sword
+rusty sword
+fire greaves
+fire body armor
+fire gloves

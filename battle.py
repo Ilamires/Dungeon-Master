@@ -276,16 +276,18 @@ def start_battle():
             f = open('Hero.txt', mode='w')
             f.write(str(hero.hp))
             f.close()
+            i = 'default'
+            while i == 'default':
+                i = random.choice([random.choice(list(items_Sword.keys())),
+                                   random.choice(list(items_BodyArmor.keys())),
+                                   random.choice(list(items_Gloves.keys())),
+                                   random.choice(list(items_Greaves.keys())),
+                                   random.choice(list(items_Helmet.keys())),
+                                   random.choice(list(items_Ring.keys()))])
             if len(Received_clothes) < 12:
-                i = 'default'
-                while i == 'default':
-                    i = random.choice([random.choice(list(items_Sword.keys())),
-                                       random.choice(list(items_BodyArmor.keys())),
-                                       random.choice(list(items_Gloves.keys())),
-                                       random.choice(list(items_Greaves.keys())),
-                                       random.choice(list(items_Helmet.keys())),
-                                       random.choice(list(items_Ring.keys()))])
                 Received_clothes.append(i)
+            else:
+                Received_clothes[0] = i
             f = open('ReceivedClothes.txt', mode='w')
             f.write('\n'.join(Received_clothes))
             f.close()
