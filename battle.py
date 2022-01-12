@@ -141,7 +141,9 @@ def start_battle(flag):
     hero.putting_artefacts(arr_Artefacts)
     hero.putting_on_consumable_items("fireball")
     f = open('Hero.txt', mode='r')
-    hero.hp = float(f.read())
+    n = f.read().split()
+    hero.hp = float(n[0])
+    hero.set_count_potion(int(n[1]))
     f.close()
     # enemy = 0, boss = 1
     if flag == 0:
@@ -200,7 +202,7 @@ def start_battle(flag):
                 f.write(str(enemy.poison_move) + ' ' + str(enemy.poison_dm))
                 f.close()
                 f = open('Hero.txt', mode='w')
-                f.write(str(hero.hp))
+                f.write(str(hero.hp) + ' ' + str(hero.get_count_potion()))
                 f.close()
                 f = open('HeroStatusEffects.txt', mode='w')
                 f.write(str(hero.poison_move) + ' ' + str(hero.poison_dm))
@@ -296,7 +298,7 @@ def start_battle(flag):
             f.write('0')
             f.close()
             f = open('Hero.txt', mode='w')
-            f.write(str(hero.hp))
+            f.write(str(hero.hp) + ' ' + str(enemy.poison_dm))
             f.close()
             i = 'default'
             while i == 'default':

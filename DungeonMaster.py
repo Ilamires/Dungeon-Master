@@ -266,7 +266,7 @@ def start_map():
     f.close()
     HeroPos = [3, 0]
     Artefacts = list(items_Artefacts.keys())
-    HeroClothes = ["god sword", "default", "default", "default", "default", "default"]
+    HeroClothes = ["Dima sword", "default", "default", "default", "default", "default"]
     Received_clothes = []
 
     if Continue:
@@ -363,6 +363,13 @@ def start_map():
                             Received_artefacts.append(Room.Cells[MoveX][MoveY].item)
                             Hero.OpenMap(HeroX, HeroY)
                         if Room.CellsTypes[MoveX][MoveY] == 'Potion':
+                            f = open('Hero.txt', mode='r')
+                            n = f.read().split()
+                            n[1] = str(int(n[1]) + 1)
+                            f.close()
+                            f = open('Hero.txt', mode='w')
+                            f.write(' '.join(n))
+                            f.close()
                             Room.CellsTypes[MoveX][MoveY] = 'Empty'
                             Room.Cells[MoveX][MoveY].type = 'Empty'
                         if Room.CellsTypes[MoveX][MoveY] == 'Enemy':
@@ -371,14 +378,14 @@ def start_map():
                             Save()
                             pygame.quit()
                             running = False
-                            start_battle()
+                            start_battle(0)
                         if Room.CellsTypes[MoveX][MoveY] == 'Exit':
                             RoomNumber += 1
                             if RoomNumber == NumberOfRooms:
                                 Save()
                                 pygame.quit()
                                 running = False
-                                start_battle()
+                                start_battle(1)
                             else:
                                 for i in range(len(board.board)):
                                     for j in range(len(board.board[i])):

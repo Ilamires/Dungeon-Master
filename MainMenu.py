@@ -69,7 +69,7 @@ def start_mainmenu():
                     ContinueBattle = bool(int(f.read()))
                     f.close()
                     if ContinueBattle:
-                        start_battle()
+                        start_battle(0)
                     else:
                         start_map()
                 elif event.ui_element == StartGame:
@@ -80,7 +80,7 @@ def start_mainmenu():
                     f.write('0')
                     f.close()
                     f = open('Hero.txt', mode='w')
-                    f.write('100')
+                    f.write('100 0')
                     f.close()
                     pygame.quit()
                     running = False
