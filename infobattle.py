@@ -117,6 +117,22 @@ class Info:
             if x - self.rect_inventory[0] >= 0:
                 return (x - self.rect_inventory[0]) // (self.size_cell[0] + 5) + 1
 
+
+class InfoBoard(Info):
+
+    def __init__(self, screen, screen_width, screen_height, x, y, hero, arr_clothes):
+        super(InfoBoard, self).__init__(screen, screen_width, screen_height, x, y, hero, 0)
+        self.arr_clothes = [arr_clothes[4], arr_clothes[1], arr_clothes[3], arr_clothes[0], arr_clothes[2],
+                            arr_clothes[5]]
+        self.rect = (self.x, self.y, 280, 420)
+        self.size_cell = 140, 140
+        self.icons = [pygame.image.load("image/icons/helmet.png"),
+                      pygame.image.load("image/icons/body_armor.png"),
+                      pygame.image.load("image/icons/creaves.png"),
+                      pygame.image.load("image/icons/sword.png"),
+                      pygame.image.load("image/icons/cloves.png"),
+                      pygame.image.load("image/icons/ring.png")]
+
     def chest_render(self):
         x = self.screen_width // 2
         y = self.screen_height - 150
@@ -135,4 +151,22 @@ class Info:
         for i in arr:
             text = myfont.render("Item received: " + i, False, (0, 255, 0))
             self.text_arr.append(text)
-        self.time_without_text = 90
+        self.time_without_text = 180
+
+    def render(self):
+        pygame.draw.rect(self.screen, [255, 255, 255], self.rect, width=1)
+        for i in range(2):
+            for j in range(3):
+                if self.arr_clothes[i * 3 + j] != "default":
+                    color = [0, 150, 0]
+                else:
+                    color = [100, 100, 100]
+                rect = self.x + i * 140, self.y + j * 140, \
+                       self.size_cell[0], \
+                       self.size_cell[1]
+                pygame.draw.rect(self.screen, color, rect, width=0)
+                icon = pygame.transform.scale(self.icons[i * 3 + j], (self.size_cell[0], self.size_cell[1]))
+                self.screen.blit(icon, (rect[0], rect[1]))
+                pygame.draw.rect(self.screen, (255, 255, 255), rect, width=1)
+
+        self.chest_render()

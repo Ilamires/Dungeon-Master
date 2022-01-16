@@ -5,7 +5,7 @@ import sys
 from items import items_Artefacts
 from battle import start_battle
 from MainMenu import start_mainmenu
-from infobattle import Info
+from infobattle import InfoBoard
 
 
 def start_map():
@@ -329,10 +329,9 @@ def start_map():
     running = True
     clock = pygame.time.Clock()
     Continue = False
-    info = Info(screen, ScreenWidth, ScreenHeight, 0, 0, Hero, 0)
+    info = InfoBoard(screen, ScreenWidth, ScreenHeight, 5, 5, Hero, HeroClothes)
 
     while running:
-        screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 Save()
@@ -407,12 +406,13 @@ def start_map():
                                     for j in range(len(board.board[i])):
                                         Room.Cells[i][j].visible = False
                                 Hero.OpenMap(*Hero.HeroPosition)
+        screen.fill((0, 0, 0))
         all_sprites.update()
         all_sprites.draw(screen)
         hero_sprite.update([0, 0])
         hero_sprite.draw(screen)
         board.render(screen)
-        info.chest_render()
+        info.render()
         pygame.display.flip()
         clock.tick(60)
 
