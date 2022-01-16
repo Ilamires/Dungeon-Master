@@ -325,8 +325,8 @@ def start_battle(flag):
             AccFile = sqlite3.connect('accounts.sqlite3')
             AccFileInf = AccFile.cursor()
             AccFileInf.execute("""UPDATE accounts
-                                                SET KilledEnemies = KilledEnemies + 1
-                                              WHERE Login = ?""", (Login,))
+                                    SET KilledEnemies = KilledEnemies + 1
+                                WHERE Login = ?""", (Login,))
             if RoomNumber == NumberOfRooms:
                 f = open('Continue.txt', mode='w')
                 f.write('0')
@@ -339,9 +339,9 @@ def start_battle(flag):
                 sys.exit()
             else:
                 running = False
-                start_map()
                 AccFile.commit()
                 AccFile.close()
+                start_map()
         elif not hero.status() and not flag_anim:
             pygame.quit()
             f = open('Continue.txt', mode='w')

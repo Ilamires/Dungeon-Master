@@ -74,7 +74,8 @@ def start_map():
         def __init__(self, x, y):
             super().__init__(x, y, 'Chest')
             if not Continue:
-                self.item = Artefacts.pop()
+                self.item = random.choice(Artefacts)
+                del Artefacts[Artefacts.index(self.item)]
             else:
                 for i in range(len(board.board)):
                     for j in range(len(board.board[i])):
