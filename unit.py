@@ -60,7 +60,7 @@ class Unit:
     def attack(self, other, flag):
         if self.flag_first_move:
             for i in self.active_artefacts:
-                items_Artefacts[i][0].active_use(other)
+                items_Artefacts[i][0].active_use(items_Artefacts[i][0], other)
             self.flag_first_move = False
         flag_miss = False
         if self.poison_flag and flag:
@@ -112,7 +112,7 @@ class Unit:
     def putting_artefacts(self, arr):
         for i in arr:
             if i != "":
-                items_Artefacts[i][0].use(self)
+                items_Artefacts[i][0].use(items_Artefacts[i][0], self)
                 if items_Artefacts[i][1] == 1:
                     self.active_artefacts.append(i)
                 self.artefacts.append(i)

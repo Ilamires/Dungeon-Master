@@ -2,5 +2,5 @@ Dima sword
 default
 default
 default
-default
-default
+rusty helmet
+rusty ring

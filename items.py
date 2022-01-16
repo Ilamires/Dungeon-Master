@@ -104,8 +104,8 @@ items_Greaves = {"default": Greaves("default", 0),
                  "fire greaves": Greaves("fire greaves", 3)}
 
 items_Helmet = {"default": Helmet("default", 0, 0),
-                "rusty gloves": Helmet("rusty gloves", 1, 1),
-                "fire gloves": Helmet("fire gloves", 1, 3)}
+                "rusty helmet": Helmet("rusty helmet", 1, 1),
+                "fire helmet": Helmet("fire helmet", 1, 3)}
 
 items_Ring = {"default": Ring("default", 0, 0, 0),
               "rusty ring": Ring("rusty ring", 5, 0, 0),
@@ -161,7 +161,10 @@ class MegaShield(Artefacts):
 
 
 items_Artefacts = {"Dio": [Dio(), 0],
-                   "Oil Bottle": [OilBottle(), 1]}
+                   "Oil Bottle": [OilBottle(), 1],
+                   "Lantern": [Lantern, 1],
+                   "Torch": [Torch, 0],
+                   "Mega shield": [MegaShield, 0]}
 
 #  название : [1)Максимум хп, 2)восстановление здововья, 3)атака, 4)атака(множитель), 5)атака огнем,
 #  6)атака ядом, 7)вампиризм, 8)дополнительная защита, 9)шанс промаха%, 10)шанс промаха%(дебафф на врага),
