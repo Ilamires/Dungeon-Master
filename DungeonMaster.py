@@ -250,6 +250,9 @@ def start_map():
         f.close()
 
     Received_artefacts = []
+    f = open('lastAccount.txt', mode='r')
+    LastAccount, Login = f.read().split('\n')
+    f.close()
     NumberOfRooms = 5
     RoomNumber = 1
     CellsDict = {
@@ -335,6 +338,9 @@ def start_map():
                 Save()
                 f = open('Continue.txt', mode='w')
                 f.write('1')
+                f.close()
+                f = open('lastAccount.txt', mode='w')
+                f.write(Login + '\n' + Login)
                 f.close()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:

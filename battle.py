@@ -155,6 +155,9 @@ def start_battle(flag):
     f = open('ContinueBattle.txt', mode='r')
     ContinueBattle = bool(int(f.read()))
     f.close()
+    f = open('lastAccount.txt', mode='r')
+    LastAccount, Login = f.read().split('\n')
+    f.close()
     if ContinueBattle:
         f = open('Enemy.txt', mode='r')
         enemy.hp = float(f.read())
@@ -209,6 +212,9 @@ def start_battle(flag):
                 f.close()
                 f = open('EnemyClothes.txt', mode='w')
                 f.write('\n'.join(enemy.items))
+                f.close()
+                f = open('lastAccount.txt', mode='w')
+                f.write(Login + '\n' + Login)
                 f.close()
                 sys.exit()
             if event.type == pygame.MOUSEMOTION:
