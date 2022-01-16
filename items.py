@@ -162,9 +162,9 @@ class MegaShield(Artefacts):
 
 items_Artefacts = {"Dio": [Dio(), 0],
                    "Oil Bottle": [OilBottle(), 1],
-                   "Lantern": [Lantern, 1],
-                   "Torch": [Torch, 0],
-                   "Mega shield": [MegaShield, 0]}
+                   "Lantern": [Lantern(), 1],
+                   "Torch": [Torch(), 0],
+                   "Mega shield": [MegaShield(), 0]}
 
 #  название : [1)Максимум хп, 2)восстановление здововья, 3)атака, 4)атака(множитель), 5)атака огнем,
 #  6)атака ядом, 7)вампиризм, 8)дополнительная защита, 9)шанс промаха%, 10)шанс промаха%(дебафф на врага),

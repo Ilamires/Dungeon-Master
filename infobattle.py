@@ -218,23 +218,23 @@ class InfoBoard(Info):
 
     def equip_item(self, item):
         if item.split()[1] == "sword":
-            if self.arr_clothes[5] != "default":
+            if self.arr_clothes[3] != "default":
                 self.arr_received_clothes.append(self.arr_clothes[3])
             self.arr_clothes[3] = item
         elif item.split()[1] == "body":
-            if self.arr_clothes[5] != "default":
+            if self.arr_clothes[1] != "default":
                 self.arr_received_clothes.append(self.arr_clothes[1])
             self.arr_clothes[1] = item
         elif item.split()[1] == "gloves":
-            if self.arr_clothes[5] != "default":
+            if self.arr_clothes[4] != "default":
                 self.arr_received_clothes.append(self.arr_clothes[4])
             self.arr_clothes[4] = item
         elif item.split()[1] == "greaves":
-            if self.arr_clothes[5] != "default":
+            if self.arr_clothes[2] != "default":
                 self.arr_received_clothes.append(self.arr_clothes[2])
             self.arr_clothes[2] = item
         elif item.split()[1] == "helmet":
-            if self.arr_clothes[5] != "default":
+            if self.arr_clothes[0] != "default":
                 self.arr_received_clothes.append(self.arr_clothes[0])
             self.arr_clothes[0] = item
         elif item.split()[1] == "ring":
@@ -260,9 +260,80 @@ class InfoBoard(Info):
                 return x * 4 + y
         return None
 
+    def get_button_items(self, pos):
+        x, y = pos
+        if self.rect[1] + self.rect[3] >= y >= self.rect[1]:
+            y = (y - self.rect[1]) // self.size_cell[1]
+            if self.rect[0] + self.rect[2] >= x >= self.rect[0]:
+                x = (x - self.rect[0]) // self.size_cell[0]
+                return x * 3 + y
+        return None
+
     def get_status_item(self, pos):
         x, y = pos
         if self.rect[1] + self.rect[3] >= y >= self.rect[1]:
             if self.rect[0] + self.rect[2] >= x >= self.rect[0]:
                 return True
         return False
+
+    def window_items_stats(self, pos, items, flag):
+        pass
+
+    def get_stats_item(self, pos, item):
+        if item != "default":
+            arr_text = []
+            myfont = pygame.font.SysFont('Liberation Serif', 20)
+            if item.split()[1] == "sword":
+                arr_text = items_Sword[item].get_stats()
+            elif item.split()[1] == "body":
+                arr_text = items_BodyArmor[item].get_stats()
+            elif item.split()[1] == "gloves":
+                arr_text = items_Gloves[item].get_stats()
+            elif item.split()[1] == "greaves":
+                arr_text = items_Greaves[item].get_stats()
+            elif item.split()[1] == "helmet":
+                arr_text = items_Helmet[item].get_stats()
+            elif item.split()[1] == "ring":
+                arr_text = items_Ring[item].get_stats()
+            pygame.draw.rect(self.screen, (70, 70, 70), (pos[0] - 205, pos[1] - 5, 200, 100), width=0)
+            for i in range(len(arr_text)):
+                text = myfont.render(arr_text[i], False, (255, 0, 0))
+                rect = (pos[0] - 200, pos[1] + (i * 25))
+                self.screen.blit(text, rect)
+
+    def stats_equip_items(self, pos, flag, item):
+        button = self.get_button_items(pos)
+        if button != None and button < len(self.arr_clothes):
+            equip_item = self.arr_clothes[button]
+            if equip_item != "default":
+                arr_text = []
+                myfont = pygame.font.SysFont('Liberation Serif', 20)
+                if equip_item.split()[1] == "sword":
+                    arr_text = items_Sword[equip_item].get_stats()
+                elif equip_item.split()[1] == "body":
+                    arr_text = items_BodyArmor[equip_item].get_stats()
+                elif equip_item.split()[1] == "gloves":
+                    arr_text = items_Gloves[equip_item].get_stats()
+                elif equip_item.split()[1] == "greaves":
+                    arr_text = items_Greaves[equip_item].get_stats()
+                elif equip_item.split()[1] == "helmet":
+                    arr_text = items_Helmet[equip_item].get_stats()
+                elif equip_item.split()[1] == "ring":
+                    arr_text = items_Ring[equip_item].get_stats()
+                if flag:
+                    pygame.draw.rect(self.screen, (70, 70, 70), (pos[0] + 5, pos[1] - 100, 200, 100), width=0)
+                    for i in range(len(arr_text)):
+                        text = myfont.render(arr_text[i], False, (0, 255, 0))
+                        rect = (pos[0] + 10, pos[1] - 95 + (i * 25))
+                        self.screen.blit(text, rect)
+                else:
+                    pygame.draw.rect(self.screen, (70, 70, 70), (pos[0] + 5, pos[1] + 5, 200, 100), width=0)
+                    for i in range(len(arr_text)):
+                        text = myfont.render(arr_text[i], False, (255, 0, 0))
+                        rect = (pos[0] + 10, pos[1] + 10 + (i * 25))
+                        self.screen.blit(text, rect)
+                if item != "" and equip_item.split()[1] == item.split()[1]:
+                    self.get_stats_item((pos[0] + 210, pos[1] + 20), item)
+                    self.transferring_item(item, (pos[0] - 100, pos[1]))
+                    return False
+        return True

@@ -297,6 +297,8 @@ def start_map():
         f.close()
         f = open('ReceivedClothes.txt', mode='r')
         Received_clothes = f.read().split('\n')
+        if Received_clothes == [""]:
+            Received_clothes = []
         f.close()
         f = open('Continue.txt', mode='w')
         f.write('0')
@@ -332,7 +334,9 @@ def start_map():
     Continue = False
     info = InfoBoard(screen, ScreenWidth, ScreenHeight, 5, 5, Hero, HeroClothes, Received_clothes)
     item = ""
+    time_item = ""
     pos = (0, 0)
+    flag = False
 
     while running:
         for event in pygame.event.get():
@@ -427,8 +431,12 @@ def start_map():
                                         Room.Cells[i][j].visible = False
                                 Hero.OpenMap(*Hero.HeroPosition)
             if event.type == pygame.MOUSEMOTION:
-                if item != "":
-                    pos = event.pos
+                pos = event.pos
+                button = info.get_button(pos)
+                if button != None and button < len(Received_clothes):
+                    time_item = Received_clothes[button]
+                else:
+                    time_item = ""
         screen.fill((0, 0, 0))
         all_sprites.update()
         all_sprites.draw(screen)
@@ -436,8 +444,12 @@ def start_map():
         hero_sprite.draw(screen)
         board.render(screen)
         info.render()
-        if item != "":
+        if time_item != "":
+            info.get_stats_item(pos, time_item)
+        flag_trans = info.stats_equip_items(pos, flag, item)
+        if item != "" and flag_trans:
             info.transferring_item(item, pos)
+            flag = True
         pygame.display.flip()
         clock.tick(60)
 
