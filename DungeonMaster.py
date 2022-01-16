@@ -22,7 +22,7 @@ def start_map():
 
         def CreateNewRoom(self):
             if not Continue:
-                self.CellsTypes = random.choice([Rooms.CreateRooms()[0]])
+                self.CellsTypes = random.choice(Rooms.CreateRooms())
             else:
                 f = open("Map.txt", mode="r")
                 self.CellsTypes = f.read().split('\n')
@@ -343,7 +343,7 @@ def start_map():
                 f.write(Login + '\n' + Login)
                 f.close()
                 sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONUP:
                 CellMovePosition = board.get_cell(event.pos)
                 HeroX, HeroY = Hero.HeroPosition[0], Hero.HeroPosition[1]
                 if CellMovePosition != None:

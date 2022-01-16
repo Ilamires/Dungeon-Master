@@ -334,6 +334,7 @@ def start_battle(flag):
                                     SET KilledEnemies = KilledEnemies + 1
                                 WHERE Login = ?""", (Login,))
             if RoomNumber == NumberOfRooms:
+                pygame.quit()
                 f = open('Continue.txt', mode='w')
                 f.write('0')
                 f.close()
@@ -342,7 +343,7 @@ def start_battle(flag):
                                       WHERE Login = ?""", (Login,))
                 AccFile.commit()
                 AccFile.close()
-                sys.exit()
+                start_mainmenu()
             else:
                 running = False
                 AccFile.commit()
