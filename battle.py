@@ -1,5 +1,6 @@
 import random
 import sys
+import sqlite3
 
 import pygame
 from infobattle import Info
@@ -167,13 +168,16 @@ def start_battle(flag):
         enemy.poison_move = int(Poison[0])
         enemy.poison_dm = int(Poison[1])
         f.close()
+        f = open('EnemyClothes.txt', mode='r')
+        enemy.putting_on_clothes(f.read().split('\n'))
+        f.close()
         f = open('HeroStatusEffects.txt', mode='r')
         Poison = f.read().split()
         hero.poison_move = int(Poison[0])
         hero.poison_dm = int(Poison[1])
         f.close()
-        f = open('EnemyClothes.txt', mode='r')
-        enemy.putting_on_clothes(f.read().split('\n'))
+        f = open('Cooldowns.txt', mode='r')
+        hero.recharge_healing, hero.recharge_Consumable_items = list(map(int, f.read().split()))
         f.close()
 
     info = Info(screen, ScreenWidth, ScreenHeight, 10, 10, hero, enemy)
@@ -204,14 +208,17 @@ def start_battle(flag):
                 f = open('EnemyStatusEffects.txt', mode='w')
                 f.write(str(enemy.poison_move) + ' ' + str(enemy.poison_dm))
                 f.close()
+                f = open('EnemyClothes.txt', mode='w')
+                f.write('\n'.join(enemy.items))
+                f.close()
                 f = open('Hero.txt', mode='w')
                 f.write(str(hero.hp) + ' ' + str(hero.get_count_potion()))
                 f.close()
                 f = open('HeroStatusEffects.txt', mode='w')
                 f.write(str(hero.poison_move) + ' ' + str(hero.poison_dm))
                 f.close()
-                f = open('EnemyClothes.txt', mode='w')
-                f.write('\n'.join(enemy.items))
+                f = open('Cooldowns.txt', mode='w')
+                f.write(str(hero.recharge_healing) + ' ' + str(hero.recharge_Consumable_items))
                 f.close()
                 f = open('lastAccount.txt', mode='w')
                 f.write(Login + '\n' + Login)
@@ -321,13 +328,26 @@ def start_battle(flag):
             f = open('ReceivedClothes.txt', mode='w')
             f.write('\n'.join(Received_clothes))
             f.close()
+            AccFile = sqlite3.connect('accounts.sqlite3')
+            AccFileInf = AccFile.cursor()
+            AccFileInf.execute("""UPDATE accounts
+                                    SET KilledEnemies = KilledEnemies + 1
+                                WHERE Login = ?""", (Login,))
             if RoomNumber == NumberOfRooms:
+                pygame.quit()
                 f = open('Continue.txt', mode='w')
                 f.write('0')
                 f.close()
-                sys.exit()
+                AccFileInf.execute("""UPDATE accounts
+                                        SET Wins = Wins + 1
+                                      WHERE Login = ?""", (Login,))
+                AccFile.commit()
+                AccFile.close()
+                start_mainmenu()
             else:
                 running = False
+                AccFile.commit()
+                AccFile.close()
                 start_map()
         elif not hero.status() and not flag_anim:
             pygame.quit()
@@ -337,15 +357,15 @@ def start_battle(flag):
             f = open('ContinueBattle.txt', mode='w')
             f.write('0')
             f.close()
-            f = open('MapNumber.txt', mode='r')
-            NumberOfRooms, RoomNumber = list(map(int, f.read().split()))
-            f.close()
-            if RoomNumber == NumberOfRooms:
-                running = False
-                start_mainmenu()
-            else:
-                running = False
-                start_map()
+            AccFile = sqlite3.connect('accounts.sqlite3')
+            AccFileInf = AccFile.cursor()
+            AccFileInf.execute("""UPDATE accounts
+                                        SET Loses = Loses + 1
+                                    WHERE Login = ?""", (Login,))
+            AccFile.commit()
+            AccFile.close()
+            running = False
+            start_mainmenu()
         render(screen, hero, enemy)
         clock.tick(fps)
         if flag_anim:

@@ -22,7 +22,7 @@ def start_map():
 
         def CreateNewRoom(self):
             if not Continue:
-                self.CellsTypes = random.choice([Rooms.CreateRooms()[0]])
+                self.CellsTypes = random.choice(Rooms.CreateRooms())
             else:
                 f = open("Map.txt", mode="r")
                 self.CellsTypes = f.read().split('\n')
@@ -74,7 +74,8 @@ def start_map():
         def __init__(self, x, y):
             super().__init__(x, y, 'Chest')
             if not Continue:
-                self.item = Artefacts.pop()
+                self.item = random.choice(Artefacts)
+                del Artefacts[Artefacts.index(self.item)]
             else:
                 for i in range(len(board.board)):
                     for j in range(len(board.board[i])):
