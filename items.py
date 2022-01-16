@@ -1,5 +1,6 @@
 class Sword:
-    def __init__(self, atk, atk_fire, vampirism):
+    def __init__(self, name, atk, atk_fire, vampirism):
+        self.name = name
         self.atk = atk
         self.atk_fire = atk_fire
         self.life_steal = vampirism
@@ -20,12 +21,14 @@ class Sword:
         return round(dm)
 
     def get_stats(self):
-        arr_str = [f"attack = {self.atk}", f"attack fire = {self.atk_fire}", f"life_steal = {self.life_steal}"]
+        arr_str = [f"name = {self.name}", f"attack = {self.atk}", f"attack fire = {self.atk_fire}",
+                   f"life_steal = {self.life_steal}"]
         return arr_str
 
 
 class BodyArmor:
-    def __init__(self, protect, hp):
+    def __init__(self, name, protect, hp):
+        self.name = name
         self.hp = hp
         self.protect = protect
 
@@ -33,76 +36,80 @@ class BodyArmor:
         return (self.protect + unit.protect) * 2 * unit.protect_multiplier
 
     def get_stats(self):
-        arr_str = [f"hp = {self.hp}", f"protect = {self.protect}"]
+        arr_str = [f"name = {self.name}", f"hp = {self.hp}", f"protect = {self.protect}"]
         return arr_str
 
 
 class Gloves:
-    def __init__(self, atk, protect):
+    def __init__(self, name, atk, protect):
+        self.name = name
         self.atk = atk
         self.protect = protect
 
     def get_stats(self):
-        arr_str = [f"atk = {self.atk}", f"protect = {self.protect}"]
+        arr_str = [f"name = {self.name}", f"atk = {self.atk}", f"protect = {self.protect}"]
         return arr_str
 
 
 class Greaves:
-    def __init__(self, protect):
+    def __init__(self, name, protect):
+        self.name = name
         self.protect = protect
 
     def get_stats(self):
-        arr_str = [f"protect = {self.protect}"]
+        arr_str = [f"name = {self.name}", f"protect = {self.protect}"]
         return arr_str
 
 
 class Ring:
-    def __init__(self, atk_fire, poison_atk, poison_move):
+    def __init__(self, name, atk_fire, poison_atk, poison_move):
+        self.name = name
         self.atk_fire = atk_fire
         self.poison_atk = poison_atk
         self.poison_move = poison_move
 
     def get_stats(self):
-        arr_str = [f"atk fire = {self.atk_fire}", f"poison atk = {self.poison_atk}",
+        arr_str = [f"name = {self.name}", f"atk fire = {self.atk_fire}", f"poison atk = {self.poison_atk}",
                    f"poison move = {self.poison_move}"]
         return arr_str
 
 
 class Helmet:
-    def __init__(self, protect, status_protect):
+    def __init__(self, name, protect, status_protect):
+        self.name = name
         self.protect = protect
         self.status_protect = status_protect
 
     def get_stats(self):
-        arr_str = [f"protect = {self.protect}", f"status_protect = {self.status_protect}"]
+        arr_str = [f"name = {self.name}", f"protect = {self.protect}", f"status_protect = {self.status_protect}"]
         return arr_str
 
 
 # ["Sword", "BodyArmor", "Gloves", "Greaves", "Helmet", "Ring"]
-items_Sword = {"default": Sword(1, 0, 0),
-               "rusty sword": Sword(5, 0, 0),
-               "fire sword": Sword(5, 3, 5),
-               "Dima sword": Sword(1000, 0, 0)}
+items_Sword = {"default": Sword("default", 1, 0, 0),
+               "rusty sword": Sword("rusty sword", 5, 0, 0),
+               "fire sword": Sword("fire sword", 5, 3, 5),
+               "Dima sword": Sword("Dima sword", 1000, 1000, 1000)}
 
-items_BodyArmor = {"default": BodyArmor(1, 0),
-                   "rusty body armor": BodyArmor(2, 20),
-                   "fire body armor": BodyArmor(5, 50)}
+items_BodyArmor = {"default": BodyArmor("default", 1, 0),
+                   "rusty body armor": BodyArmor("rusty body armor", 2, 20),
+                   "fire body armor": BodyArmor("fire body armor", 5, 50)}
 
-items_Gloves = {"default": Gloves(0, 0),
-                "rusty gloves": Gloves(2, 1),
-                "fire gloves": Gloves(3, 1)}
+items_Gloves = {"default": Gloves("default", 0, 0),
+                "rusty gloves": Gloves("rusty gloves", 2, 1),
+                "fire gloves": Gloves("fire gloves", 3, 1)}
 
-items_Greaves = {"default": Greaves(0),
-                 "rusty greaves": Greaves(1),
-                 "fire greaves": Greaves(3)}
+items_Greaves = {"default": Greaves("default", 0),
+                 "rusty greaves": Greaves("rusty greaves", 1),
+                 "fire greaves": Greaves("fire greaves", 3)}
 
-items_Helmet = {"default": Helmet(0, 0),
-                "rusty gloves": Helmet(1, 1),
-                "fire gloves": Helmet(1, 3)}
+items_Helmet = {"default": Helmet("default", 0, 0),
+                "rusty gloves": Helmet("rusty gloves", 1, 1),
+                "fire gloves": Helmet("fire gloves", 1, 3)}
 
-items_Ring = {"default": Ring(0, 0, 0),
-              "rusty ring": Ring(5, 0, 0),
-              "poison ring": Ring(0, 3, 2)}
+items_Ring = {"default": Ring("default", 0, 0, 0),
+              "rusty ring": Ring("rusty ring", 5, 0, 0),
+              "poison ring": Ring("poison ring", 0, 3, 2)}
 
 Consumable_items = {"fireball": ["damage", "fire", 20, 4]}
 

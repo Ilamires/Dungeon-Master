@@ -1,6 +1,13 @@
 import pygame.draw
 from items import items_Sword, items_BodyArmor, items_Gloves, items_Greaves, items_Ring, items_Helmet, Consumable_items
 
+icons = [pygame.image.load("image/icons/sword.png"),
+         pygame.image.load("image/icons/body_armor.png"),
+         pygame.image.load("image/icons/cloves.png"),
+         pygame.image.load("image/icons/creaves.png"),
+         pygame.image.load("image/icons/helmet.png"),
+         pygame.image.load("image/icons/ring.png")]
+
 
 class Info:
     def __init__(self, screen, screen_width, screen_height, x, y, hero, enemy):
@@ -100,6 +107,8 @@ class Info:
                    self.size_cell[0], \
                    self.size_cell[1]
             pygame.draw.rect(self.screen, color, rect, width=0)
+            icon = pygame.transform.scale(icons[i], (self.size_cell[0], self.size_cell[1]))
+            self.screen.blit(icon, (rect[0], rect[1]))
 
     def button_inventory(self, pos):
         x, y = pos
