@@ -1,5 +1,6 @@
 import random
 import sys
+import sqlite3
 
 import pygame
 from infobattle import Info
@@ -321,14 +322,26 @@ def start_battle(flag):
             f = open('ReceivedClothes.txt', mode='w')
             f.write('\n'.join(Received_clothes))
             f.close()
+            AccFile = sqlite3.connect('accounts.sqlite3')
+            AccFileInf = AccFile.cursor()
+            AccFileInf.execute("""UPDATE accounts
+                                                SET KilledEnemies = KilledEnemies + 1
+                                              WHERE Login = ?""", (Login,))
             if RoomNumber == NumberOfRooms:
                 f = open('Continue.txt', mode='w')
                 f.write('0')
                 f.close()
+                AccFileInf.execute("""UPDATE accounts
+                                        SET Wins = Wins + 1
+                                      WHERE Login = ?""", (Login,))
+                AccFile.commit()
+                AccFile.close()
                 sys.exit()
             else:
                 running = False
                 start_map()
+                AccFile.commit()
+                AccFile.close()
         elif not hero.status() and not flag_anim:
             pygame.quit()
             f = open('Continue.txt', mode='w')
@@ -337,15 +350,15 @@ def start_battle(flag):
             f = open('ContinueBattle.txt', mode='w')
             f.write('0')
             f.close()
-            f = open('MapNumber.txt', mode='r')
-            NumberOfRooms, RoomNumber = list(map(int, f.read().split()))
-            f.close()
-            if RoomNumber == NumberOfRooms:
-                running = False
-                start_mainmenu()
-            else:
-                running = False
-                start_map()
+            AccFile = sqlite3.connect('accounts.sqlite3')
+            AccFileInf = AccFile.cursor()
+            AccFileInf.execute("""UPDATE accounts
+                                        SET Loses = Loses + 1
+                                    WHERE Login = ?""", (Login,))
+            AccFile.commit()
+            AccFile.close()
+            running = False
+            start_mainmenu()
         render(screen, hero, enemy)
         clock.tick(fps)
         if flag_anim:
