@@ -5,7 +5,7 @@ class Sword:
         self.atk_fire = atk_fire
         self.life_steal = vampirism
 
-    def attack(self, unit, other):
+    def attack(self, unit, other, flag):
         if other.time_def == 0:
             dm = (self.atk + unit.atk + unit.dop_atk) - (other.protect + other.dop_protect) * other.protect_multiplier
         else:
@@ -16,7 +16,7 @@ class Sword:
         dop_dm = (self.atk_fire + unit.atk_fire) * unit.atk_fire_multiplier - other.status_protect
         if dop_dm > 0:
             dm += dop_dm
-        if self.life_steal != 0:
+        if self.life_steal != 0 and flag:
             unit.heal(round((self.life_steal / 100) * dm))
         return round(dm)
 

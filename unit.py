@@ -71,7 +71,7 @@ class Unit:
             if chance <= self.chance_of_miss:
                 flag_miss = True
         if not flag_miss:
-            dm = items_Sword[self.items[0]].attack(self, other)
+            dm = items_Sword[self.items[0]].attack(self, other, flag)
         else:
             dm = 0
         return dm
