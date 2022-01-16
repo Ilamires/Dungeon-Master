@@ -5,6 +5,7 @@ import sys
 from items import items_Artefacts
 from battle import start_battle
 from MainMenu import start_mainmenu
+from infobattle import Info
 
 
 def start_map():
@@ -325,8 +326,10 @@ def start_map():
     running = True
     clock = pygame.time.Clock()
     Continue = False
+    info = Info(screen, ScreenWidth, ScreenHeight, 0, 0, Hero, 0)
 
     while running:
+        screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 Save()
@@ -361,6 +364,7 @@ def start_map():
                             Room.CellsTypes[MoveX][MoveY] = 'Empty'
                             Room.Cells[MoveX][MoveY].type = 'Empty'
                             Received_artefacts.append(Room.Cells[MoveX][MoveY].item)
+                            info.without_chest_items([Room.Cells[MoveX][MoveY].item])
                             Hero.OpenMap(HeroX, HeroY)
                         if Room.CellsTypes[MoveX][MoveY] == 'Potion':
                             f = open('Hero.txt', mode='r')
@@ -397,11 +401,12 @@ def start_map():
                                     for j in range(len(board.board[i])):
                                         Room.Cells[i][j].visible = False
                                 Hero.OpenMap(*Hero.HeroPosition)
-                        all_sprites.update()
-                        all_sprites.draw(screen)
-                        hero_sprite.update([0, 0])
-                        hero_sprite.draw(screen)
-                        board.render(screen)
+        all_sprites.update()
+        all_sprites.draw(screen)
+        hero_sprite.update([0, 0])
+        hero_sprite.draw(screen)
+        board.render(screen)
+        info.chest_render()
         pygame.display.flip()
         clock.tick(60)
 

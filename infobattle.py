@@ -26,6 +26,7 @@ class Info:
         self.rect_inventory = (self.x + 325, round(self.screen_height * 0.7), self.screen_width - self.x - 350,
                                round(self.screen_height * 0.3))
         self.flag_inventory = False
+        self.time_without_text = -1
         self.text_arr = []
 
     def render(self):
@@ -115,3 +116,23 @@ class Info:
         if self.screen_width >= y >= self.rect_inventory[1]:
             if x - self.rect_inventory[0] >= 0:
                 return (x - self.rect_inventory[0]) // (self.size_cell[0] + 5) + 1
+
+    def chest_render(self):
+        x = self.screen_width // 2
+        y = self.screen_height - 150
+        for i in range(len(self.text_arr)):
+            text = self.text_arr[i]
+            rect = text.get_rect(center=(x, y))
+            rect[1] += (i * 25)
+            self.screen.blit(text, rect)
+        if self.time_without_text == 0:
+            self.text_arr = []
+        else:
+            self.time_without_text -= 1
+
+    def without_chest_items(self, arr):
+        myfont = pygame.font.SysFont('Liberation Serif', 20)
+        for i in arr:
+            text = myfont.render("Item received: " + i, False, (0, 255, 0))
+            self.text_arr.append(text)
+        self.time_without_text = 90
