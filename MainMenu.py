@@ -31,6 +31,7 @@ def start_mainmenu():
 
     manager = pygame_gui.UIManager((ScreenWidth, ScreenHeight))
     LoginRoom = False
+    LoginAccount = False
     f = open('Continue.txt', mode='r')
     Continue = bool(int(f.read()))
     f.close()
@@ -54,6 +55,7 @@ def start_mainmenu():
         text='Log In Account', manager=manager)
     Enter = ''
     Register = ''
+    LogOutAccount = ''
 
     clock = pygame.time.Clock()
     running = True
@@ -120,7 +122,7 @@ def start_mainmenu():
                         text='Register', manager=manager)
                 elif event.ui_element == Enter:
                     pygame.draw.rect(screen, (0, 0, 0),
-                                     (ScreenWidth // 2 - 98, ScreenHeight // 2 + 300, 200, 80), 0)
+                                     (ScreenWidth // 2 - 98, ScreenHeight // 2 + 300, 240, 80), 0)
                     n = LoginText.text
                     p = PasswordText.text
                     s = ''
@@ -135,10 +137,38 @@ def start_mainmenu():
                         for i in AccInf:
                             if n == i[0]:
                                 if u == i[1]:
+                                    LoginAccount = True
                                     Login = n
-                                    LoginLabel = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
-                                        (10, 10), (200, 40)),
-                                        text=Login, manager=manager)
+                                    AccFile.commit()
+                                    AccFile.close()
+                                    screen.fill((0, 0, 0))
+                                    LoginText.kill()
+                                    PasswordText.kill()
+                                    Enter.kill()
+                                    Register.kill()
+                                    text = Create_text(100, 'Dungeon Master')
+                                    text_rect = pygame.Rect(ScreenWidth // 2 - 340, 60, 800, 200)
+                                    screen.blit(text, text_rect)
+                                    text = Create_text(30, Login)
+                                    text_rect = pygame.Rect(10, 10, 80, 40)
+                                    screen.blit(text, text_rect)
+                                    manager = pygame_gui.UIManager((ScreenWidth, ScreenHeight))
+                                    if Continue:
+                                        ContinueGame = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+                                            (ScreenWidth // 2 - 100, ScreenHeight // 2), (200, 50)),
+                                            text='Continue', manager=manager)
+                                    StartGame = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+                                        (ScreenWidth // 2 - 100, ScreenHeight // 2 + 80), (200, 50)),
+                                        text='Start game', manager=manager)
+                                    StatisticsButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+                                        (ScreenWidth // 2 - 100, ScreenHeight // 2 + 160), (200, 50)),
+                                        text='Statistics', manager=manager)
+                                    ExitButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+                                        (ScreenWidth // 2 - 100, ScreenHeight // 2 + 240), (200, 50)),
+                                        text='Exit', manager=manager)
+                                    LogOutAccount = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+                                        (400, 10), (200, 40)),
+                                        text='Log Out Account', manager=manager)
                                     m = False
                                     break
                                 else:
@@ -157,11 +187,9 @@ def start_mainmenu():
                         text_rect = pygame.Rect(ScreenWidth // 2 - 98, ScreenHeight // 2 + 300,
                                                 80, 20)
                         screen.blit(text, text_rect)
-                    AccFile.commit()
-                    AccFile.close()
                 elif event.ui_element == Register:
                     pygame.draw.rect(screen, (0, 0, 0),
-                                     (ScreenWidth // 2 - 98, ScreenHeight // 2 + 300, 200, 80), 0)
+                                     (ScreenWidth // 2 - 98, ScreenHeight // 2 + 300, 240, 80), 0)
                     n = LoginText.text
                     p = PasswordText.text
                     s = ''
@@ -191,9 +219,41 @@ def start_mainmenu():
                             s = 'The password is too long.'
                             raise ValueError(s)
                         else:
+                            LoginAccount = True
+                            Login = n
                             AccFileChanger.execute("""INSERT INTO 
                                     accounts(Login,Password,Wins,Loses,KilledEnemies)
                                 VALUES (?,?,?,?,?)""", (n, u, 0, 0, 0))
+                            AccFile.commit()
+                            AccFile.close()
+                            screen.fill((0, 0, 0))
+                            LoginText.kill()
+                            PasswordText.kill()
+                            Enter.kill()
+                            Register.kill()
+                            text = Create_text(100, 'Dungeon Master')
+                            text_rect = pygame.Rect(ScreenWidth // 2 - 340, 60, 800, 200)
+                            screen.blit(text, text_rect)
+                            text = Create_text(30, Login)
+                            text_rect = pygame.Rect(10, 10, 80, 40)
+                            screen.blit(text, text_rect)
+                            manager = pygame_gui.UIManager((ScreenWidth, ScreenHeight))
+                            if Continue:
+                                ContinueGame = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+                                    (ScreenWidth // 2 - 100, ScreenHeight // 2), (200, 50)),
+                                    text='Continue', manager=manager)
+                            StartGame = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+                                (ScreenWidth // 2 - 100, ScreenHeight // 2 + 80), (200, 50)),
+                                text='Start game', manager=manager)
+                            StatisticsButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+                                (ScreenWidth // 2 - 100, ScreenHeight // 2 + 160), (200, 50)),
+                                text='Statistics', manager=manager)
+                            ExitButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+                                (ScreenWidth // 2 - 100, ScreenHeight // 2 + 240), (200, 50)),
+                                text='Exit', manager=manager)
+                            LogOutAccount = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+                                (400, 10), (200, 40)),
+                                text='Log Out Account', manager=manager)
                     except NameError:
                         text = Create_text(20, s)
                         text_rect = pygame.Rect(ScreenWidth // 2 - 98, ScreenHeight // 2 + 300,
@@ -204,10 +264,17 @@ def start_mainmenu():
                         text_rect = pygame.Rect(ScreenWidth // 2 - 98, ScreenHeight // 2 + 300,
                                                 80, 20)
                         screen.blit(text, text_rect)
-                    AccFile.commit()
-                    AccFile.close()
+                elif event.ui_element == LogOutAccount:
+                    LoginAccount = False
+                    LogOutAccount.kill()
+                    pygame.draw.rect(screen, (0, 0, 0),
+                                     (10, 10, 900, 40), 0)
+                    LogInAccount = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+                        (10, 10), (200, 40)),
+                        text='Log In Account', manager=manager)
+
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_f:
+                if event.key == pygame.K_f and not LoginRoom:
                     DisplaySize = pygame.display.get_window_size()
                     pygame.quit()
                     pygame.init()
