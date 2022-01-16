@@ -33,17 +33,24 @@ def start_mainmenu():
     LoginRoom = False
     LoginAccount = False
     ContinueCreate = False
-    LastAccount = ''
     Login = ''
     ContinueGame = ''
+    Enter = ''
+    Register = ''
+    LogOutAccount = ''
+    LogInAccount = ''
+    Back = ''
+    f = open('lastAccount.txt', mode='r')
+    LastAccount, n = f.read().split('\n')
+    if n != '':
+        LoginAccount = True
+        Login = n
+    f.close()
 
     f = open('Continue.txt', mode='r')
     Continue = bool(int(f.read()))
     f.close()
     if Continue:
-        f = open('lastAccount.txt', mode='r')
-        LastAccount = f.read().split('\n')[0]
-        f.close()
         if LastAccount == Login and LastAccount != '':
             ContinueCreate = True
             ContinueGame = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
@@ -58,13 +65,17 @@ def start_mainmenu():
     ExitButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
         (ScreenWidth // 2 - 100, ScreenHeight // 2 + 240), (200, 50)),
         text='Exit', manager=manager)
-    LogInAccount = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
-        (10, 10), (200, 40)),
-        text='Log In Account', manager=manager)
-    Enter = ''
-    Register = ''
-    LogOutAccount = ''
-    Back = ''
+    if LoginAccount:
+        text = Create_text(30, Login)
+        text_rect = pygame.Rect(10, 10, 80, 40)
+        screen.blit(text, text_rect)
+        LogOutAccount = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+            (400, 10), (200, 40)),
+            text='Log Out Account', manager=manager)
+    else:
+        LogInAccount = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+            (10, 10), (200, 40)),
+            text='Log In Account', manager=manager)
 
     clock = pygame.time.Clock()
     running = True
@@ -127,6 +138,9 @@ def start_mainmenu():
                         Register = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
                             (ScreenWidth // 2 - 100, ScreenHeight // 2 + 240), (200, 50)),
                             text='Register', manager=manager)
+                        Back = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
+                            (ScreenWidth - 210, 10), (200, 50)),
+                            text='Back', manager=manager)
                 elif event.ui_element == StatisticsButton:
                     pass
                 elif event.ui_element == ExitButton:
