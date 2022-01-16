@@ -329,7 +329,9 @@ def start_map():
     running = True
     clock = pygame.time.Clock()
     Continue = False
-    info = InfoBoard(screen, ScreenWidth, ScreenHeight, 5, 5, Hero, HeroClothes)
+    info = InfoBoard(screen, ScreenWidth, ScreenHeight, 5, 5, Hero, HeroClothes, Received_clothes)
+    item = ""
+    pos = (0, 0)
 
     while running:
         for event in pygame.event.get():
@@ -343,6 +345,23 @@ def start_map():
                 f.close()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
+                button = info.get_button(event.pos)
+                status_item = info.get_status_item(event.pos)
+                if status_item:
+                    if item != "":
+                        info.equip_item(item)
+                        item = ""
+                        f = open('HeroClothes.txt', mode='r')
+                        HeroClothes = f.read().split('\n')
+                        f.close()
+                        f = open('ReceivedClothes.txt', mode='r')
+                        Received_clothes = f.read().split('\n')
+                        f.close()
+                if button != None and button < len(Received_clothes):
+                    item = Received_clothes[button]
+                    pos = event.pos
+                else:
+                    item = ""
                 CellMovePosition = board.get_cell(event.pos)
                 HeroX, HeroY = Hero.HeroPosition[0], Hero.HeroPosition[1]
                 if CellMovePosition != None:
@@ -406,6 +425,9 @@ def start_map():
                                     for j in range(len(board.board[i])):
                                         Room.Cells[i][j].visible = False
                                 Hero.OpenMap(*Hero.HeroPosition)
+            if event.type == pygame.MOUSEMOTION:
+                if item != "":
+                    pos = event.pos
         screen.fill((0, 0, 0))
         all_sprites.update()
         all_sprites.draw(screen)
@@ -413,6 +435,8 @@ def start_map():
         hero_sprite.draw(screen)
         board.render(screen)
         info.render()
+        if item != "":
+            info.transferring_item(item, pos)
         pygame.display.flip()
         clock.tick(60)
 

@@ -120,12 +120,14 @@ class Info:
 
 class InfoBoard(Info):
 
-    def __init__(self, screen, screen_width, screen_height, x, y, hero, arr_clothes):
+    def __init__(self, screen, screen_width, screen_height, x, y, hero, arr_clothes, arr_received_clothes):
         super(InfoBoard, self).__init__(screen, screen_width, screen_height, x, y, hero, 0)
         self.arr_clothes = [arr_clothes[4], arr_clothes[1], arr_clothes[3], arr_clothes[0], arr_clothes[2],
                             arr_clothes[5]]
-        self.rect = (self.x, self.y, 280, 372)
-        self.rect_items = (screen_width - 285, 5, 280, 560)
+        self.arr_received_clothes = arr_received_clothes
+        y = screen_height // 2
+        self.rect = (self.x, y - 280, 280, 420)
+        self.rect_items = (screen_width - 285, y - 186, 280, 372)
         self.size_cell = 140, 140
         self.size_cell_items = 93, 93
         self.icons = [pygame.image.load("image/icons/helmet.png"),
@@ -156,14 +158,13 @@ class InfoBoard(Info):
         self.time_without_text = 180
 
     def render(self):
-        pygame.draw.rect(self.screen, [255, 255, 255], self.rect, width=1)
         for i in range(2):
             for j in range(3):
                 if self.arr_clothes[i * 3 + j] != "default":
                     color = [0, 150, 0]
                 else:
                     color = [100, 100, 100]
-                rect = self.x + i * 140, self.y + j * 140, \
+                rect = self.rect[0] + i * 140, self.rect[1] + j * 140, \
                        self.size_cell[0], \
                        self.size_cell[1]
                 pygame.draw.rect(self.screen, color, rect, width=0)
@@ -174,7 +175,6 @@ class InfoBoard(Info):
         self.chest_render()
 
     def render_items(self):
-        pygame.draw.rect(self.screen, [255, 255, 255], self.rect_items, width=1)
         for i in range(3):
             for j in range(4):
                 color = [100, 100, 100]
@@ -183,3 +183,86 @@ class InfoBoard(Info):
                        self.size_cell_items[0], self.size_cell_items[1]
                 pygame.draw.rect(self.screen, color, rect, width=0)
                 pygame.draw.rect(self.screen, (255, 255, 255), rect, width=1)
+                if not (i * 4 + j >= len(self.arr_received_clothes)):
+                    name_item = self.arr_received_clothes[i * 4 + j]
+                    if name_item.split()[1] == "sword":
+                        icon = icons[0]
+                    elif name_item.split()[1] == "body":
+                        icon = icons[1]
+                    elif name_item.split()[1] == "gloves":
+                        icon = icons[2]
+                    elif name_item.split()[1] == "greaves":
+                        icon = icons[3]
+                    elif name_item.split()[1] == "helmet":
+                        icon = icons[4]
+                    elif name_item.split()[1] == "ring":
+                        icon = icons[5]
+                    icon = pygame.transform.scale(icon, (self.size_cell_items[0] - 6, self.size_cell_items[1] - 6))
+                    self.screen.blit(icon, (rect[0] + 3, rect[1] + 3))
+
+    def transferring_item(self, item, pos):
+        if item.split()[1] == "sword":
+            icon = icons[0]
+        elif item.split()[1] == "body":
+            icon = icons[1]
+        elif item.split()[1] == "gloves":
+            icon = icons[2]
+        elif item.split()[1] == "greaves":
+            icon = icons[3]
+        elif item.split()[1] == "helmet":
+            icon = icons[4]
+        elif item.split()[1] == "ring":
+            icon = icons[5]
+        icon = pygame.transform.scale(icon, (self.size_cell_items[0] - 6, self.size_cell_items[1] - 6))
+        self.screen.blit(icon, pos)
+
+    def equip_item(self, item):
+        if item.split()[1] == "sword":
+            if self.arr_clothes[5] != "default":
+                self.arr_received_clothes.append(self.arr_clothes[3])
+            self.arr_clothes[3] = item
+        elif item.split()[1] == "body":
+            if self.arr_clothes[5] != "default":
+                self.arr_received_clothes.append(self.arr_clothes[1])
+            self.arr_clothes[1] = item
+        elif item.split()[1] == "gloves":
+            if self.arr_clothes[5] != "default":
+                self.arr_received_clothes.append(self.arr_clothes[4])
+            self.arr_clothes[4] = item
+        elif item.split()[1] == "greaves":
+            if self.arr_clothes[5] != "default":
+                self.arr_received_clothes.append(self.arr_clothes[2])
+            self.arr_clothes[2] = item
+        elif item.split()[1] == "helmet":
+            if self.arr_clothes[5] != "default":
+                self.arr_received_clothes.append(self.arr_clothes[0])
+            self.arr_clothes[0] = item
+        elif item.split()[1] == "ring":
+            if self.arr_clothes[5] != "default":
+                self.arr_received_clothes.append(self.arr_clothes[5])
+            self.arr_clothes[5] = item
+        self.arr_received_clothes.remove(item)
+        f = open('ReceivedClothes.txt', mode='w')
+        f.write('\n'.join(self.arr_received_clothes))
+        f.close()
+        arr = self.arr_clothes[3], self.arr_clothes[1], self.arr_clothes[4], self.arr_clothes[2], self.arr_clothes[0], \
+              self.arr_clothes[5]
+        f = open('HeroClothes.txt', mode='w')
+        f.write('\n'.join(arr))
+        f.close()
+
+    def get_button(self, pos):
+        x, y = pos
+        if self.rect_items[1] + self.rect_items[3] >= y >= self.rect_items[1]:
+            y = (y - self.rect_items[1]) // self.size_cell_items[1]
+            if self.rect_items[0] + self.rect_items[2] >= x >= self.rect_items[0]:
+                x = (x - self.rect_items[0]) // self.size_cell_items[0]
+                return x * 4 + y
+        return None
+
+    def get_status_item(self, pos):
+        x, y = pos
+        if self.rect[1] + self.rect[3] >= y >= self.rect[1]:
+            if self.rect[0] + self.rect[2] >= x >= self.rect[0]:
+                return True
+        return False
