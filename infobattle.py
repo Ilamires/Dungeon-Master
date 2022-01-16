@@ -124,8 +124,10 @@ class InfoBoard(Info):
         super(InfoBoard, self).__init__(screen, screen_width, screen_height, x, y, hero, 0)
         self.arr_clothes = [arr_clothes[4], arr_clothes[1], arr_clothes[3], arr_clothes[0], arr_clothes[2],
                             arr_clothes[5]]
-        self.rect = (self.x, self.y, 280, 420)
+        self.rect = (self.x, self.y, 280, 372)
+        self.rect_items = (screen_width - 285, 5, 280, 560)
         self.size_cell = 140, 140
+        self.size_cell_items = 93, 93
         self.icons = [pygame.image.load("image/icons/helmet.png"),
                       pygame.image.load("image/icons/body_armor.png"),
                       pygame.image.load("image/icons/creaves.png"),
@@ -168,5 +170,16 @@ class InfoBoard(Info):
                 icon = pygame.transform.scale(self.icons[i * 3 + j], (self.size_cell[0], self.size_cell[1]))
                 self.screen.blit(icon, (rect[0], rect[1]))
                 pygame.draw.rect(self.screen, (255, 255, 255), rect, width=1)
-
+        self.render_items()
         self.chest_render()
+
+    def render_items(self):
+        pygame.draw.rect(self.screen, [255, 255, 255], self.rect_items, width=1)
+        for i in range(3):
+            for j in range(4):
+                color = [100, 100, 100]
+                rect = self.rect_items[0] + i * self.size_cell_items[0], \
+                       self.rect_items[1] + j * self.size_cell_items[1], \
+                       self.size_cell_items[0], self.size_cell_items[1]
+                pygame.draw.rect(self.screen, color, rect, width=0)
+                pygame.draw.rect(self.screen, (255, 255, 255), rect, width=1)
