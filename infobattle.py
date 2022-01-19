@@ -303,7 +303,7 @@ class InfoBoard(Info):
         for i in range(len(self.artefacts)):
             if i != "":
                 color = [0, 150, 0]
-                rect = (self.rect_artefacts[0] + 10, self.rect_artefacts[1] + ((i - 1) * 35) + 10, 700, 500)
+                rect = (self.rect_artefacts[0] + 10, self.rect_artefacts[1] + (i * 35) + 10, 700, 500)
                 text = myfont.render(self.artefacts[i], False, color)
                 self.screen.blit(text, (rect[0], rect[1]))
 
