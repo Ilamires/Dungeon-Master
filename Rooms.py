@@ -23,20 +23,22 @@ def CreateRooms():
              ['Mount', 'Mount', 'Empty', 'Empty', 'Empty', 'Enemy', 'Potion', 'Empty', 'Enemy'],
              ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Mount', 'Mount', 'Empty']]
 
-    Room4 = [['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-             ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-             ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-             ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Exit'],
-             ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-             ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-             ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty']]
-    Room5 = [['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-             ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-             ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-             ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Exit'],
-             ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-             ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
-             ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty']]
+    Room4 = [['Chest', 'Enemy', 'Empty', 'Enemy', 'Empty', 'Empty', 'Mount', 'Mount', 'Mount'],
+             ['Potion', 'Mount', 'Mount', 'Mount', 'Mount', 'Empty', 'Enemy', 'Empty', 'Empty'],
+             ['Mount', 'Mount', 'Mount', 'Empty', 'Empty', 'Empty', 'Mount', 'Empty', 'Enemy'],
+             ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Mount', 'Enemy', 'Exit'],
+             ['Mount', 'Empty', 'Empty', 'Mount', 'Mount', 'Empty', 'Mount', 'Mount', 'Empty'],
+             ['Mount', 'Empty', 'Empty', 'Empty', 'Mount', 'Mount', 'Mount', 'Mount', 'Empty'],
+             ['Mount', 'Empty', 'Empty', 'Empty', 'Empty', 'Potion', 'Empty', 'Empty', 'Empty']]
+
+    Room5 = [['Empty', 'Mount', 'Empty', 'Mount', 'Mount', 'Mount', 'Empty', 'Mount', 'Mount'],
+             ['Empty', 'Mount', 'Enemy', 'Mount', 'Mount', 'Empty', 'Empty', 'Empty', 'Empty'],
+             ['Empty', 'Mount', 'Enemy', 'Mount', 'Mount', 'Empty', 'Mount', 'Mount', 'Empty'],
+             ['Empty', 'Enemy', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Enemy', 'Exit'],
+             ['Empty', 'Mount', 'Enemy', 'Mount', 'Mount', 'Mount', 'Mount', 'Empty', 'Mount'],
+             ['Empty', 'Mount', 'Empty', 'Mount', 'Mount', 'Chest', 'Mount', 'Empty', 'Mount'],
+             ['Empty', 'Mount', 'Empty', 'Potion', 'Mount', 'Enemy', 'Empty', 'Empty', 'Mount']]
+
     Room6 = [['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
              ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
              ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
@@ -114,6 +116,6 @@ def CreateRooms():
               ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
               ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty'],
               ['Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty', 'Empty']]
-    #return [Room1, Room2, Room3, Room4, Room5, Room6, Room7, Room8,
+    # return [Room1, Room2, Room3, Room4, Room5, Room6, Room7, Room8,
     #        Room9, Room10, Room11, Room12, Room13, Room14, Room15, Room16]
-    return [Room1, Room2,Room3]
+    return [Room1, Room2, Room3, Room4,Room5]
