@@ -332,7 +332,7 @@ def start_map():
     running = True
     clock = pygame.time.Clock()
     Continue = False
-    info = InfoBoard(screen, ScreenWidth, ScreenHeight, 5, 5, Hero, HeroClothes, Received_clothes)
+    info = InfoBoard(screen, ScreenWidth, ScreenHeight, 5, 5, Hero, HeroClothes, Received_clothes, Artefacts)
     item = ""
     time_item = ""
     pos = (0, 0)
@@ -351,6 +351,7 @@ def start_map():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 button = info.get_button(event.pos)
+                info.button_artefacts(event.pos)
                 status_item = info.get_status_item(event.pos)
                 if status_item:
                     if item != "":

@@ -1,7 +1,7 @@
-Empty Empty Empty Empty Empty Empty Empty Empty Empty
+Empty Empty Empty Empty Empty Enemy Empty Empty Empty
 Empty Empty Empty Mount Mount Mount Mount Mount Empty
 Empty Empty Empty Empty Empty Empty Empty Mount Empty
 Empty Empty Empty Mount Mount Mount Mount Mount Exit
-Empty Mount Empty Mount Enemy Potion Mount Mount Mount
-Empty Mount Mount Mount Empty Enemy Empty Mount Chest
-Empty Empty Empty Empty Empty Empty Empty Empty Enemy
+Empty Mount Empty Mount Empty Potion Mount Mount Mount
+Empty Mount Mount Mount Empty Empty Empty Mount Empty
+Empty Empty Empty Empty Empty Empty Empty Empty Empty
