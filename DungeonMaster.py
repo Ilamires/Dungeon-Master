@@ -269,6 +269,9 @@ def start_map():
     f = open('Continue.txt', mode='r')
     Continue = bool(int(f.read()))
     f.close()
+    f = open('StatisticsPerGame.txt', mode='r')
+    KilledEnemies, AllReceived_clothes, AllReceived_artefacts = list(map(int, f.read().split()))
+    f.close()
     HeroPos = [3, 0]
     Artefacts = list(items_Artefacts.keys())
     HeroClothes = ["Dima sword", "default", "default", "default", "default", "default"]
@@ -304,18 +307,10 @@ def start_map():
         f.write('0')
         f.close()
 
-    f = open('Fullscreen.txt', mode='r')
-    Fullscreen = bool(int(f.read()))
-    f.close()
     pygame.init()
     pygame.display.set_caption('Dungeon Master')
-    if Fullscreen:
-        size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
-                                           pygame.display.Info().current_h
-        screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
-    else:
-        size = ScreenWidth, ScreenHeight = 1225, 700
-        screen = pygame.display.set_mode(size)
+    size = ScreenWidth, ScreenHeight = 1225, 700
+    screen = pygame.display.set_mode(size)
 
     hero_sprite = pygame.sprite.Group()
     all_sprites = pygame.sprite.Group()
@@ -394,7 +389,11 @@ def start_map():
                             Room.Cells[MoveX][MoveY].type = 'Empty'
                             Received_artefacts.append(Room.Cells[MoveX][MoveY].item)
                             info.without_chest_items([Room.Cells[MoveX][MoveY].item])
-                            Hero.OpenMap(HeroX, HeroY)
+                            f = open('StatisticsPerGame.txt', mode='w')
+                            AllReceived_artefacts += 1
+                            f.write(str(KilledEnemies) + ' ' + str(AllReceived_clothes)
+                                    + ' ' + str(AllReceived_artefacts))
+                            f.close()
                         if Room.CellsTypes[MoveX][MoveY] == 'Potion':
                             f = open('Hero.txt', mode='r')
                             n = f.read().split()
@@ -454,4 +453,5 @@ def start_map():
         clock.tick(60)
 
 
-start_mainmenu()
+if __name__ == '__main__':
+    start_mainmenu()

@@ -7,18 +7,10 @@ import sqlite3
 def start_mainmenu():
     from DungeonMaster import start_map
     from battle import start_battle
-    f = open('Fullscreen.txt', mode='r')
-    Fullscreen = bool(int(f.read()))
-    f.close()
     pygame.init()
     pygame.display.set_caption('Dungeon Master')
-    if Fullscreen:
-        size1 = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
-                                            pygame.display.Info().current_h
-        screen = pygame.display.set_mode(size1, pygame.FULLSCREEN)
-    else:
-        size1 = ScreenWidth, ScreenHeight = 1225, 700
-        screen = pygame.display.set_mode(size1)
+    size1 = ScreenWidth, ScreenHeight = 1225, 700
+    screen = pygame.display.set_mode(size1)
 
     def Create_text(size, textvalue):
         Font = pygame.font.SysFont('Liberation Serif', size)
@@ -104,6 +96,9 @@ def start_mainmenu():
                         f.close()
                         f = open('Hero.txt', mode='w')
                         f.write('100 0')
+                        f.close()
+                        f = open('StatisticsPerGame.txt', mode='w')
+                        f.write('0 0 0')
                         f.close()
                         pygame.quit()
                         running = False
@@ -375,6 +370,7 @@ def start_mainmenu():
                 elif event.ui_element == LogOutAccount:
                     LoginAccount = False
                     LogOutAccount.kill()
+                    Login = ''
                     if ContinueCreate:
                         ContinueGame.kill()
                         pygame.draw.rect(screen, (0, 0, 0),
@@ -384,72 +380,6 @@ def start_mainmenu():
                     LogInAccount = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
                         (10, 10), (200, 40)),
                         text='Log In Account', manager=manager)
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_f and not LoginRoom:
-                    DisplaySize = pygame.display.get_window_size()
-                    pygame.quit()
-                    pygame.init()
-                    pygame.display.set_caption('Dungeon Master')
-                    if DisplaySize == (1225, 700):
-                        size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
-                                                           pygame.display.Info().current_h
-                        screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
-                        f = open('Fullscreen.txt', mode='w')
-                        f.write('1')
-                        f.close()
-                    else:
-                        size = ScreenWidth, ScreenHeight = 1225, 700
-                        screen = pygame.display.set_mode(size)
-                        f = open('Fullscreen.txt', mode='w')
-                        f.write('0')
-                        f.close()
-                    if LoginRoom:
-                        LoginText.kill()
-                        PasswordText.kill()
-                        text = Create_text(30, 'Login')
-                        text_rect = pygame.Rect(ScreenWidth // 2 - 98, ScreenHeight // 2 + 45,
-                                                800, 200)
-                        screen.blit(text, text_rect)
-                        text = Create_text(30, 'Password')
-                        text_rect = pygame.Rect(ScreenWidth // 2 - 98, ScreenHeight // 2 + 125,
-                                                800, 280)
-                        screen.blit(text, text_rect)
-
-                        manager = pygame_gui.UIManager((ScreenWidth, ScreenHeight))
-                        LoginText = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect(
-                            (ScreenWidth // 2 - 100, ScreenHeight // 2 + 80), (200, 50)),
-                            manager=manager)
-                        PasswordText = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect(
-                            (ScreenWidth // 2 - 100, ScreenHeight // 2 + 160), (200, 50)),
-                            manager=manager)
-                    else:
-                        text = Create_text(100, 'Dungeon Master')
-                        text_rect = pygame.Rect(ScreenWidth // 2 - 340, 60, 800, 200)
-                        screen.blit(text, text_rect)
-                        StartGame.kill()
-                        StatisticsButton.kill()
-                        ExitButton.kill()
-                        LogInAccount.kill()
-                        if Continue:
-                            ContinueGame.kill()
-                        manager = pygame_gui.UIManager((ScreenWidth, ScreenHeight))
-                        if Continue:
-                            ContinueGame = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
-                                (ScreenWidth // 2 - 100, ScreenHeight // 2), (200, 50)),
-                                text='Continue', manager=manager)
-                        StartGame = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
-                            (ScreenWidth // 2 - 100, ScreenHeight // 2 + 80), (200, 50)),
-                            text='Start game', manager=manager)
-                        StatisticsButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
-                            (ScreenWidth // 2 - 100, ScreenHeight // 2 + 160), (200, 50)),
-                            text='Statistics', manager=manager)
-                        ExitButton = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
-                            (ScreenWidth // 2 - 100, ScreenHeight // 2 + 240), (200, 50)),
-                            text='Exit', manager=manager)
-                        LogInAccount = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
-                            (10, 10), (200, 40)),
-                            text='Log In Account', manager=manager)
 
             manager.process_events(event)
 

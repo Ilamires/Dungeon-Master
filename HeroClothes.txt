@@ -1,6 +1,6 @@
 Dima sword
 default
 default
-rusty greaves
-rusty helmet
-poison ring
+default
+default
+default
