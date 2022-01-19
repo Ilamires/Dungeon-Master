@@ -6,12 +6,12 @@ import pygame
 from infobattle import Info
 from unit import Unit, Boss
 from items import Consumable_items, items_Sword, items_BodyArmor, items_Gloves, items_Greaves, \
-    items_Ring, items_Helmet, items_Artefacts
+    items_Ring, items_Helmet
 
 
 def start_battle(flag):
     from DungeonMaster import start_map
-    from MainMenu import start_mainmenu
+    from FinalScreen import FinalScreen
     hero_anim_breathing = ["image/hero_anim/hero_battle_anim_breathing_1.png",
                            "image/hero_anim/hero_battle_anim_breathing_2.png",
                            "image/hero_anim/hero_battle_anim_breathing_3.png",
@@ -114,18 +114,10 @@ def start_battle(flag):
         dm = self.attack(other, True)
         other.taking_damage(dm)
 
-    f = open('Fullscreen.txt', mode='r')
-    Fullscreen = bool(int(f.read()))
-    f.close()
     pygame.init()
     pygame.display.set_caption('Dungeon Master')
-    if Fullscreen:
-        size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
-                                           pygame.display.Info().current_h
-        screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
-    else:
-        size = ScreenWidth, ScreenHeight = 1225, 700
-        screen = pygame.display.set_mode(size)
+    size = ScreenWidth, ScreenHeight = 1225, 700
+    screen = pygame.display.set_mode(size)
     all_sprites = pygame.sprite.Group()
 
     dop_x = 150
@@ -144,6 +136,9 @@ def start_battle(flag):
     f.close()
     f = open('ReceivedClothes.txt', mode='r')
     Received_clothes = f.read().split('\n')
+    f.close()
+    f = open('StatisticsPerGame.txt', mode='r')
+    KilledEnemies, AllReceived_clothes, AllReceived_artefacts = list(map(int, f.read().split()))
     f.close()
     if Received_clothes == [""]:
         Received_clothes = []
@@ -270,33 +265,6 @@ def start_battle(flag):
                             else:
                                 flag_move = True
                                 flag_anim = False
-            if enemy.status():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_f:
-                        DisplaySize = pygame.display.get_window_size()
-                        pygame.quit()
-                        pygame.init()
-                        pygame.display.set_caption('Dungeon Master')
-                        f = open('Fullscreen.txt', mode='w')
-                        if DisplaySize == (1225, 700):
-                            size = ScreenWidth, ScreenHeight = pygame.display.Info().current_w, \
-                                                               pygame.display.Info().current_h
-                            screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
-                            f.write('1')
-                        else:
-                            size = ScreenWidth, ScreenHeight = 1225, 700
-                            screen = pygame.display.set_mode(size)
-                            f = open('Fullscreen.txt', mode='w')
-                            f.write('0')
-                        f.close()
-                        AttackPosX = ScreenWidth // 2 - 350 + dop_x
-                        DefendPosX = ScreenWidth // 2 - 150 + dop_x
-                        HealingPosX = ScreenWidth // 2 + 50 + dop_x
-                        ConsumableItemPosX = ScreenWidth // 2 + 250 + dop_x
-                        ArtPosX = ScreenWidth // 2 - 425 + dop_x
-                        info.screen_width = ScreenWidth
-                        info.screen_height = ScreenHeight
-                        info.screen = screen
         if not flag_move and enemy.status() and not flag_anim:
             if flag_atk_enemy > len(pattern_atk_enemy) - 1:
                 flag_atk_enemy = 0
@@ -341,6 +309,12 @@ def start_battle(flag):
             AccFileInf.execute("""UPDATE accounts
                                     SET KilledEnemies = KilledEnemies + 1
                                 WHERE Login = ?""", (Login,))
+
+            KilledEnemies += 1
+            AllReceived_clothes += 1
+            f = open('StatisticsPerGame.txt', mode='w')
+            f.write(str(KilledEnemies) + ' ' + str(AllReceived_clothes) + ' ' + str(AllReceived_artefacts))
+            f.close()
             if RoomNumber == NumberOfRooms:
                 pygame.quit()
                 f = open('Continue.txt', mode='w')
@@ -351,7 +325,7 @@ def start_battle(flag):
                                       WHERE Login = ?""", (Login,))
                 AccFile.commit()
                 AccFile.close()
-                start_mainmenu()
+                FinalScreen(True, KilledEnemies, AllReceived_clothes, AllReceived_artefacts)
             else:
                 running = False
                 AccFile.commit()
@@ -373,7 +347,7 @@ def start_battle(flag):
             AccFile.commit()
             AccFile.close()
             running = False
-            start_mainmenu()
+            FinalScreen(False, KilledEnemies, AllReceived_clothes, AllReceived_artefacts)
         render(screen, hero, enemy)
         clock.tick(fps)
         if flag_anim:
