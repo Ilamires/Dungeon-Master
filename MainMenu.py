@@ -11,6 +11,9 @@ def start_mainmenu():
     pygame.display.set_caption('Dungeon Master')
     size1 = ScreenWidth, ScreenHeight = 1225, 700
     screen = pygame.display.set_mode(size1)
+    DrawingCell = pygame.image.load("image/background/podzemelie_full.jpg")
+    DrawingCell = pygame.transform.scale(DrawingCell, (1225, 700))
+    screen.blit(DrawingCell, (0, 0))
 
     def Create_text(size, textvalue):
         Font = pygame.font.SysFont('Liberation Serif', size)
@@ -114,6 +117,9 @@ def start_mainmenu():
                             ContinueGame.kill()
                             ContinueCreate = False
                         screen.fill((0, 0, 0))
+                        DrawingCell = pygame.image.load("image/background/podzemelie_full.jpg")
+                        DrawingCell = pygame.transform.scale(DrawingCell, (1225, 700))
+                        screen.blit(DrawingCell, (0, 0))
                         text = Create_text(30, 'Login')
                         text_rect = pygame.Rect(ScreenWidth // 2 - 98, ScreenHeight // 2 + 45,
                                                 800, 200)
@@ -141,6 +147,9 @@ def start_mainmenu():
                     if LoginAccount:
                         StatisticsRoom = True
                         screen.fill((0, 0, 0))
+                        DrawingCell = pygame.image.load("image/background/podzemelie_full.jpg")
+                        DrawingCell = pygame.transform.scale(DrawingCell, (1225, 700))
+                        screen.blit(DrawingCell, (0, 0))
                         text = Create_text(50, 'Killed Enemies:')
                         text_rect = pygame.Rect(ScreenWidth // 2 - 500, 100,
                                                 90, 50)
@@ -192,6 +201,9 @@ def start_mainmenu():
                             ContinueGame.kill()
                             ContinueCreate = False
                         screen.fill((0, 0, 0))
+                        DrawingCell = pygame.image.load("image/background/podzemelie_full.jpg")
+                        DrawingCell = pygame.transform.scale(DrawingCell, (1225, 700))
+                        screen.blit(DrawingCell, (0, 0))
                         text = Create_text(30, 'Login')
                         text_rect = pygame.Rect(ScreenWidth // 2 - 98, ScreenHeight // 2 + 45,
                                                 800, 200)
@@ -227,6 +239,9 @@ def start_mainmenu():
                         ContinueGame.kill()
                         ContinueCreate = False
                     screen.fill((0, 0, 0))
+                    DrawingCell = pygame.image.load("image/background/podzemelie_full.jpg")
+                    DrawingCell = pygame.transform.scale(DrawingCell, (1225, 700))
+                    screen.blit(DrawingCell, (0, 0))
                     text = Create_text(30, 'Login')
                     text_rect = pygame.Rect(ScreenWidth // 2 - 98, ScreenHeight // 2 + 45,
                                             100, 50)
@@ -275,6 +290,9 @@ def start_mainmenu():
                                     AccFile.commit()
                                     AccFile.close()
                                     screen.fill((0, 0, 0))
+                                    DrawingCell = pygame.image.load("image/background/podzemelie_full.jpg")
+                                    DrawingCell = pygame.transform.scale(DrawingCell, (1225, 700))
+                                    screen.blit(DrawingCell, (0, 0))
                                     LoginText.kill()
                                     PasswordText.kill()
                                     Enter.kill()
@@ -307,6 +325,7 @@ def start_mainmenu():
                                     LogOutAccount = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
                                         (400, 10), (200, 40)),
                                         text='Log Out Account', manager=manager)
+                                    LoginRoom = False
                                     m = False
                                     break
                                 else:
@@ -368,6 +387,9 @@ def start_mainmenu():
                             AccFile.commit()
                             AccFile.close()
                             screen.fill((0, 0, 0))
+                            DrawingCell = pygame.image.load("image/background/podzemelie_full.jpg")
+                            DrawingCell = pygame.transform.scale(DrawingCell, (1225, 700))
+                            screen.blit(DrawingCell, (0, 0))
                             LoginText.kill()
                             PasswordText.kill()
                             Enter.kill()
@@ -400,6 +422,7 @@ def start_mainmenu():
                             LogOutAccount = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
                                 (400, 10), (200, 40)),
                                 text='Log Out Account', manager=manager)
+                            LoginRoom = False
                     except NameError:
                         text = Create_text(20, s)
                         text_rect = pygame.Rect(ScreenWidth // 2 - 98, ScreenHeight // 2 + 300,
@@ -412,6 +435,9 @@ def start_mainmenu():
                         screen.blit(text, text_rect)
                 elif event.ui_element == Back:
                     screen.fill((0, 0, 0))
+                    DrawingCell = pygame.image.load("image/background/podzemelie_full.jpg")
+                    DrawingCell = pygame.transform.scale(DrawingCell, (1225, 700))
+                    screen.blit(DrawingCell, (0, 0))
                     if LoginRoom:
                         LoginRoom = False
                         LoginText.kill()
@@ -494,6 +520,12 @@ def start_mainmenu():
                                          (ScreenWidth // 2 - 100, ScreenHeight // 2, 200, 50), 0)
                     pygame.draw.rect(screen, (0, 0, 0),
                                      (10, 10, 900, 40), 0)
+                    DrawingCell = pygame.image.load("image/background/podzemelie_full.jpg")
+                    DrawingCell = pygame.transform.scale(DrawingCell, (1225, 700))
+                    screen.blit(DrawingCell, (0, 0))
+                    text = Create_text(100, 'Dungeon Master')
+                    text_rect = pygame.Rect(ScreenWidth // 2 - 340, 60, 800, 200)
+                    screen.blit(text, text_rect)
                     LogInAccount = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(
                         (10, 10), (200, 40)),
                         text='Log In Account', manager=manager)
