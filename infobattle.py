@@ -157,7 +157,6 @@ class InfoBoard(Info):
     def without_chest_items(self, arr):
         myfont = pygame.font.SysFont('Liberation Serif', 20)
         for i in arr:
-            self.artefacts.append(i)
             text = myfont.render("Item received: " + i, False, (0, 255, 0))
             self.text_arr.append(text)
         self.time_without_text = 180
@@ -300,12 +299,11 @@ class InfoBoard(Info):
                 self.flag_render_artifacts = not self.flag_render_artifacts
 
     def window_artefact(self):
-        print(self.artefacts)
         myfont = pygame.font.SysFont('Liberation Serif', 30)
         for i in range(len(self.artefacts)):
             if i != "":
                 color = [0, 150, 0]
-                rect = (self.rect_artefacts[0] + 10, self.rect_artefacts[1] + (i * 35) + 10, 700, 500)
+                rect = (self.rect_artefacts[0] + 10, self.rect_artefacts[1] + ((i - 1) * 35) + 10, 700, 500)
                 text = myfont.render(self.artefacts[i], False, color)
                 self.screen.blit(text, (rect[0], rect[1]))
 

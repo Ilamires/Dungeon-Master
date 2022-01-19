@@ -327,7 +327,7 @@ def start_map():
     running = True
     clock = pygame.time.Clock()
     Continue = False
-    info = InfoBoard(screen, ScreenWidth, ScreenHeight, 5, 5, Hero, HeroClothes, Received_clothes, Artefacts)
+    info = InfoBoard(screen, ScreenWidth, ScreenHeight, 5, 5, Hero, HeroClothes, Received_clothes, Received_artefacts)
     item = ""
     time_item = ""
     pos = (0, 0)
