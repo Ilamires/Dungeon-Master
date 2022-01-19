@@ -104,6 +104,9 @@ def start_mainmenu():
                         f = open('StatisticsPerGame.txt', mode='w')
                         f.write('0 0 0')
                         f.close()
+                        f = open('ReceivedArtefacts.txt', mode='w')
+                        f.write('')
+                        f.close()
                         pygame.quit()
                         running = False
                         start_map()

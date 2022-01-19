@@ -394,6 +394,7 @@ def start_map():
                             f.write(str(KilledEnemies) + ' ' + str(AllReceived_clothes)
                                     + ' ' + str(AllReceived_artefacts))
                             f.close()
+                            Save()
                         if Room.CellsTypes[MoveX][MoveY] == 'Potion':
                             f = open('Hero.txt', mode='r')
                             n = f.read().split()
