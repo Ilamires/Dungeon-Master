@@ -59,13 +59,21 @@ def start_battle(flag):
         text_rect = pygame.Rect(ArtPosX + 640, 20, 30, 30)
         screen.blit(text, text_rect)
 
-        # recharge_healing
+        # count potion
+        tfont = pygame.font.SysFont('Liberation Serif', 100)
+        text = tfont.render(str(hero.count_potion), False, [155, 155, 0, 128])
+        rect = text.get_rect(center=(HealingPosX + 50, 550))
+        rect_surf = pygame.Surface((1225, 700), pygame.SRCALPHA)
+        rect_surf.blit(text, rect)
+        screen.blit(rect_surf, (0, 0),  special_flags=pygame.BLEND_MAX)
+
+        # recharge healing
         if hero.recharge_healing != 0:
             text = myfont.render(str(hero.recharge_healing), False, (255, 255, 255))
             text_rect = pygame.Rect(HealingPosX, 470, 30, 30)
             screen.blit(text, text_rect)
 
-        # recharge_Consumable_items
+        # recharge Consumable items
         if hero.recharge_Consumable_items != 0:
             text = myfont.render(str(hero.recharge_Consumable_items), False, (255, 255, 255))
             text_rect = pygame.Rect(ConsumableItemPosX, 470, 30, 30)

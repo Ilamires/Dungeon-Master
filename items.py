@@ -121,6 +121,9 @@ class Artefacts:
     def use(self, hero):
         pass
 
+    def active_use(self, enemy):
+        pass
+
 
 class Dio(Artefacts):
     def use(self, hero):

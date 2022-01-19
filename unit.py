@@ -16,7 +16,7 @@ class Unit:
         self.healing_hp = 50
         self.recharge_healing = 0
         self.max_recharge_healing = 6
-        self.count_potion = 3
+        self.count_potion = 0
 
         self.transparency = 128
         self.screen = screen
@@ -103,6 +103,7 @@ class Unit:
             self.items[3]].protect + items_Helmet[self.items[4]].protect
         self.status_protect = items_Helmet[self.items[4]].status_protect
         self.dop_atk = items_Gloves[self.items[2]].atk
+        self.atk_fire = items_Ring[self.items[5]].atk_fire
         self.dop_hp += items_BodyArmor[self.items[1]].hp
         self.max_hp += self.dop_hp
         self.hp += self.dop_hp

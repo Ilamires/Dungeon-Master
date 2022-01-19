@@ -120,16 +120,20 @@ class Info:
 
 class InfoBoard(Info):
 
-    def __init__(self, screen, screen_width, screen_height, x, y, hero, arr_clothes, arr_received_clothes):
+    def __init__(self, screen, screen_width, screen_height, x, y, hero, arr_clothes, arr_received_clothes, artefacts):
         super(InfoBoard, self).__init__(screen, screen_width, screen_height, x, y, hero, 0)
         self.arr_clothes = [arr_clothes[4], arr_clothes[1], arr_clothes[3], arr_clothes[0], arr_clothes[2],
                             arr_clothes[5]]
         self.arr_received_clothes = arr_received_clothes
         y = screen_height // 2
+        self.artefacts = artefacts
         self.rect = (self.x, y - 280, 280, 420)
         self.rect_items = (screen_width - 285, y - 186, 280, 372)
         self.size_cell = 140, 140
         self.size_cell_items = 93, 93
+        self.flag_item = True
+        self.flag_render_artifacts = False
+        self.rect_artefacts = (262, 100, 700, 500)
         self.icons = [pygame.image.load("image/icons/helmet.png"),
                       pygame.image.load("image/icons/body_armor.png"),
                       pygame.image.load("image/icons/creaves.png"),
@@ -171,8 +175,15 @@ class InfoBoard(Info):
                 icon = pygame.transform.scale(self.icons[i * 3 + j], (self.size_cell[0], self.size_cell[1]))
                 self.screen.blit(icon, (rect[0], rect[1]))
                 pygame.draw.rect(self.screen, (255, 255, 255), rect, width=1)
+        myfont = pygame.font.SysFont('Liberation Serif', 50)
+        pygame.draw.rect(self.screen, [255, 255, 255], self.rect_button_inventory, width=0)
+        text = myfont.render("artefacts", False, (0, 0, 0))
+        text_rect = text.get_rect(center=(self.x + 150, self.screen_height - 100))
+        self.screen.blit(text, text_rect)
         self.render_items()
         self.chest_render()
+        if self.flag_render_artifacts:
+            self.render_artefacts()
 
     def render_items(self):
         for i in range(3):
@@ -276,11 +287,28 @@ class InfoBoard(Info):
                 return True
         return False
 
-    def window_items_stats(self, pos, items, flag):
-        pass
+    def render_artefacts(self):
+        pygame.draw.rect(self.screen, (50, 50, 50), self.rect_artefacts, width=0)
+        self.window_artefact()
+
+    def button_artefacts(self, pos):
+        x, y = pos
+        if self.rect_button_inventory[0] < x < self.rect_button_inventory[0] + self.rect_button_inventory[2]:
+            if self.rect_button_inventory[1] < y < self.rect_button_inventory[1] + self.rect_button_inventory[3]:
+                self.flag_item = not self.flag_item
+                self.flag_render_artifacts = not self.flag_render_artifacts
+
+    def window_artefact(self):
+        myfont = pygame.font.SysFont('Liberation Serif', 30)
+        for i in range(len(self.artefacts)):
+            if i != "":
+                color = [0, 150, 0]
+                rect = (self.rect_artefacts[0] + 10, self.rect_artefacts[1] + ((i - 1) * 35) + 10, 700, 500)
+                text = myfont.render(self.artefacts[i], False, color)
+                self.screen.blit(text, (rect[0], rect[1]))
 
     def get_stats_item(self, pos, item):
-        if item != "default":
+        if item != "default" and self.flag_item:
             arr_text = []
             myfont = pygame.font.SysFont('Liberation Serif', 20)
             if item.split()[1] == "sword":
@@ -303,7 +331,7 @@ class InfoBoard(Info):
 
     def stats_equip_items(self, pos, flag, item):
         button = self.get_button_items(pos)
-        if button != None and button < len(self.arr_clothes):
+        if button != None and button < len(self.arr_clothes) and self.flag_item:
             equip_item = self.arr_clothes[button]
             if equip_item != "default":
                 arr_text = []
