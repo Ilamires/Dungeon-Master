@@ -240,6 +240,7 @@ def start_map():
         f = open("MapNumber.txt", mode="w")
         f.write(str(NumberOfRooms) + ' ' + str(RoomNumber))
         f.close()
+        SaveClothes()
 
     def SaveClothes():
         f = open('HeroClothes.txt', mode='w')
