@@ -157,7 +157,7 @@ def start_battle(flag):
         enemy = Unit(lv, enemy_anim_breathing, ArtPosX, 50, 'enemy', screen, all_sprites)
         enemy.putting_on_clothes(["", "", "", "", "", ""])
     elif flag == 1:
-        enemy = Boss(10, boss_anim_breathing, ArtPosX, 50, 'enemy', screen, all_sprites)
+        enemy = Boss(15, boss_anim_breathing, ArtPosX, 50, 'enemy', screen, all_sprites)
         enemy.putting_on_clothes(["", "", "", "", "", ""])
     f = open('ContinueBattle.txt', mode='r')
     ContinueBattle = bool(int(f.read()))
