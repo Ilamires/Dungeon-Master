@@ -262,7 +262,7 @@ def start_map():
         'Mount': 'image/cells/mount.png',
         'Enemy': 'image/cells/enemy.png',
         'Chest': 'image/cells/chest.png',
-        'Exit': 'image/cells/potions.png',
+        'Exit': 'image/cells/exit.png',
         'Potion': 'image/cells/potions.png'
     }
 

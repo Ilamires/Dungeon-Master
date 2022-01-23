@@ -8,6 +8,13 @@ icons = [pygame.image.load("image/icons/sword.png"),
          pygame.image.load("image/icons/helmet.png"),
          pygame.image.load("image/icons/ring.png")]
 
+items_icons = {"sword": icons[0],
+               "body": icons[1],
+               "gloves": icons[2],
+               "greaves": icons[3],
+               "helmet": icons[4],
+               "ring": icons[5]}
+
 
 class Info:
     def __init__(self, screen, screen_width, screen_height, x, y, hero, enemy):
@@ -196,62 +203,33 @@ class InfoBoard(Info):
                 pygame.draw.rect(self.screen, (255, 255, 255), rect, width=1)
                 if not (i * 4 + j >= len(self.arr_received_clothes)):
                     name_item = self.arr_received_clothes[i * 4 + j]
-                    if name_item.split()[1] == "sword":
-                        icon = icons[0]
-                    elif name_item.split()[1] == "body":
-                        icon = icons[1]
-                    elif name_item.split()[1] == "gloves":
-                        icon = icons[2]
-                    elif name_item.split()[1] == "greaves":
-                        icon = icons[3]
-                    elif name_item.split()[1] == "helmet":
-                        icon = icons[4]
-                    elif name_item.split()[1] == "ring":
-                        icon = icons[5]
+                    icon = items_icons[name_item.split()[1]]
                     icon = pygame.transform.scale(icon, (self.size_cell_items[0] - 6, self.size_cell_items[1] - 6))
                     self.screen.blit(icon, (rect[0] + 3, rect[1] + 3))
 
     def transferring_item(self, item, pos):
-        if item.split()[1] == "sword":
-            icon = icons[0]
-        elif item.split()[1] == "body":
-            icon = icons[1]
-        elif item.split()[1] == "gloves":
-            icon = icons[2]
-        elif item.split()[1] == "greaves":
-            icon = icons[3]
-        elif item.split()[1] == "helmet":
-            icon = icons[4]
-        elif item.split()[1] == "ring":
-            icon = icons[5]
+        icon = items_icons[item.split()[1]]
         icon = pygame.transform.scale(icon, (self.size_cell_items[0] - 6, self.size_cell_items[1] - 6))
         self.screen.blit(icon, pos)
 
     def equip_item(self, item):
+        # item.__class name
+        index = 0
         if item.split()[1] == "sword":
-            if self.arr_clothes[3] != "default":
-                self.arr_received_clothes.append(self.arr_clothes[3])
-            self.arr_clothes[3] = item
+            index = 3
         elif item.split()[1] == "body":
-            if self.arr_clothes[1] != "default":
-                self.arr_received_clothes.append(self.arr_clothes[1])
-            self.arr_clothes[1] = item
+            index = 1
         elif item.split()[1] == "gloves":
-            if self.arr_clothes[4] != "default":
-                self.arr_received_clothes.append(self.arr_clothes[4])
-            self.arr_clothes[4] = item
+            index = 4
         elif item.split()[1] == "greaves":
-            if self.arr_clothes[2] != "default":
-                self.arr_received_clothes.append(self.arr_clothes[2])
-            self.arr_clothes[2] = item
+            index = 2
         elif item.split()[1] == "helmet":
-            if self.arr_clothes[0] != "default":
-                self.arr_received_clothes.append(self.arr_clothes[0])
-            self.arr_clothes[0] = item
+            index = 0
         elif item.split()[1] == "ring":
-            if self.arr_clothes[5] != "default":
-                self.arr_received_clothes.append(self.arr_clothes[5])
-            self.arr_clothes[5] = item
+            index = 5
+        if self.arr_clothes[index] != "default":
+            self.arr_received_clothes.append(self.arr_clothes[index])
+        self.arr_clothes[index] = item
         self.arr_received_clothes.remove(item)
         f = open('ReceivedClothes.txt', mode='w')
         f.write('\n'.join(self.arr_received_clothes))
