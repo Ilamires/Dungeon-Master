@@ -92,6 +92,9 @@ def start_mainmenu():
                         start_map()
                 elif event.ui_element == StartGame:
                     if LoginAccount:
+                        f = open("mob_progression.txt", mode="w")
+                        f.write(str(3))
+                        f.close()
                         f = open('Continue.txt', mode='w')
                         f.write('0')
                         f.close()
