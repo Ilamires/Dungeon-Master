@@ -240,7 +240,6 @@ def start_map():
         f = open("MapNumber.txt", mode="w")
         f.write(str(NumberOfRooms) + ' ' + str(RoomNumber))
         f.close()
-        SaveClothes()
 
     def SaveClothes():
         f = open('HeroClothes.txt', mode='w')
@@ -415,6 +414,12 @@ def start_map():
                             start_battle(0)
                         if Room.CellsTypes[MoveX][MoveY] == 'Exit':
                             RoomNumber += 1
+                            f = open("mob_progression.txt", mode="r")
+                            lv = int(f.read()) + 2
+                            f.close()
+                            f = open("mob_progression.txt", mode="w")
+                            f.write(str(lv))
+                            f.close()
                             if RoomNumber == NumberOfRooms:
                                 Save()
                                 pygame.quit()

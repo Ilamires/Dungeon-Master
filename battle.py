@@ -151,10 +151,13 @@ def start_battle(flag):
     f.close()
     # enemy = 0, boss = 1
     if flag == 0:
-        enemy = Unit(2, enemy_anim_breathing, ArtPosX, 50, 'enemy', screen, all_sprites)
+        f = open('mob_progression.txt', mode='r')
+        lv = int(f.read())
+        f.close()
+        enemy = Unit(lv, enemy_anim_breathing, ArtPosX, 50, 'enemy', screen, all_sprites)
         enemy.putting_on_clothes(["", "", "", "", "", ""])
     elif flag == 1:
-        enemy = Boss(5, boss_anim_breathing, ArtPosX, 50, 'enemy', screen, all_sprites)
+        enemy = Boss(10, boss_anim_breathing, ArtPosX, 50, 'enemy', screen, all_sprites)
         enemy.putting_on_clothes(["", "", "", "", "", ""])
     f = open('ContinueBattle.txt', mode='r')
     ContinueBattle = bool(int(f.read()))
@@ -275,7 +278,7 @@ def start_battle(flag):
             flag_anim = True
             flag_enemy_move = True
             flag_atk_enemy += 1
-        if not hero.status() or not enemy.status() and not flag_anim:
+        if not enemy.status() and not flag_anim:
             pygame.quit()
             f = open('Continue.txt', mode='w')
             f.write('1')
