@@ -1,6 +1,6 @@
 Dima sword
 default
+fire gloves
 default
 default
-default
-default
+poison ring
